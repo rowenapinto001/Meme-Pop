@@ -9,6 +9,7 @@
 html {
   min-height: 100%;
   background: #fff6e9;
+  overflow-x: hidden;
 }
 
 * {
@@ -16,10 +17,11 @@ html {
 }
 
 body {
-  width: min(480px, 100vw);
-  max-width: 100vw;
+  width: 100%;
+  max-width: none;
   min-height: 100vh;
   margin: 0;
+  overflow-x: hidden;
   background:
     radial-gradient(circle at 14% 8%, rgba(255, 210, 92, 0.38), transparent 22%),
     radial-gradient(circle at 96% 4%, rgba(93, 214, 189, 0.34), transparent 24%),
@@ -31,6 +33,7 @@ input,
 select,
 textarea {
   font: inherit;
+  min-width: 0;
 }
 
 button {
@@ -41,14 +44,17 @@ button {
   display: grid;
   gap: 14px;
   align-content: start;
+  width: 100%;
+  max-width: 100%;
   min-height: 100vh;
   padding: 18px;
+  overflow-x: hidden;
 }
 
 .hero {
   position: relative;
   display: grid;
-  grid-template-columns: 72px 1fr 48px;
+  grid-template-columns: 68px minmax(0, 1fr) 46px;
   gap: 14px;
   align-items: center;
   overflow: hidden;
@@ -107,6 +113,7 @@ button {
 .hero > div {
   position: relative;
   z-index: 1;
+  min-width: 0;
 }
 
 h1,
@@ -165,7 +172,7 @@ h2 {
 .action-grid,
 .split-switches {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -173,6 +180,8 @@ h2 {
 .panel,
 .meta-panel,
 .start-screen {
+  min-width: 0;
+  max-width: 100%;
   border: 1px solid rgba(58, 43, 42, 0.1);
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.84);
@@ -255,7 +264,7 @@ h2 {
 
 .start-actions {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -301,6 +310,7 @@ h2 {
   display: flex;
   justify-content: space-between;
   gap: 8px;
+  min-width: 0;
 }
 
 .section-head p {
@@ -332,6 +342,7 @@ h2 {
 .field {
   display: grid;
   gap: 6px;
+  min-width: 0;
 }
 
 select,
@@ -340,6 +351,8 @@ input[type="text"],
 input[type="datetime-local"],
 textarea {
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   border: 1px solid rgba(38, 49, 63, 0.14);
   border-radius: 14px;
   color: #26313f;
@@ -414,7 +427,7 @@ input[type="checkbox"]:checked::after {
 
 .focus-row {
   display: grid;
-  grid-template-columns: 1fr 112px;
+  grid-template-columns: minmax(0, 1fr) minmax(88px, 112px);
   gap: 10px;
 }
 
@@ -430,7 +443,7 @@ input[type="checkbox"]:checked::after {
 
 .deadline-grid {
   display: grid;
-  grid-template-columns: 1fr 118px;
+  grid-template-columns: minmax(0, 1fr) minmax(96px, 118px);
   gap: 10px;
 }
 
@@ -452,6 +465,7 @@ input[type="checkbox"]:checked::after {
   display: flex;
   justify-content: space-between;
   gap: 10px;
+  min-width: 0;
 }
 
 .deadline-card h3 {
@@ -522,7 +536,7 @@ input[type="checkbox"]:checked::after {
 
 .deadline-actions {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 7px;
 }
 
@@ -562,7 +576,7 @@ input[type="checkbox"]:checked::after {
 
 .accessory-card {
   display: grid;
-  grid-template-columns: 42px 1fr 88px;
+  grid-template-columns: 42px minmax(0, 1fr) minmax(74px, 88px);
   gap: 10px;
   align-items: center;
   padding: 9px;
