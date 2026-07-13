@@ -149,20 +149,20 @@ function updateThemeClass() {
     if (!rootElement) {
         return;
     }
-    rootElement.classList.remove("memepop-theme-random", "memepop-theme-focus", "memepop-theme-break", "memepop-theme-motivation", "memepop-theme-procrastination", "memepop-theme-lateNight", "memepop-theme-social", "memepop-theme-office", "memepop-theme-studying", "memepop-theme-gaming", "memepop-theme-coding", "memepop-theme-hydration", "memepop-splashing");
+    rootElement.classList.remove("memepop-theme-random", "memepop-theme-focus", "memepop-theme-break", "memepop-theme-motivation", "memepop-theme-procrastination", "memepop-theme-lateNight", "memepop-theme-social", "memepop-theme-office", "memepop-theme-studying", "memepop-theme-gaming", "memepop-theme-coding", "memepop-theme-hydration", "memepop-offering", "memepop-splashing");
     rootElement.classList.add(`memepop-theme-${appState.settings.theme}`);
     updateCharacterImage();
     if (isHydrationTheme()) {
-        restartHydrationSplash();
+        restartHydrationOffer();
     }
 }
-function restartHydrationSplash() {
+function restartHydrationOffer() {
     if (!rootElement || !isHydrationTheme()) {
         return;
     }
-    rootElement.classList.remove("memepop-splashing");
+    rootElement.classList.remove("memepop-offering");
     void rootElement.offsetWidth;
-    rootElement.classList.add("memepop-splashing");
+    rootElement.classList.add("memepop-offering");
 }
 function updateCountdown() {
     if (!countdownElement) {
@@ -333,7 +333,7 @@ function createMemePop(message) {
             return;
         }
         setMessage();
-        restartHydrationSplash();
+        restartHydrationOffer();
         playTone("click");
         resetAutoHide(true);
         chrome.runtime.sendMessage({ type: "MEMEPOP_CHARACTER_CLICKED" }, (response) => {
@@ -390,7 +390,7 @@ function showMemePop(force, message) {
     if (rootElement) {
         updateThemeClass();
         setMessage(message);
-        restartHydrationSplash();
+        restartHydrationOffer();
         centerAndRememberPosition();
         resetAutoHide(true);
         return true;
@@ -432,7 +432,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     updateThemeClass();
     if (rootElement && previousTheme !== appState.settings.theme) {
         setMessage();
-        restartHydrationSplash();
+        restartHydrationOffer();
     }
     if (MemePop.isQuiet(appState)) {
         hideMemePop(true);

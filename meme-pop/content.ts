@@ -199,24 +199,25 @@ function updateThemeClass(): void {
     "memepop-theme-gaming",
     "memepop-theme-coding",
     "memepop-theme-hydration",
+    "memepop-offering",
     "memepop-splashing"
   );
   rootElement.classList.add(`memepop-theme-${appState.settings.theme}`);
   updateCharacterImage();
 
   if (isHydrationTheme()) {
-    restartHydrationSplash();
+    restartHydrationOffer();
   }
 }
 
-function restartHydrationSplash(): void {
+function restartHydrationOffer(): void {
   if (!rootElement || !isHydrationTheme()) {
     return;
   }
 
-  rootElement.classList.remove("memepop-splashing");
+  rootElement.classList.remove("memepop-offering");
   void rootElement.offsetWidth;
-  rootElement.classList.add("memepop-splashing");
+  rootElement.classList.add("memepop-offering");
 }
 
 function updateCountdown(): void {
@@ -427,7 +428,7 @@ function createMemePop(message?: string): HTMLElement {
     }
 
     setMessage();
-    restartHydrationSplash();
+    restartHydrationOffer();
     playTone("click");
     resetAutoHide(true);
     chrome.runtime.sendMessage({ type: "MEMEPOP_CHARACTER_CLICKED" }, (response?: { awarded?: boolean; coins?: number }) => {
@@ -496,7 +497,7 @@ function showMemePop(force: boolean, message?: string): boolean {
   if (rootElement) {
     updateThemeClass();
     setMessage(message);
-    restartHydrationSplash();
+    restartHydrationOffer();
     centerAndRememberPosition();
     resetAutoHide(true);
     return true;
@@ -547,7 +548,7 @@ chrome.storage.onChanged.addListener((changes: Record<string, { newValue?: Parti
 
   if (rootElement && previousTheme !== appState.settings.theme) {
     setMessage();
-    restartHydrationSplash();
+    restartHydrationOffer();
   }
 
   if (MemePop.isQuiet(appState)) {
