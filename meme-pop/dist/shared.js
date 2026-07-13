@@ -5,6 +5,20 @@ var MemePop;
     MemePop.CLICK_COIN_COOLDOWN_MS = 15000;
     MemePop.AUTO_HIDE_MIN_MS = 6000;
     MemePop.AUTO_HIDE_MAX_MS = 10000;
+    MemePop.DEFAULT_CHARACTER_THEME = "studying";
+    MemePop.THEME_CHARACTER_ASSETS = {
+        focus: "assets/character/memepop-focus.png",
+        break: "assets/character/memepop-break.png",
+        motivation: "assets/character/memepop-motivation.png",
+        procrastination: "assets/character/memepop-procrastination.png",
+        lateNight: "assets/character/memepop-late-night.png",
+        social: "assets/character/memepop-social.png",
+        studying: "assets/character/memepop-study.png",
+        gaming: "assets/character/memepop-gaming.png",
+        office: "assets/character/memepop-office.png",
+        coding: "assets/character/memepop-coding.png",
+        hydration: "assets/character/memepop-hydration.png"
+    };
     MemePop.ACCESSORIES = [
         { id: "none", name: "No accessory", price: 0, description: "Classic MemePop energy." },
         { id: "partyHat", name: "Party hat", price: 20, description: "For tiny celebrations." },
@@ -439,6 +453,42 @@ var MemePop;
         return Math.random() > 0.78 ? "motivation" : "general";
     }
     MemePop.categoryForUrl = categoryForUrl;
+    function characterThemeForCategory(category) {
+        if (category === "focusMode") {
+            return "focus";
+        }
+        if (category === "breakTime") {
+            return "break";
+        }
+        if (category === "motivationMode" || category === "motivation") {
+            return "motivation";
+        }
+        if (category === "procrastinationMode" || category === "procrastination" || category === "shopping") {
+            return "procrastination";
+        }
+        if (category === "lateNightMode" || category === "lateNight") {
+            return "lateNight";
+        }
+        if (category === "socialMode" || category === "social") {
+            return "social";
+        }
+        if (category === "videos") {
+            return "gaming";
+        }
+        if (category === "office" || category === "studying" || category === "coding" || category === "gaming" || category === "hydration") {
+            return category;
+        }
+        return MemePop.DEFAULT_CHARACTER_THEME;
+    }
+    MemePop.characterThemeForCategory = characterThemeForCategory;
+    function characterThemeForSettings(theme, category = "general") {
+        return theme === "random" ? characterThemeForCategory(category) : theme;
+    }
+    MemePop.characterThemeForSettings = characterThemeForSettings;
+    function characterAssetForTheme(theme, category = "general") {
+        return MemePop.THEME_CHARACTER_ASSETS[characterThemeForSettings(theme, category)];
+    }
+    MemePop.characterAssetForTheme = characterAssetForTheme;
     function messagesForCategory(category) {
         const categoryMessages = MemePop.MESSAGES.filter((message) => message.category === category);
         return categoryMessages.length > 0 ? categoryMessages : MemePop.MESSAGES.filter((message) => message.category === "general");

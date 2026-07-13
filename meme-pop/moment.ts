@@ -8,10 +8,21 @@ const momentStatus = document.querySelector<HTMLElement>("#momentStatus");
 const characterImage = new Image();
 let momentState: MemePop.AppState = MemePop.normalizeState(undefined);
 
-characterImage.src = "assets/character/memepop-study.png";
+characterImage.src = MemePop.characterAssetForTheme("studying");
+
+function getCaption(): string {
+  const custom = captionInput?.value.trim();
+  return custom || messageSelect?.value || "MemePop has entered the moment.";
+}
+
+function getMomentMessageCategory(): MemePop.MessageCategory {
+  const caption = getCaption();
+  const selectedMessage = MemePop.MESSAGES.find((message) => message.text === caption);
+  return selectedMessage?.category ?? "studying";
+}
 
 function getMomentCharacterPath(): string {
-  return momentState.settings.theme === "hydration" ? "assets/character/memepop-hydration.png" : "assets/character/memepop-study.png";
+  return MemePop.characterAssetForTheme(momentState.settings.theme, getMomentMessageCategory());
 }
 
 function updateMomentCharacter(): void {
@@ -116,15 +127,12 @@ function drawFallbackCharacter(context: CanvasRenderingContext2D): void {
   context.restore();
 }
 
-function getCaption(): string {
-  const custom = captionInput?.value.trim();
-  return custom || messageSelect?.value || "MemePop has entered the moment.";
-}
-
 function renderMoment(): void {
   if (!canvas) {
     return;
   }
+
+  updateMomentCharacter();
 
   const context = canvas.getContext("2d");
 

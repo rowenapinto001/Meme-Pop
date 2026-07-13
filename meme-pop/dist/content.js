@@ -9,6 +9,8 @@ let autoHideTimer;
 let countdownTimer;
 let removeTimer;
 let lastMessageText = "";
+let activeMessageCategory = null;
+let extensionContextAvailable = true;
 let dragging = false;
 let dragMoved = false;
 let dragOffsetX = 0;
@@ -31,6 +33,61 @@ const THEME_CATEGORIES = {
 function clearTimer(timer) {
     if (timer) {
         window.clearTimeout(timer);
+    }
+}
+function stopContentScript() {
+    extensionContextAvailable = false;
+    clearTimer(nextAppearTimer);
+    clearTimer(autoHideTimer);
+    clearTimer(countdownTimer);
+    clearTimer(removeTimer);
+    hideMemePop(false);
+}
+function hasExtensionContext() {
+    if (!extensionContextAvailable) {
+        return false;
+    }
+    try {
+        void chrome.runtime.getURL("");
+        return true;
+    }
+    catch {
+        stopContentScript();
+        return false;
+    }
+}
+function getExtensionUrl(path) {
+    if (!extensionContextAvailable) {
+        return null;
+    }
+    try {
+        return chrome.runtime.getURL(path);
+    }
+    catch {
+        stopContentScript();
+        return null;
+    }
+}
+function sendRuntimeMessage(message, callback) {
+    if (!hasExtensionContext()) {
+        return;
+    }
+    try {
+        chrome.runtime.sendMessage(message, (response) => {
+            try {
+                if (chrome.runtime.lastError) {
+                    return;
+                }
+            }
+            catch {
+                stopContentScript();
+                return;
+            }
+            callback?.(response);
+        });
+    }
+    catch {
+        stopContentScript();
     }
 }
 function clamp(value, min, max) {
@@ -69,7 +126,7 @@ function playTone(kind) {
     }
 }
 function canShow(force) {
-    if (!document.body || location.protocol === "chrome:" || location.hostname === "chrome.google.com") {
+    if (!hasExtensionContext() || !document.body || location.protocol === "chrome:" || location.hostname === "chrome.google.com") {
         return false;
     }
     if (!appState.settings.enabled || appState.settings.doNotDisturb || appState.settings.mutedUntil > Date.now()) {
@@ -82,6 +139,9 @@ function canShow(force) {
 }
 function scheduleNextAppearance() {
     clearTimer(nextAppearTimer);
+    if (!extensionContextAvailable) {
+        return;
+    }
     if (MemePop.isQuiet(appState)) {
         return;
     }
@@ -135,15 +195,35 @@ function getActiveMessageCategory() {
     }
     return THEME_CATEGORIES[appState.settings.theme];
 }
+function getCategoryForText(text) {
+    if (!text) {
+        return null;
+    }
+    const knownMessage = MemePop.MESSAGES.find((message) => message.text === text);
+    if (knownMessage) {
+        return knownMessage.category;
+    }
+    if (MemePop.FOCUS_START_MESSAGES.includes(text) || MemePop.FOCUS_DONE_MESSAGES.includes(text)) {
+        return "focusMode";
+    }
+    return null;
+}
+function getCharacterTheme() {
+    return MemePop.characterThemeForSettings(appState.settings.theme, activeMessageCategory ?? getActiveMessageCategory());
+}
 function getCharacterAssetPath() {
-    return isHydrationTheme() ? "assets/character/memepop-hydration.png" : "assets/character/memepop-study.png";
+    return MemePop.THEME_CHARACTER_ASSETS[getCharacterTheme()];
 }
 function updateCharacterImage() {
     if (!characterImageElement) {
         return;
     }
-    characterImageElement.src = chrome.runtime.getURL(getCharacterAssetPath());
-    characterImageElement.alt = isHydrationTheme() ? "MemePop hydration character" : "MemePop character";
+    const imageUrl = getExtensionUrl(getCharacterAssetPath());
+    if (!imageUrl) {
+        return;
+    }
+    characterImageElement.src = imageUrl;
+    characterImageElement.alt = `MemePop ${getCharacterTheme()} character`;
 }
 function updateThemeClass() {
     if (!rootElement) {
@@ -217,8 +297,11 @@ function hideMemePop(animated) {
     }, 420);
 }
 function setMessage(text) {
-    const nextMessage = text ?? MemePop.pickMessage(getActiveMessageCategory(), lastMessageText).text;
+    const category = getCategoryForText(text) ?? getActiveMessageCategory();
+    const nextMessage = text ?? MemePop.pickMessage(category, lastMessageText).text;
+    activeMessageCategory = category;
     lastMessageText = nextMessage;
+    updateCharacterImage();
     if (messageElement) {
         messageElement.textContent = nextMessage;
     }
@@ -257,6 +340,9 @@ function createHydrationSplash() {
     return splash;
 }
 function createMemePop(message) {
+    if (!hasExtensionContext()) {
+        return null;
+    }
     const root = document.createElement("aside");
     root.id = "memepop-root";
     root.setAttribute("aria-live", "polite");
@@ -273,8 +359,12 @@ function createMemePop(message) {
     controls.append(momentButton, muteButton, settingsButton, closeButton);
     const characterButton = createButton("memepop-character", "", "Click MemePop for a reaction");
     const image = document.createElement("img");
-    image.src = chrome.runtime.getURL(getCharacterAssetPath());
-    image.alt = isHydrationTheme() ? "MemePop hydration character" : "MemePop character";
+    const imageUrl = getExtensionUrl(getCharacterAssetPath());
+    if (!imageUrl) {
+        return null;
+    }
+    image.src = imageUrl;
+    image.alt = `MemePop ${getCharacterTheme()} character`;
     image.decoding = "async";
     image.addEventListener("error", () => {
         characterButton.classList.add("memepop-character-fallback");
@@ -322,10 +412,10 @@ function createMemePop(message) {
         });
     });
     settingsButton.addEventListener("click", () => {
-        chrome.runtime.sendMessage({ type: "MEMEPOP_OPEN_SETTINGS" });
+        sendRuntimeMessage({ type: "MEMEPOP_OPEN_SETTINGS" });
     });
     momentButton.addEventListener("click", () => {
-        chrome.runtime.sendMessage({ type: "MEMEPOP_OPEN_MOMENT", message: lastMessageText });
+        sendRuntimeMessage({ type: "MEMEPOP_OPEN_MOMENT", message: lastMessageText });
     });
     characterButton.addEventListener("click", () => {
         if (dragMoved) {
@@ -336,8 +426,8 @@ function createMemePop(message) {
         restartHydrationOffer();
         playTone("click");
         resetAutoHide(true);
-        chrome.runtime.sendMessage({ type: "MEMEPOP_CHARACTER_CLICKED" }, (response) => {
-            if (chrome.runtime.lastError || !response?.awarded) {
+        sendRuntimeMessage({ type: "MEMEPOP_CHARACTER_CLICKED" }, (response) => {
+            if (!response?.awarded) {
                 return;
             }
             card.classList.remove("memepop-earned");
@@ -399,53 +489,71 @@ function showMemePop(force, message) {
     if (!target) {
         return false;
     }
-    target.append(createMemePop(message));
+    const memePop = createMemePop(message);
+    if (!memePop) {
+        return false;
+    }
+    target.append(memePop);
     centerAndRememberPosition();
     playTone(message && MemePop.FOCUS_DONE_MESSAGES.includes(message) ? "finish" : "appear");
     resetAutoHide();
     return true;
 }
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-    if (message?.type === "MEMEPOP_SHOW_NOW") {
-        showMemePop(true, message.message);
+try {
+    chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+        if (!extensionContextAvailable) {
+            sendResponse({ ok: false });
+            return;
+        }
+        if (message?.type === "MEMEPOP_SHOW_NOW") {
+            showMemePop(true, message.message);
+            scheduleNextAppearance();
+            sendResponse({ ok: Boolean(rootElement) });
+            return;
+        }
+        if (message?.type === "MEMEPOP_FOCUS_START") {
+            showMemePop(true, message.message ?? MemePop.FOCUS_START_MESSAGES[0]);
+            sendResponse({ ok: true });
+            return;
+        }
+        if (message?.type === "MEMEPOP_FOCUS_DONE") {
+            showMemePop(true, message.message ?? MemePop.FOCUS_DONE_MESSAGES[0]);
+            sendResponse({ ok: true });
+        }
+    });
+    chrome.storage.onChanged.addListener((changes, areaName) => {
+        if (!extensionContextAvailable || areaName !== "local" || !changes[MemePop.STATE_KEY]) {
+            return;
+        }
+        const previousTheme = appState.settings.theme;
+        appState = MemePop.normalizeState(changes[MemePop.STATE_KEY].newValue);
+        updateAccessoryClass();
+        updateThemeClass();
+        if (rootElement && previousTheme !== appState.settings.theme) {
+            setMessage();
+            restartHydrationOffer();
+        }
+        if (MemePop.isQuiet(appState)) {
+            hideMemePop(true);
+        }
         scheduleNextAppearance();
-        sendResponse({ ok: Boolean(rootElement) });
-        return;
-    }
-    if (message?.type === "MEMEPOP_FOCUS_START") {
-        showMemePop(true, message.message ?? MemePop.FOCUS_START_MESSAGES[0]);
-        sendResponse({ ok: true });
-        return;
-    }
-    if (message?.type === "MEMEPOP_FOCUS_DONE") {
-        showMemePop(true, message.message ?? MemePop.FOCUS_DONE_MESSAGES[0]);
-        sendResponse({ ok: true });
-    }
-});
-chrome.storage.onChanged.addListener((changes, areaName) => {
-    if (areaName !== "local" || !changes[MemePop.STATE_KEY]) {
-        return;
-    }
-    const previousTheme = appState.settings.theme;
-    appState = MemePop.normalizeState(changes[MemePop.STATE_KEY].newValue);
-    updateAccessoryClass();
-    updateThemeClass();
-    if (rootElement && previousTheme !== appState.settings.theme) {
-        setMessage();
-        restartHydrationOffer();
-    }
-    if (MemePop.isQuiet(appState)) {
-        hideMemePop(true);
-    }
-    scheduleNextAppearance();
-});
+    });
+}
+catch {
+    stopContentScript();
+}
 window.addEventListener("resize", () => centerAndRememberPosition());
 document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") {
         scheduleNextAppearance();
     }
 });
-void MemePop.readState().then((state) => {
-    appState = state;
-    scheduleNextAppearance();
-});
+if (hasExtensionContext()) {
+    void MemePop.readState().then((state) => {
+        if (!extensionContextAvailable) {
+            return;
+        }
+        appState = state;
+        scheduleNextAppearance();
+    });
+}

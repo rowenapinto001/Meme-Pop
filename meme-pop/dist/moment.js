@@ -8,9 +8,18 @@ const downloadLink = document.querySelector("#downloadLink");
 const momentStatus = document.querySelector("#momentStatus");
 const characterImage = new Image();
 let momentState = MemePop.normalizeState(undefined);
-characterImage.src = "assets/character/memepop-study.png";
+characterImage.src = MemePop.characterAssetForTheme("studying");
+function getCaption() {
+    const custom = captionInput?.value.trim();
+    return custom || messageSelect?.value || "MemePop has entered the moment.";
+}
+function getMomentMessageCategory() {
+    const caption = getCaption();
+    const selectedMessage = MemePop.MESSAGES.find((message) => message.text === caption);
+    return selectedMessage?.category ?? "studying";
+}
 function getMomentCharacterPath() {
-    return momentState.settings.theme === "hydration" ? "assets/character/memepop-hydration.png" : "assets/character/memepop-study.png";
+    return MemePop.characterAssetForTheme(momentState.settings.theme, getMomentMessageCategory());
 }
 function updateMomentCharacter() {
     const nextPath = getMomentCharacterPath();
@@ -103,14 +112,11 @@ function drawFallbackCharacter(context) {
     context.fill();
     context.restore();
 }
-function getCaption() {
-    const custom = captionInput?.value.trim();
-    return custom || messageSelect?.value || "MemePop has entered the moment.";
-}
 function renderMoment() {
     if (!canvas) {
         return;
     }
+    updateMomentCharacter();
     const context = canvas.getContext("2d");
     if (!context) {
         setMomentStatus("Canvas is not available in this browser.");

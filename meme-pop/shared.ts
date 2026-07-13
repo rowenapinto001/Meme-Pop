@@ -13,6 +13,7 @@ namespace MemePop {
     | "office"
     | "coding"
     | "hydration";
+  export type CharacterTheme = Exclude<Theme, "random">;
   export type AccessoryId = "none" | "partyHat" | "sunglasses" | "crown";
   export type MessageCategory =
     | "general"
@@ -94,6 +95,21 @@ namespace MemePop {
   export const CLICK_COIN_COOLDOWN_MS = 15000;
   export const AUTO_HIDE_MIN_MS = 6000;
   export const AUTO_HIDE_MAX_MS = 10000;
+  export const DEFAULT_CHARACTER_THEME: CharacterTheme = "studying";
+
+  export const THEME_CHARACTER_ASSETS: Record<CharacterTheme, string> = {
+    focus: "assets/character/memepop-focus.png",
+    break: "assets/character/memepop-break.png",
+    motivation: "assets/character/memepop-motivation.png",
+    procrastination: "assets/character/memepop-procrastination.png",
+    lateNight: "assets/character/memepop-late-night.png",
+    social: "assets/character/memepop-social.png",
+    studying: "assets/character/memepop-study.png",
+    gaming: "assets/character/memepop-gaming.png",
+    office: "assets/character/memepop-office.png",
+    coding: "assets/character/memepop-coding.png",
+    hydration: "assets/character/memepop-hydration.png"
+  };
 
   export const ACCESSORIES: Accessory[] = [
     { id: "none", name: "No accessory", price: 0, description: "Classic MemePop energy." },
@@ -578,6 +594,50 @@ namespace MemePop {
     }
 
     return Math.random() > 0.78 ? "motivation" : "general";
+  }
+
+  export function characterThemeForCategory(category: MessageCategory): CharacterTheme {
+    if (category === "focusMode") {
+      return "focus";
+    }
+
+    if (category === "breakTime") {
+      return "break";
+    }
+
+    if (category === "motivationMode" || category === "motivation") {
+      return "motivation";
+    }
+
+    if (category === "procrastinationMode" || category === "procrastination" || category === "shopping") {
+      return "procrastination";
+    }
+
+    if (category === "lateNightMode" || category === "lateNight") {
+      return "lateNight";
+    }
+
+    if (category === "socialMode" || category === "social") {
+      return "social";
+    }
+
+    if (category === "videos") {
+      return "gaming";
+    }
+
+    if (category === "office" || category === "studying" || category === "coding" || category === "gaming" || category === "hydration") {
+      return category;
+    }
+
+    return DEFAULT_CHARACTER_THEME;
+  }
+
+  export function characterThemeForSettings(theme: Theme, category: MessageCategory = "general"): CharacterTheme {
+    return theme === "random" ? characterThemeForCategory(category) : theme;
+  }
+
+  export function characterAssetForTheme(theme: Theme, category: MessageCategory = "general"): string {
+    return THEME_CHARACTER_ASSETS[characterThemeForSettings(theme, category)];
   }
 
   export function messagesForCategory(category: MessageCategory): MessageItem[] {

@@ -14,6 +14,8 @@ let autoHideTimer: number | undefined;
 let countdownTimer: number | undefined;
 let removeTimer: number | undefined;
 let lastMessageText = "";
+let activeMessageCategory: MemePop.MessageCategory | null = null;
+let extensionContextAvailable = true;
 let dragging = false;
 let dragMoved = false;
 let dragOffsetX = 0;
@@ -37,6 +39,68 @@ const THEME_CATEGORIES: Record<Exclude<MemePop.Theme, "random">, MemePop.Message
 function clearTimer(timer: number | undefined): void {
   if (timer) {
     window.clearTimeout(timer);
+  }
+}
+
+function stopContentScript(): void {
+  extensionContextAvailable = false;
+  clearTimer(nextAppearTimer);
+  clearTimer(autoHideTimer);
+  clearTimer(countdownTimer);
+  clearTimer(removeTimer);
+  hideMemePop(false);
+}
+
+function hasExtensionContext(): boolean {
+  if (!extensionContextAvailable) {
+    return false;
+  }
+
+  try {
+    void chrome.runtime.getURL("");
+    return true;
+  } catch {
+    stopContentScript();
+    return false;
+  }
+}
+
+function getExtensionUrl(path: string): string | null {
+  if (!extensionContextAvailable) {
+    return null;
+  }
+
+  try {
+    return chrome.runtime.getURL(path);
+  } catch {
+    stopContentScript();
+    return null;
+  }
+}
+
+function sendRuntimeMessage<TResponse>(
+  message: Record<string, unknown>,
+  callback?: (response: TResponse | undefined) => void
+): void {
+  if (!hasExtensionContext()) {
+    return;
+  }
+
+  try {
+    chrome.runtime.sendMessage(message, (response?: TResponse) => {
+      try {
+        if (chrome.runtime.lastError) {
+          return;
+        }
+      } catch {
+        stopContentScript();
+        return;
+      }
+
+      callback?.(response);
+    });
+  } catch {
+    stopContentScript();
   }
 }
 
@@ -82,7 +146,7 @@ function playTone(kind: "appear" | "click" | "unlock" | "finish"): void {
 }
 
 function canShow(force: boolean): boolean {
-  if (!document.body || location.protocol === "chrome:" || location.hostname === "chrome.google.com") {
+  if (!hasExtensionContext() || !document.body || location.protocol === "chrome:" || location.hostname === "chrome.google.com") {
     return false;
   }
 
@@ -99,6 +163,10 @@ function canShow(force: boolean): boolean {
 
 function scheduleNextAppearance(): void {
   clearTimer(nextAppearTimer);
+
+  if (!extensionContextAvailable) {
+    return;
+  }
 
   if (MemePop.isQuiet(appState)) {
     return;
@@ -168,8 +236,30 @@ function getActiveMessageCategory(): MemePop.MessageCategory {
   return THEME_CATEGORIES[appState.settings.theme];
 }
 
+function getCategoryForText(text?: string): MemePop.MessageCategory | null {
+  if (!text) {
+    return null;
+  }
+
+  const knownMessage = MemePop.MESSAGES.find((message) => message.text === text);
+
+  if (knownMessage) {
+    return knownMessage.category;
+  }
+
+  if (MemePop.FOCUS_START_MESSAGES.includes(text) || MemePop.FOCUS_DONE_MESSAGES.includes(text)) {
+    return "focusMode";
+  }
+
+  return null;
+}
+
+function getCharacterTheme(): MemePop.CharacterTheme {
+  return MemePop.characterThemeForSettings(appState.settings.theme, activeMessageCategory ?? getActiveMessageCategory());
+}
+
 function getCharacterAssetPath(): string {
-  return isHydrationTheme() ? "assets/character/memepop-hydration.png" : "assets/character/memepop-study.png";
+  return MemePop.THEME_CHARACTER_ASSETS[getCharacterTheme()];
 }
 
 function updateCharacterImage(): void {
@@ -177,8 +267,14 @@ function updateCharacterImage(): void {
     return;
   }
 
-  characterImageElement.src = chrome.runtime.getURL(getCharacterAssetPath());
-  characterImageElement.alt = isHydrationTheme() ? "MemePop hydration character" : "MemePop character";
+  const imageUrl = getExtensionUrl(getCharacterAssetPath());
+
+  if (!imageUrl) {
+    return;
+  }
+
+  characterImageElement.src = imageUrl;
+  characterImageElement.alt = `MemePop ${getCharacterTheme()} character`;
 }
 
 function updateThemeClass(): void {
@@ -284,9 +380,12 @@ function hideMemePop(animated: boolean): void {
 }
 
 function setMessage(text?: string): void {
-  const nextMessage = text ?? MemePop.pickMessage(getActiveMessageCategory(), lastMessageText).text;
+  const category = getCategoryForText(text) ?? getActiveMessageCategory();
+  const nextMessage = text ?? MemePop.pickMessage(category, lastMessageText).text;
 
+  activeMessageCategory = category;
   lastMessageText = nextMessage;
+  updateCharacterImage();
 
   if (messageElement) {
     messageElement.textContent = nextMessage;
@@ -334,7 +433,11 @@ function createHydrationSplash(): HTMLElement {
   return splash;
 }
 
-function createMemePop(message?: string): HTMLElement {
+function createMemePop(message?: string): HTMLElement | null {
+  if (!hasExtensionContext()) {
+    return null;
+  }
+
   const root = document.createElement("aside");
   root.id = "memepop-root";
   root.setAttribute("aria-live", "polite");
@@ -356,8 +459,14 @@ function createMemePop(message?: string): HTMLElement {
 
   const characterButton = createButton("memepop-character", "", "Click MemePop for a reaction");
   const image = document.createElement("img");
-  image.src = chrome.runtime.getURL(getCharacterAssetPath());
-  image.alt = isHydrationTheme() ? "MemePop hydration character" : "MemePop character";
+  const imageUrl = getExtensionUrl(getCharacterAssetPath());
+
+  if (!imageUrl) {
+    return null;
+  }
+
+  image.src = imageUrl;
+  image.alt = `MemePop ${getCharacterTheme()} character`;
   image.decoding = "async";
   image.addEventListener("error", () => {
     characterButton.classList.add("memepop-character-fallback");
@@ -416,10 +525,10 @@ function createMemePop(message?: string): HTMLElement {
     });
   });
   settingsButton.addEventListener("click", () => {
-    chrome.runtime.sendMessage({ type: "MEMEPOP_OPEN_SETTINGS" });
+    sendRuntimeMessage({ type: "MEMEPOP_OPEN_SETTINGS" });
   });
   momentButton.addEventListener("click", () => {
-    chrome.runtime.sendMessage({ type: "MEMEPOP_OPEN_MOMENT", message: lastMessageText });
+    sendRuntimeMessage({ type: "MEMEPOP_OPEN_MOMENT", message: lastMessageText });
   });
   characterButton.addEventListener("click", () => {
     if (dragMoved) {
@@ -431,8 +540,8 @@ function createMemePop(message?: string): HTMLElement {
     restartHydrationOffer();
     playTone("click");
     resetAutoHide(true);
-    chrome.runtime.sendMessage({ type: "MEMEPOP_CHARACTER_CLICKED" }, (response?: { awarded?: boolean; coins?: number }) => {
-      if (chrome.runtime.lastError || !response?.awarded) {
+    sendRuntimeMessage<{ awarded?: boolean; coins?: number }>({ type: "MEMEPOP_CHARACTER_CLICKED" }, (response) => {
+      if (!response?.awarded) {
         return;
       }
 
@@ -509,54 +618,69 @@ function showMemePop(force: boolean, message?: string): boolean {
     return false;
   }
 
-  target.append(createMemePop(message));
+  const memePop = createMemePop(message);
+
+  if (!memePop) {
+    return false;
+  }
+
+  target.append(memePop);
   centerAndRememberPosition();
   playTone(message && MemePop.FOCUS_DONE_MESSAGES.includes(message) ? "finish" : "appear");
   resetAutoHide();
   return true;
 }
 
-chrome.runtime.onMessage.addListener((message: ContentCommand, _sender: unknown, sendResponse: (response: { ok: boolean }) => void) => {
-  if (message?.type === "MEMEPOP_SHOW_NOW") {
-    showMemePop(true, message.message);
+try {
+  chrome.runtime.onMessage.addListener((message: ContentCommand, _sender: unknown, sendResponse: (response: { ok: boolean }) => void) => {
+    if (!extensionContextAvailable) {
+      sendResponse({ ok: false });
+      return;
+    }
+
+    if (message?.type === "MEMEPOP_SHOW_NOW") {
+      showMemePop(true, message.message);
+      scheduleNextAppearance();
+      sendResponse({ ok: Boolean(rootElement) });
+      return;
+    }
+
+    if (message?.type === "MEMEPOP_FOCUS_START") {
+      showMemePop(true, message.message ?? MemePop.FOCUS_START_MESSAGES[0]);
+      sendResponse({ ok: true });
+      return;
+    }
+
+    if (message?.type === "MEMEPOP_FOCUS_DONE") {
+      showMemePop(true, message.message ?? MemePop.FOCUS_DONE_MESSAGES[0]);
+      sendResponse({ ok: true });
+    }
+  });
+
+  chrome.storage.onChanged.addListener((changes: Record<string, { newValue?: Partial<MemePop.AppState> }>, areaName: string) => {
+    if (!extensionContextAvailable || areaName !== "local" || !changes[MemePop.STATE_KEY]) {
+      return;
+    }
+
+    const previousTheme = appState.settings.theme;
+    appState = MemePop.normalizeState(changes[MemePop.STATE_KEY].newValue);
+    updateAccessoryClass();
+    updateThemeClass();
+
+    if (rootElement && previousTheme !== appState.settings.theme) {
+      setMessage();
+      restartHydrationOffer();
+    }
+
+    if (MemePop.isQuiet(appState)) {
+      hideMemePop(true);
+    }
+
     scheduleNextAppearance();
-    sendResponse({ ok: Boolean(rootElement) });
-    return;
-  }
-
-  if (message?.type === "MEMEPOP_FOCUS_START") {
-    showMemePop(true, message.message ?? MemePop.FOCUS_START_MESSAGES[0]);
-    sendResponse({ ok: true });
-    return;
-  }
-
-  if (message?.type === "MEMEPOP_FOCUS_DONE") {
-    showMemePop(true, message.message ?? MemePop.FOCUS_DONE_MESSAGES[0]);
-    sendResponse({ ok: true });
-  }
-});
-
-chrome.storage.onChanged.addListener((changes: Record<string, { newValue?: Partial<MemePop.AppState> }>, areaName: string) => {
-  if (areaName !== "local" || !changes[MemePop.STATE_KEY]) {
-    return;
-  }
-
-  const previousTheme = appState.settings.theme;
-  appState = MemePop.normalizeState(changes[MemePop.STATE_KEY].newValue);
-  updateAccessoryClass();
-  updateThemeClass();
-
-  if (rootElement && previousTheme !== appState.settings.theme) {
-    setMessage();
-    restartHydrationOffer();
-  }
-
-  if (MemePop.isQuiet(appState)) {
-    hideMemePop(true);
-  }
-
-  scheduleNextAppearance();
-});
+  });
+} catch {
+  stopContentScript();
+}
 
 window.addEventListener("resize", () => centerAndRememberPosition());
 document.addEventListener("visibilitychange", () => {
@@ -565,7 +689,13 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-void MemePop.readState().then((state) => {
-  appState = state;
-  scheduleNextAppearance();
-});
+if (hasExtensionContext()) {
+  void MemePop.readState().then((state) => {
+    if (!extensionContextAvailable) {
+      return;
+    }
+
+    appState = state;
+    scheduleNextAppearance();
+  });
+}
