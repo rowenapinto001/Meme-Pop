@@ -1,5 +1,6 @@
 const optionsEnabledInput = document.querySelector<HTMLInputElement>("#enabledInput");
 const optionsDndInput = document.querySelector<HTMLInputElement>("#dndInput");
+const optionsThemeSelect = document.querySelector<HTMLSelectElement>("#themeSelect");
 const optionsFrequencySelect = document.querySelector<HTMLSelectElement>("#frequencySelect");
 const optionsCoinCount = document.querySelector<HTMLElement>("#coinCount");
 const optionsStreakCount = document.querySelector<HTMLElement>("#streakCount");
@@ -36,6 +37,10 @@ function renderOptions(): void {
     optionsFrequencySelect.value = optionsState.settings.frequency;
   }
 
+  if (optionsThemeSelect) {
+    optionsThemeSelect.value = optionsState.settings.theme;
+  }
+
   if (optionsCoinCount) {
     optionsCoinCount.textContent = `Meme Coins: ${optionsState.wallet.coins}`;
   }
@@ -53,6 +58,7 @@ async function saveOptions(): Promise<void> {
   optionsState = await MemePop.updateState((state) => {
     state.settings.enabled = optionsEnabledInput?.checked ?? state.settings.enabled;
     state.settings.doNotDisturb = optionsDndInput?.checked ?? state.settings.doNotDisturb;
+    state.settings.theme = (optionsThemeSelect?.value as MemePop.Theme | undefined) ?? state.settings.theme;
     state.settings.frequency = (optionsFrequencySelect?.value as MemePop.Frequency | undefined) ?? state.settings.frequency;
   });
   renderOptions();
@@ -61,6 +67,7 @@ async function saveOptions(): Promise<void> {
 
 optionsEnabledInput?.addEventListener("change", () => void saveOptions());
 optionsDndInput?.addEventListener("change", () => void saveOptions());
+optionsThemeSelect?.addEventListener("change", () => void saveOptions());
 optionsFrequencySelect?.addEventListener("change", () => void saveOptions());
 
 resetPositionButton?.addEventListener("click", () => {

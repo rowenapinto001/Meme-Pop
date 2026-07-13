@@ -1,10 +1,14 @@
 namespace MemePop {
   export type Frequency = "off" | "rare" | "normal" | "frequent";
+  export type Theme = "random" | "office" | "studying" | "gaming" | "coding" | "hydration";
   export type AccessoryId = "none" | "partyHat" | "sunglasses" | "crown";
   export type MessageCategory =
     | "general"
+    | "office"
     | "studying"
     | "coding"
+    | "gaming"
+    | "hydration"
     | "videos"
     | "shopping"
     | "lateNight"
@@ -26,6 +30,7 @@ namespace MemePop {
 
   export type Settings = {
     enabled: boolean;
+    theme: Theme;
     frequency: Frequency;
     soundEnabled: boolean;
     doNotDisturb: boolean;
@@ -82,6 +87,7 @@ namespace MemePop {
   export const DEFAULT_STATE: AppState = {
     settings: {
       enabled: true,
+      theme: "random",
       frequency: "normal",
       soundEnabled: false,
       doNotDisturb: false,
@@ -126,6 +132,14 @@ namespace MemePop {
     { id: "general-12", category: "general", text: "MemePop approves this click. Probably." },
     { id: "general-13", category: "general", text: "Keep going. The tabs believe in you." },
 
+    { id: "office-1", category: "office", text: "That meeting could have been a snack." },
+    { id: "office-2", category: "office", text: "Spreadsheet opened. Confidence pending." },
+    { id: "office-3", category: "office", text: "Pretending to look busy: advanced mode." },
+    { id: "office-4", category: "office", text: "Inbox says hello. MemePop says later." },
+    { id: "office-5", category: "office", text: "Professional tiny chaos has arrived." },
+    { id: "office-6", category: "office", text: "This tab needs a coffee and a boundary." },
+    { id: "office-7", category: "office", text: "Calendar invite detected. Emotional support deployed." },
+
     { id: "study-1", category: "studying", text: "Academic comeback loading." },
     { id: "study-2", category: "studying", text: "One more chapter. Maybe two if the font is big." },
     { id: "study-3", category: "studying", text: "Your notes are trying their best." },
@@ -153,6 +167,22 @@ namespace MemePop {
     { id: "coding-11", category: "coding", text: "Have you tried asking the rubber duck nicely?" },
     { id: "coding-12", category: "coding", text: "Debugging is just detective work with snacks." },
     { id: "coding-13", category: "coding", text: "The bug vanished when you opened DevTools." },
+
+    { id: "gaming-1", category: "gaming", text: "Just one more round. Very scientific." },
+    { id: "gaming-2", category: "gaming", text: "That was totally lag." },
+    { id: "gaming-3", category: "gaming", text: "Victory is loading." },
+    { id: "gaming-4", category: "gaming", text: "Inventory full. Brain also full." },
+    { id: "gaming-5", category: "gaming", text: "Boss fight energy detected." },
+    { id: "gaming-6", category: "gaming", text: "MemePop believes in the comeback." },
+    { id: "gaming-7", category: "gaming", text: "Respawn with snacks." },
+
+    { id: "hydration-1", category: "hydration", text: "Hydration break! MemePop brought water." },
+    { id: "hydration-2", category: "hydration", text: "Tiny sip. Dramatic delivery." },
+    { id: "hydration-3", category: "hydration", text: "Open mouth? Browser cup incoming." },
+    { id: "hydration-4", category: "hydration", text: "Sip check: please accept this pixels-water." },
+    { id: "hydration-5", category: "hydration", text: "MemePop is feeding you water responsibly." },
+    { id: "hydration-6", category: "hydration", text: "Stay hydrated. Your tabs are cheering." },
+    { id: "hydration-7", category: "hydration", text: "Water has entered the chat." },
 
     { id: "video-1", category: "videos", text: "One more video? Very believable." },
     { id: "video-2", category: "videos", text: "The autoplay button is feeling powerful." },
@@ -269,10 +299,14 @@ namespace MemePop {
     const frequency: Frequency = ["off", "rare", "normal", "frequent"].includes(settings.frequency as string)
       ? (settings.frequency as Frequency)
       : DEFAULT_STATE.settings.frequency;
+    const theme: Theme = ["random", "office", "studying", "gaming", "coding", "hydration"].includes(settings.theme as string)
+      ? (settings.theme as Theme)
+      : DEFAULT_STATE.settings.theme;
 
     return {
       settings: {
         enabled: typeof settings.enabled === "boolean" ? settings.enabled : DEFAULT_STATE.settings.enabled,
+        theme,
         frequency,
         soundEnabled: typeof settings.soundEnabled === "boolean" ? settings.soundEnabled : DEFAULT_STATE.settings.soundEnabled,
         doNotDisturb: typeof settings.doNotDisturb === "boolean" ? settings.doNotDisturb : DEFAULT_STATE.settings.doNotDisturb,
@@ -420,6 +454,28 @@ namespace MemePop {
       host.includes("npmjs")
     ) {
       return "coding";
+    }
+
+    if (
+      host.includes("steam") ||
+      host.includes("epicgames") ||
+      host.includes("itch.io") ||
+      host.includes("roblox") ||
+      host.includes("xbox") ||
+      host.includes("playstation")
+    ) {
+      return "gaming";
+    }
+
+    if (
+      host.includes("docs.google") ||
+      host.includes("sheets.google") ||
+      host.includes("office") ||
+      host.includes("notion") ||
+      host.includes("slack") ||
+      host.includes("teams")
+    ) {
+      return "office";
     }
 
     if (

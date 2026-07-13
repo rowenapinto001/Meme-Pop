@@ -1,5 +1,6 @@
 "use strict";
 const enabledInput = document.querySelector("#enabledInput");
+const themeSelect = document.querySelector("#themeSelect");
 const frequencySelect = document.querySelector("#frequencySelect");
 const soundInput = document.querySelector("#soundInput");
 const dndInput = document.querySelector("#dndInput");
@@ -137,6 +138,9 @@ function render() {
     if (frequencySelect) {
         frequencySelect.value = state.settings.frequency;
     }
+    if (themeSelect) {
+        themeSelect.value = state.settings.theme;
+    }
     if (soundInput) {
         soundInput.checked = state.settings.soundEnabled;
     }
@@ -161,6 +165,7 @@ function render() {
 async function saveSettings() {
     state = await MemePop.updateState((nextState) => {
         nextState.settings.enabled = enabledInput?.checked ?? nextState.settings.enabled;
+        nextState.settings.theme = themeSelect?.value ?? nextState.settings.theme;
         nextState.settings.frequency = frequencySelect?.value ?? nextState.settings.frequency;
         nextState.settings.soundEnabled = soundInput?.checked ?? nextState.settings.soundEnabled;
         nextState.settings.doNotDisturb = dndInput?.checked ?? nextState.settings.doNotDisturb;
@@ -265,6 +270,7 @@ function toggleFocus() {
     });
 }
 enabledInput?.addEventListener("change", () => void saveSettings());
+themeSelect?.addEventListener("change", () => void saveSettings());
 frequencySelect?.addEventListener("change", () => void saveSettings());
 soundInput?.addEventListener("change", () => void saveSettings());
 dndInput?.addEventListener("change", () => void saveSettings());

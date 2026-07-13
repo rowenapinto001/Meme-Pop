@@ -7,7 +7,17 @@ const generateButton = document.querySelector("#generateButton");
 const downloadLink = document.querySelector("#downloadLink");
 const momentStatus = document.querySelector("#momentStatus");
 const characterImage = new Image();
-characterImage.src = "assets/character/memepop-hydration.png";
+let momentState = MemePop.normalizeState(undefined);
+characterImage.src = "assets/character/memepop-study.png";
+function getMomentCharacterPath() {
+    return momentState.settings.theme === "hydration" ? "assets/character/memepop-hydration.png" : "assets/character/memepop-study.png";
+}
+function updateMomentCharacter() {
+    const nextPath = getMomentCharacterPath();
+    if (!characterImage.src.endsWith(nextPath)) {
+        characterImage.src = nextPath;
+    }
+}
 function setMomentStatus(message) {
     if (momentStatus) {
         momentStatus.textContent = message;
@@ -174,5 +184,9 @@ characterImage.addEventListener("error", () => {
 });
 document.addEventListener("DOMContentLoaded", () => {
     populateMessages();
-    renderMoment();
+    void MemePop.readState().then((state) => {
+        momentState = state;
+        updateMomentCharacter();
+        renderMoment();
+    });
 });

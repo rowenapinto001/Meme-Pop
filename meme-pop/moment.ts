@@ -6,8 +6,21 @@ const generateButton = document.querySelector<HTMLButtonElement>("#generateButto
 const downloadLink = document.querySelector<HTMLAnchorElement>("#downloadLink");
 const momentStatus = document.querySelector<HTMLElement>("#momentStatus");
 const characterImage = new Image();
+let momentState: MemePop.AppState = MemePop.normalizeState(undefined);
 
-characterImage.src = "assets/character/memepop-hydration.png";
+characterImage.src = "assets/character/memepop-study.png";
+
+function getMomentCharacterPath(): string {
+  return momentState.settings.theme === "hydration" ? "assets/character/memepop-hydration.png" : "assets/character/memepop-study.png";
+}
+
+function updateMomentCharacter(): void {
+  const nextPath = getMomentCharacterPath();
+
+  if (!characterImage.src.endsWith(nextPath)) {
+    characterImage.src = nextPath;
+  }
+}
 
 function setMomentStatus(message: string): void {
   if (momentStatus) {
@@ -202,5 +215,9 @@ characterImage.addEventListener("error", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   populateMessages();
-  renderMoment();
+  void MemePop.readState().then((state) => {
+    momentState = state;
+    updateMomentCharacter();
+    renderMoment();
+  });
 });

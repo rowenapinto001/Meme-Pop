@@ -1,4 +1,5 @@
 const enabledInput = document.querySelector<HTMLInputElement>("#enabledInput");
+const themeSelect = document.querySelector<HTMLSelectElement>("#themeSelect");
 const frequencySelect = document.querySelector<HTMLSelectElement>("#frequencySelect");
 const soundInput = document.querySelector<HTMLInputElement>("#soundInput");
 const dndInput = document.querySelector<HTMLInputElement>("#dndInput");
@@ -161,6 +162,10 @@ function render(): void {
     frequencySelect.value = state.settings.frequency;
   }
 
+  if (themeSelect) {
+    themeSelect.value = state.settings.theme;
+  }
+
   if (soundInput) {
     soundInput.checked = state.settings.soundEnabled;
   }
@@ -192,6 +197,7 @@ function render(): void {
 async function saveSettings(): Promise<void> {
   state = await MemePop.updateState((nextState) => {
     nextState.settings.enabled = enabledInput?.checked ?? nextState.settings.enabled;
+    nextState.settings.theme = (themeSelect?.value as MemePop.Theme | undefined) ?? nextState.settings.theme;
     nextState.settings.frequency = (frequencySelect?.value as MemePop.Frequency | undefined) ?? nextState.settings.frequency;
     nextState.settings.soundEnabled = soundInput?.checked ?? nextState.settings.soundEnabled;
     nextState.settings.doNotDisturb = dndInput?.checked ?? nextState.settings.doNotDisturb;
@@ -316,6 +322,7 @@ function toggleFocus(): void {
 }
 
 enabledInput?.addEventListener("change", () => void saveSettings());
+themeSelect?.addEventListener("change", () => void saveSettings());
 frequencySelect?.addEventListener("change", () => void saveSettings());
 soundInput?.addEventListener("change", () => void saveSettings());
 dndInput?.addEventListener("change", () => void saveSettings());

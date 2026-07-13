@@ -19,15 +19,14 @@ let dragMoved = false;
 let dragOffsetX = 0;
 let dragOffsetY = 0;
 const VISIBLE_DURATION_MS = 10000;
-const HYDRATION_MESSAGES = [
-  "Hydration break! Your tabs look thirsty.",
-  "Tiny sip. Dramatic spill.",
-  "Water has entered the chat.",
-  "This page is now lightly moisturized.",
-  "Sip check: passed with splash damage.",
-  "MemePop brought water. The screen disagreed.",
-  "Stay hydrated. Tabs are absorbent, probably."
-];
+let characterImageElement: HTMLImageElement | null = null;
+const THEME_CATEGORIES: Record<Exclude<MemePop.Theme, "random">, MemePop.MessageCategory> = {
+  office: "office",
+  studying: "studying",
+  gaming: "gaming",
+  coding: "coding",
+  hydration: "hydration"
+};
 
 function clearTimer(timer: number | undefined): void {
   if (timer) {
@@ -151,20 +150,61 @@ function centerAndRememberPosition(): void {
   });
 }
 
-function restartHydrationSplash(): void {
+function isHydrationTheme(): boolean {
+  return appState.settings.theme === "hydration";
+}
+
+function getActiveMessageCategory(): MemePop.MessageCategory {
+  if (appState.settings.theme === "random") {
+    return MemePop.categoryForUrl(window.location.href);
+  }
+
+  return THEME_CATEGORIES[appState.settings.theme];
+}
+
+function getCharacterAssetPath(): string {
+  return isHydrationTheme() ? "assets/character/memepop-hydration.png" : "assets/character/memepop-study.png";
+}
+
+function updateCharacterImage(): void {
+  if (!characterImageElement) {
+    return;
+  }
+
+  characterImageElement.src = chrome.runtime.getURL(getCharacterAssetPath());
+  characterImageElement.alt = isHydrationTheme() ? "MemePop hydration character" : "MemePop character";
+}
+
+function updateThemeClass(): void {
   if (!rootElement) {
+    return;
+  }
+
+  rootElement.classList.remove(
+    "memepop-theme-random",
+    "memepop-theme-office",
+    "memepop-theme-studying",
+    "memepop-theme-gaming",
+    "memepop-theme-coding",
+    "memepop-theme-hydration",
+    "memepop-splashing"
+  );
+  rootElement.classList.add(`memepop-theme-${appState.settings.theme}`);
+  updateCharacterImage();
+
+  if (isHydrationTheme()) {
+    restartHydrationSplash();
+  }
+}
+
+function restartHydrationSplash(): void {
+  if (!rootElement || !isHydrationTheme()) {
     return;
   }
 
   rootElement.classList.remove("memepop-splashing");
   void rootElement.offsetWidth;
   rootElement.classList.add("memepop-splashing");
-}
-
-function pickHydrationMessage(): string {
-  const choices = HYDRATION_MESSAGES.filter((message) => message !== lastMessageText);
-  const messages = choices.length ? choices : HYDRATION_MESSAGES;
-  return messages[Math.floor(Math.random() * messages.length)];
 }
 
 function updateCountdown(): void {
@@ -213,6 +253,7 @@ function hideMemePop(animated: boolean): void {
     cardElement = null;
     messageElement = null;
     countdownElement = null;
+    characterImageElement = null;
     return;
   }
 
@@ -224,12 +265,13 @@ function hideMemePop(animated: boolean): void {
       cardElement = null;
       messageElement = null;
       countdownElement = null;
+      characterImageElement = null;
     }
   }, 420);
 }
 
 function setMessage(text?: string): void {
-  const nextMessage = text ?? pickHydrationMessage();
+  const nextMessage = text ?? MemePop.pickMessage(getActiveMessageCategory(), lastMessageText).text;
 
   lastMessageText = nextMessage;
 
@@ -283,7 +325,7 @@ function createMemePop(message?: string): HTMLElement {
   const root = document.createElement("aside");
   root.id = "memepop-root";
   root.setAttribute("aria-live", "polite");
-  root.className = "memepop-accessory-none memepop-splashing";
+  root.className = "memepop-accessory-none";
 
   const splash = createHydrationSplash();
 
@@ -301,13 +343,23 @@ function createMemePop(message?: string): HTMLElement {
 
   const characterButton = createButton("memepop-character", "", "Click MemePop for a reaction");
   const image = document.createElement("img");
-  image.src = chrome.runtime.getURL("assets/character/memepop-hydration.png");
-  image.alt = "MemePop hydration character";
+  image.src = chrome.runtime.getURL(getCharacterAssetPath());
+  image.alt = isHydrationTheme() ? "MemePop hydration character" : "MemePop character";
   image.decoding = "async";
   image.addEventListener("error", () => {
     characterButton.classList.add("memepop-character-fallback");
   });
-  characterButton.append(image);
+  characterImageElement = image;
+
+  const hydrationArm = document.createElement("span");
+  hydrationArm.className = "memepop-hydration-arm";
+  hydrationArm.setAttribute("aria-hidden", "true");
+
+  const hydrationCup = document.createElement("span");
+  hydrationCup.className = "memepop-hydration-cup";
+  hydrationCup.setAttribute("aria-hidden", "true");
+
+  characterButton.append(image, hydrationArm, hydrationCup);
 
   const accessory = document.createElement("span");
   accessory.className = "memepop-accessory";
@@ -337,6 +389,7 @@ function createMemePop(message?: string): HTMLElement {
   messageElement = messageText;
   countdownElement = countdown;
   updateAccessoryClass();
+  updateThemeClass();
   setMessage(message);
 
   closeButton.addEventListener("click", () => hideMemePop(true));
@@ -429,6 +482,7 @@ function showMemePop(force: boolean, message?: string): boolean {
   }
 
   if (rootElement) {
+    updateThemeClass();
     setMessage(message);
     restartHydrationSplash();
     centerAndRememberPosition();
@@ -474,8 +528,15 @@ chrome.storage.onChanged.addListener((changes: Record<string, { newValue?: Parti
     return;
   }
 
+  const previousTheme = appState.settings.theme;
   appState = MemePop.normalizeState(changes[MemePop.STATE_KEY].newValue);
   updateAccessoryClass();
+  updateThemeClass();
+
+  if (rootElement && previousTheme !== appState.settings.theme) {
+    setMessage();
+    restartHydrationSplash();
+  }
 
   if (MemePop.isQuiet(appState)) {
     hideMemePop(true);
