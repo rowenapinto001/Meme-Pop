@@ -3,10 +3,9 @@
   "name": "MemePop",
   "version": "1.0.0",
   "description": "A cute browser companion with meme reactions, focus mode, coins, streaks, and Meme Moments.",
-  "permissions": ["storage", "activeTab", "tabs", "notifications", "alarms"],
+  "permissions": ["storage", "activeTab", "tabs", "notifications", "alarms", "sidePanel"],
   "action": {
     "default_title": "MemePop",
-    "default_popup": "popup.html",
     "default_icon": {
       "16": "assets/icons/icon16.png",
       "48": "assets/icons/icon48.png",
@@ -20,6 +19,9 @@
   },
   "background": {
     "service_worker": "dist/background.js"
+  },
+  "side_panel": {
+    "default_path": "popup.html"
   },
   "options_page": "options.html",
   "content_scripts": [

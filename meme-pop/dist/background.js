@@ -2,6 +2,15 @@
 importScripts("shared.js");
 const FOCUS_ALARM_NAME = "memepop-focus-complete";
 const DEADLINE_ALARM_PREFIX = "memepop-deadline-reminder:";
+function enableSidePanelOnActionClick() {
+    try {
+        chrome.sidePanel?.setPanelBehavior({ openPanelOnActionClick: true }, () => {
+            void chrome.runtime.lastError;
+        });
+    }
+    catch {
+    }
+}
 function deadlineAlarmName(deadlineId) {
     return `${DEADLINE_ALARM_PREFIX}${deadlineId}`;
 }
@@ -66,11 +75,14 @@ async function ensureInitialState() {
     scheduleDeadlineReminders(state);
 }
 chrome.runtime.onInstalled.addListener(() => {
+    enableSidePanelOnActionClick();
     void ensureInitialState();
 });
 chrome.runtime.onStartup.addListener(() => {
+    enableSidePanelOnActionClick();
     void ensureInitialState();
 });
+enableSidePanelOnActionClick();
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (message?.type === "MEMEPOP_CHARACTER_CLICKED") {
         let awarded = false;

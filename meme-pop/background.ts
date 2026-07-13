@@ -11,6 +11,28 @@ type RuntimeMessage = {
   message?: string;
 };
 
+type ChromeWithSidePanel = typeof chrome & {
+  sidePanel?: {
+    setPanelBehavior(
+      behavior: { openPanelOnActionClick: boolean },
+      callback?: () => void
+    ): void;
+  };
+};
+
+function enableSidePanelOnActionClick(): void {
+  try {
+    (chrome as ChromeWithSidePanel).sidePanel?.setPanelBehavior(
+      { openPanelOnActionClick: true },
+      () => {
+        void chrome.runtime.lastError;
+      }
+    );
+  } catch {
+    // Older Chrome versions may not expose the side panel API.
+  }
+}
+
 function deadlineAlarmName(deadlineId: string): string {
   return `${DEADLINE_ALARM_PREFIX}${deadlineId}`;
 }
@@ -93,12 +115,16 @@ async function ensureInitialState(): Promise<void> {
 }
 
 chrome.runtime.onInstalled.addListener(() => {
+  enableSidePanelOnActionClick();
   void ensureInitialState();
 });
 
 chrome.runtime.onStartup.addListener(() => {
+  enableSidePanelOnActionClick();
   void ensureInitialState();
 });
+
+enableSidePanelOnActionClick();
 
 chrome.runtime.onMessage.addListener((message: RuntimeMessage, _sender: unknown, sendResponse: (response: Record<string, unknown>) => void) => {
   if (message?.type === "MEMEPOP_CHARACTER_CLICKED") {
