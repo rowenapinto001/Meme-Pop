@@ -118,40 +118,27 @@ function getCenteredPosition(): MemePop.CharacterPosition {
 }
 
 function applySavedPosition(center = false): void {
-  if (!rootElement || !cardElement) {
+  if (!rootElement) {
     return;
   }
 
-  const cardRect = cardElement.getBoundingClientRect();
-  const fallback = center ? getCenteredPosition() : getDefaultPosition();
-  const fallbackX = fallback.x ?? 20;
-  const fallbackY = fallback.y ?? 20;
-  const savedX = center ? fallbackX : appState.position.x ?? fallbackX;
-  const savedY = center ? fallbackY : appState.position.y ?? fallbackY;
-  const maxX = Math.max(12, window.innerWidth - cardRect.width - 12);
-  const maxY = Math.max(12, window.innerHeight - cardRect.height - 12);
-  const x = clamp(savedX, 12, maxX);
-  const y = clamp(savedY, 12, maxY);
-
-  rootElement.style.left = `${x}px`;
-  rootElement.style.top = `${y}px`;
+  void center;
+  rootElement.style.removeProperty("left");
+  rootElement.style.removeProperty("top");
+  rootElement.style.removeProperty("right");
+  rootElement.style.removeProperty("bottom");
 }
 
 function centerAndRememberPosition(): void {
   applySavedPosition(true);
 
-  if (!cardElement) {
+  if (appState.position.x === null && appState.position.y === null) {
     return;
   }
 
-  const rect = cardElement.getBoundingClientRect();
-  savePosition(rect.left, rect.top);
-}
-
-function savePosition(x: number, y: number): void {
-  appState.position = { x, y };
+  appState.position = { x: null, y: null };
   void MemePop.updateState((state) => {
-    state.position = { x, y };
+    state.position = { x: null, y: null };
   });
 }
 
@@ -268,7 +255,7 @@ function createMemePop(message?: string): HTMLElement {
 
   const characterButton = createButton("memepop-character", "", "Click MemePop for a reaction");
   const image = document.createElement("img");
-  image.src = chrome.runtime.getURL("assets/character/memepop.png");
+  image.src = chrome.runtime.getURL("assets/character/memepop-study.png");
   image.alt = "MemePop character";
   image.decoding = "async";
   image.addEventListener("error", () => {
@@ -367,9 +354,7 @@ function createMemePop(message?: string): HTMLElement {
     const rect = cardElement.getBoundingClientRect();
     const x = clamp(event.clientX - dragOffsetX, 8, window.innerWidth - rect.width - 8);
     const y = clamp(event.clientY - dragOffsetY, 8, window.innerHeight - rect.height - 8);
-    rootElement.style.left = `${x}px`;
-    rootElement.style.top = `${y}px`;
-    dragMoved = true;
+    dragMoved = dragMoved || Math.abs(rect.left - x) > 4 || Math.abs(rect.top - y) > 4;
   });
 
   card.addEventListener("pointerup", (event) => {
@@ -380,8 +365,7 @@ function createMemePop(message?: string): HTMLElement {
     dragging = false;
     card.releasePointerCapture(event.pointerId);
     card.classList.remove("memepop-dragging");
-    const rect = cardElement.getBoundingClientRect();
-    savePosition(rect.left, rect.top);
+    centerAndRememberPosition();
   });
 
   card.addEventListener("pointercancel", () => {

@@ -1,10 +1,13 @@
 #memepop-root {
   all: initial;
   position: fixed !important;
+  inset: 0 !important;
   z-index: 2147483647 !important;
-  display: block !important;
-  width: min(760px, calc(100vw - 32px)) !important;
-  max-width: calc(100vw - 32px) !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  padding: 24px !important;
   pointer-events: none !important;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
   color: #352b35 !important;
@@ -13,6 +16,16 @@
 #memepop-root,
 #memepop-root * {
   box-sizing: border-box !important;
+}
+
+#memepop-root::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background:
+    radial-gradient(circle at 50% 52%, rgba(255, 213, 112, 0.18), transparent 36%),
+    radial-gradient(circle at 50% 52%, rgba(58, 43, 42, 0.08), transparent 48%) !important;
+  pointer-events: none !important;
 }
 
 #memepop-root .memepop-card {
@@ -24,14 +37,19 @@
   width: min(760px, calc(100vw - 32px)) !important;
   min-height: min(430px, calc(100vh - 32px)) !important;
   padding: 28px !important;
-  border: 5px solid rgba(58, 43, 42, 0.9) !important;
+  border: 6px solid #4a3a3a !important;
   border-radius: 36px !important;
   background:
     radial-gradient(circle at 16% 12%, rgba(255, 247, 180, 0.85), transparent 26%),
+    radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.9), transparent 21%),
     linear-gradient(145deg, rgba(255, 222, 145, 0.98), rgba(255, 247, 225, 0.98)),
     #ffe2a3 !important;
-  box-shadow: 0 36px 90px rgba(15, 23, 42, 0.32), 0 12px 28px rgba(58, 43, 42, 0.18) !important;
-  cursor: grab !important;
+  box-shadow:
+    0 0 0 6px rgba(255, 255, 255, 0.72),
+    0 0 0 14px rgba(255, 218, 124, 0.22),
+    0 34px 80px rgba(15, 23, 42, 0.32),
+    0 14px 0 rgba(58, 43, 42, 0.12) !important;
+  cursor: default !important;
   pointer-events: auto !important;
   transform-origin: 50% 100% !important;
   animation:
@@ -39,6 +57,25 @@
     memepop-float 2800ms ease-in-out 620ms infinite !important;
   user-select: none !important;
   touch-action: none !important;
+}
+
+#memepop-root .memepop-card::before,
+#memepop-root .memepop-card::after {
+  content: "" !important;
+  position: absolute !important;
+  pointer-events: none !important;
+}
+
+#memepop-root .memepop-card::before {
+  inset: 12px !important;
+  border: 2px solid rgba(255, 255, 255, 0.72) !important;
+  border-radius: 26px !important;
+}
+
+#memepop-root .memepop-card::after {
+  inset: 20px !important;
+  border: 1px dashed rgba(58, 43, 42, 0.18) !important;
+  border-radius: 20px !important;
 }
 
 #memepop-root .memepop-card.memepop-dragging {
@@ -49,6 +86,7 @@
 
 #memepop-root .memepop-character {
   position: relative !important;
+  z-index: 2 !important;
   display: grid !important;
   place-items: center !important;
   grid-column: 1 !important;
@@ -99,6 +137,7 @@
 
 #memepop-root .memepop-bubble {
   position: relative !important;
+  z-index: 2 !important;
   grid-column: 2 !important;
   margin-top: 0 !important;
   min-height: 190px !important;
@@ -141,7 +180,7 @@
   position: absolute !important;
   top: 14px !important;
   right: 14px !important;
-  z-index: 3 !important;
+  z-index: 5 !important;
   display: flex !important;
   gap: 4px !important;
 }
@@ -167,7 +206,7 @@
   position: absolute !important;
   top: 14px !important;
   left: 14px !important;
-  z-index: 4 !important;
+  z-index: 5 !important;
   display: grid !important;
   place-items: center !important;
   min-width: 54px !important;
@@ -189,7 +228,7 @@
 
 #memepop-root .memepop-accessory {
   position: absolute !important;
-  z-index: 2 !important;
+  z-index: 3 !important;
   pointer-events: none !important;
 }
 
@@ -347,7 +386,6 @@
 }
 
 @media (max-width: 760px) {
-  #memepop-root,
   #memepop-root .memepop-card {
     width: min(420px, calc(100vw - 24px)) !important;
   }

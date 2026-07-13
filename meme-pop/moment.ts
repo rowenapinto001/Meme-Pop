@@ -7,7 +7,7 @@ const downloadLink = document.querySelector<HTMLAnchorElement>("#downloadLink");
 const momentStatus = document.querySelector<HTMLElement>("#momentStatus");
 const characterImage = new Image();
 
-characterImage.src = "assets/character/memepop.png";
+characterImage.src = "assets/character/memepop-study.png";
 
 function setMomentStatus(message: string): void {
   if (momentStatus) {

@@ -7,7 +7,7 @@ const generateButton = document.querySelector("#generateButton");
 const downloadLink = document.querySelector("#downloadLink");
 const momentStatus = document.querySelector("#momentStatus");
 const characterImage = new Image();
-characterImage.src = "assets/character/memepop.png";
+characterImage.src = "assets/character/memepop-study.png";
 function setMomentStatus(message) {
     if (momentStatus) {
         momentStatus.textContent = message;
