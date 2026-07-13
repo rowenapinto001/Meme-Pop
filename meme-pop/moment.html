@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MemePop Moment</title>
+    <link rel="stylesheet" href="moment.css">
+  </head>
+  <body>
+    <main class="moment-page">
+      <header class="moment-header">
+        <img src="assets/icons/icon48.png" alt="" class="moment-icon">
+        <div>
+          <h1>Create Meme Moment</h1>
+          <p>Generate a PNG from MemePop, a caption, and a simple background.</p>
+        </div>
+      </header>
+
+      <section class="workspace">
+        <div class="preview-panel">
+          <canvas id="momentCanvas" width="1080" height="1080" aria-label="Meme Moment preview"></canvas>
+        </div>
+
+        <form class="creator-panel">
+          <label class="field">
+            <span>Existing message</span>
+            <select id="messageSelect"></select>
+          </label>
+
+          <label class="field">
+            <span>Custom caption</span>
+            <textarea id="captionInput" rows="4" maxlength="120" placeholder="Type a caption or use the selected message."></textarea>
+          </label>
+
+          <label class="field">
+            <span>Background style</span>
+            <select id="backgroundSelect">
+              <option value="sunny">Sunny pastel</option>
+              <option value="mint">Mint pop</option>
+              <option value="night">Cozy night</option>
+            </select>
+          </label>
+
+          <div class="button-row">
+            <button id="generateButton" type="button">Generate PNG</button>
+            <a id="downloadLink" download="memepop-moment.png">Download PNG</a>
+          </div>
+          <p id="momentStatus" class="status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+
+    <script src="dist/shared.js"></script>
+    <script src="dist/moment.js"></script>
+  </body>
+</html>

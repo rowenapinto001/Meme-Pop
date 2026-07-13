@@ -1,201 +1,26 @@
 "use strict";
-const CONTENT_DEFAULT_SETTINGS = {
-    enabled: true,
-    theme: "random",
-    intervalSeconds: 180,
-    soundEnabled: false
-};
-const CONTENT_VALID_THEMES = ["random", "office", "coding", "studying", "gaming"];
-const CONTENT_VALID_INTERVALS = [10, 60, 180, 300, 600];
-const MEME_ITEMS = [
-    {
-        id: "office-1",
-        theme: "office",
-        image: "assets/memes/office-1.png",
-        messages: [
-            "That meeting could have been an email.",
-            "Pretending to look busy...",
-            "Another spreadsheet has appeared.",
-            "My calendar just developed a side quest."
-        ]
-    },
-    {
-        id: "coding-1",
-        theme: "coding",
-        image: "assets/memes/coding-1.png",
-        messages: [
-            "It worked yesterday.",
-            "One tiny fix. Definitely.",
-            "Have you tried turning it off and on again?",
-            "The bug saw me open DevTools and left."
-        ]
-    },
-    {
-        id: "study-1",
-        theme: "studying",
-        image: "assets/memes/study-1.png",
-        messages: [
-            "One more chapter... maybe.",
-            "Your notes are judging you.",
-            "Focus mode activated... almost.",
-            "The highlighter is doing most of the learning."
-        ]
-    },
-    {
-        id: "gaming-1",
-        theme: "gaming",
-        image: "assets/memes/gaming-1.png",
-        messages: [
-            "Just one more round.",
-            "That was totally lag.",
-            "Victory is loading.",
-            "My strategy is mostly enthusiasm."
-        ]
+let appState = MemePop.normalizeState(undefined);
+let rootElement = null;
+let cardElement = null;
+let messageElement = null;
+let nextAppearTimer;
+let autoHideTimer;
+let removeTimer;
+let lastMessageText = "";
+let dragging = false;
+let dragMoved = false;
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+function clearTimer(timer) {
+    if (timer) {
+        window.clearTimeout(timer);
     }
-];
-let contentSettings = CONTENT_DEFAULT_SETTINGS;
-let currentPopup = null;
-let nextMemeTimeout;
-let autoRemoveTimeout;
-let removeAnimationTimeout;
-let lastMemeId = "";
-let lastMessage = "";
-function normalizeContentSettings(raw) {
-    const theme = raw?.theme && CONTENT_VALID_THEMES.includes(raw.theme) ? raw.theme : CONTENT_DEFAULT_SETTINGS.theme;
-    const intervalSeconds = raw?.intervalSeconds && CONTENT_VALID_INTERVALS.includes(raw.intervalSeconds)
-        ? raw.intervalSeconds
-        : CONTENT_DEFAULT_SETTINGS.intervalSeconds;
-    return {
-        enabled: typeof raw?.enabled === "boolean" ? raw.enabled : CONTENT_DEFAULT_SETTINGS.enabled,
-        theme,
-        intervalSeconds,
-        soundEnabled: typeof raw?.soundEnabled === "boolean" ? raw.soundEnabled : CONTENT_DEFAULT_SETTINGS.soundEnabled
-    };
 }
-function loadContentSettings() {
-    return new Promise((resolve) => {
-        chrome.storage.local.get("memePopSettings", (result) => {
-            resolve(normalizeContentSettings(result.memePopSettings));
-        });
-    });
+function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
 }
-function scheduleNextMeme() {
-    window.clearTimeout(nextMemeTimeout);
-    if (!contentSettings.enabled) {
-        return;
-    }
-    nextMemeTimeout = window.setTimeout(() => {
-        showMeme(false);
-        scheduleNextMeme();
-    }, contentSettings.intervalSeconds * 1000);
-}
-function pickMeme() {
-    const eligibleMemes = contentSettings.theme === "random"
-        ? MEME_ITEMS
-        : MEME_ITEMS.filter((meme) => meme.theme === contentSettings.theme);
-    const pool = eligibleMemes.length > 0 ? eligibleMemes : MEME_ITEMS;
-    let meme = pool[Math.floor(Math.random() * pool.length)];
-    if (pool.length > 1 && meme.id === lastMemeId) {
-        const alternatives = pool.filter((item) => item.id !== lastMemeId);
-        meme = alternatives[Math.floor(Math.random() * alternatives.length)];
-    }
-    lastMemeId = meme.id;
-    return meme;
-}
-function pickMessage(meme) {
-    let message = meme.messages[Math.floor(Math.random() * meme.messages.length)];
-    if (meme.messages.length > 1 && message === lastMessage) {
-        const alternatives = meme.messages.filter((item) => item !== lastMessage);
-        message = alternatives[Math.floor(Math.random() * alternatives.length)];
-    }
-    lastMessage = message;
-    return message;
-}
-function formatThemeLabel(theme) {
-    if (theme === "studying") {
-        return "Studying";
-    }
-    return theme.charAt(0).toUpperCase() + theme.slice(1);
-}
-function removeExistingPopupNow() {
-    window.clearTimeout(autoRemoveTimeout);
-    window.clearTimeout(removeAnimationTimeout);
-    const existingPopup = document.getElementById("meme-pop-root");
-    existingPopup?.remove();
-    currentPopup = null;
-}
-function beginRemovePopup(animated) {
-    if (!currentPopup) {
-        return;
-    }
-    window.clearTimeout(autoRemoveTimeout);
-    window.clearTimeout(removeAnimationTimeout);
-    const popupToRemove = currentPopup;
-    if (!animated) {
-        popupToRemove.remove();
-        currentPopup = null;
-        return;
-    }
-    popupToRemove.classList.add("meme-pop-leaving");
-    removeAnimationTimeout = window.setTimeout(() => {
-        if (currentPopup === popupToRemove) {
-            currentPopup = null;
-        }
-        popupToRemove.remove();
-    }, 600);
-}
-function startAutoRemoveTimer() {
-    window.clearTimeout(autoRemoveTimeout);
-    autoRemoveTimeout = window.setTimeout(() => {
-        beginRemovePopup(true);
-    }, 9400);
-}
-function updateSpeechBubble(messageElement, meme) {
-    messageElement.textContent = pickMessage(meme);
-}
-function createMemePopup(meme) {
-    const root = document.createElement("aside");
-    root.id = "meme-pop-root";
-    root.className = `meme-pop-theme-${meme.theme}`;
-    root.setAttribute("aria-live", "polite");
-    const card = document.createElement("div");
-    card.className = "meme-pop-card";
-    const characterButton = document.createElement("button");
-    characterButton.className = "meme-pop-character";
-    characterButton.type = "button";
-    characterButton.title = "Show another joke";
-    characterButton.setAttribute("aria-label", "Show another Meme Pop joke");
-    const image = document.createElement("img");
-    image.src = chrome.runtime.getURL(meme.image);
-    image.alt = `${formatThemeLabel(meme.theme)} meme character`;
-    image.decoding = "async";
-    const bubble = document.createElement("div");
-    bubble.className = "meme-pop-bubble";
-    const closeButton = document.createElement("button");
-    closeButton.className = "meme-pop-close";
-    closeButton.type = "button";
-    closeButton.setAttribute("aria-label", "Close Meme Pop");
-    closeButton.textContent = "x";
-    const message = document.createElement("p");
-    message.className = "meme-pop-message";
-    message.textContent = pickMessage(meme);
-    const label = document.createElement("span");
-    label.className = "meme-pop-label";
-    label.textContent = formatThemeLabel(meme.theme);
-    characterButton.append(image);
-    bubble.append(closeButton, message, label);
-    card.append(characterButton, bubble);
-    root.append(card);
-    characterButton.addEventListener("click", () => {
-        updateSpeechBubble(message, meme);
-    });
-    closeButton.addEventListener("click", () => {
-        beginRemovePopup(true);
-    });
-    return root;
-}
-function playPopSound() {
-    if (!contentSettings.soundEnabled) {
+function playTone(kind) {
+    if (!appState.settings.soundEnabled) {
         return;
     }
     try {
@@ -207,16 +32,18 @@ function playPopSound() {
         const oscillator = context.createOscillator();
         const gain = context.createGain();
         const now = context.currentTime;
+        const startFrequency = kind === "finish" ? 520 : kind === "click" ? 620 : kind === "unlock" ? 740 : 430;
+        const endFrequency = kind === "finish" ? 880 : kind === "click" ? 540 : kind === "unlock" ? 980 : 700;
         oscillator.type = "triangle";
-        oscillator.frequency.setValueAtTime(420, now);
-        oscillator.frequency.exponentialRampToValueAtTime(720, now + 0.08);
+        oscillator.frequency.setValueAtTime(startFrequency, now);
+        oscillator.frequency.exponentialRampToValueAtTime(endFrequency, now + 0.09);
         gain.gain.setValueAtTime(0.0001, now);
-        gain.gain.exponentialRampToValueAtTime(0.08, now + 0.015);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.14);
+        gain.gain.exponentialRampToValueAtTime(0.07, now + 0.018);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
         oscillator.connect(gain);
         gain.connect(context.destination);
         oscillator.start(now);
-        oscillator.stop(now + 0.15);
+        oscillator.stop(now + 0.17);
         oscillator.addEventListener("ended", () => {
             void context.close();
         });
@@ -224,45 +51,287 @@ function playPopSound() {
     catch {
     }
 }
-function showMeme(force) {
-    if (!force && (currentPopup || document.getElementById("meme-pop-root"))) {
+function canShow(force) {
+    if (!document.body || location.protocol === "chrome:" || location.hostname === "chrome.google.com") {
+        return false;
+    }
+    if (!appState.settings.enabled || appState.settings.doNotDisturb || appState.settings.mutedUntil > Date.now()) {
+        return false;
+    }
+    if (!force && MemePop.isQuiet(appState)) {
+        return false;
+    }
+    return true;
+}
+function scheduleNextAppearance() {
+    clearTimer(nextAppearTimer);
+    if (MemePop.isQuiet(appState)) {
         return;
     }
-    if (force) {
-        removeExistingPopupNow();
+    const delay = MemePop.getRandomDelayMs(appState.settings.frequency);
+    if (!delay) {
+        return;
+    }
+    nextAppearTimer = window.setTimeout(() => {
+        showMemePop(false);
+        scheduleNextAppearance();
+    }, delay);
+}
+function getDefaultPosition() {
+    const width = Math.min(window.innerWidth, 240);
+    const height = Math.min(window.innerHeight, 245);
+    return {
+        x: window.innerWidth - width - 20,
+        y: window.innerHeight - height - 20
+    };
+}
+function applySavedPosition() {
+    if (!rootElement || !cardElement) {
+        return;
+    }
+    const cardRect = cardElement.getBoundingClientRect();
+    const fallback = getDefaultPosition();
+    const savedX = appState.position.x ?? fallback.x ?? 20;
+    const savedY = appState.position.y ?? fallback.y ?? 20;
+    const maxX = Math.max(12, window.innerWidth - cardRect.width - 12);
+    const maxY = Math.max(12, window.innerHeight - cardRect.height - 12);
+    const x = clamp(savedX, 12, maxX);
+    const y = clamp(savedY, 12, maxY);
+    rootElement.style.left = `${x}px`;
+    rootElement.style.top = `${y}px`;
+}
+function savePosition(x, y) {
+    appState.position = { x, y };
+    void MemePop.updateState((state) => {
+        state.position = { x, y };
+    });
+}
+function resetAutoHide(extended = false) {
+    clearTimer(autoHideTimer);
+    const delay = extended ? 14000 : MemePop.randomBetween(MemePop.AUTO_HIDE_MIN_MS, MemePop.AUTO_HIDE_MAX_MS);
+    autoHideTimer = window.setTimeout(() => {
+        hideMemePop(true);
+    }, delay);
+}
+function hideMemePop(animated) {
+    clearTimer(autoHideTimer);
+    clearTimer(removeTimer);
+    if (!rootElement) {
+        return;
+    }
+    const currentRoot = rootElement;
+    if (!animated) {
+        currentRoot.remove();
+        rootElement = null;
+        cardElement = null;
+        messageElement = null;
+        return;
+    }
+    currentRoot.classList.add("memepop-leaving");
+    removeTimer = window.setTimeout(() => {
+        currentRoot.remove();
+        if (rootElement === currentRoot) {
+            rootElement = null;
+            cardElement = null;
+            messageElement = null;
+        }
+    }, 420);
+}
+function setMessage(text) {
+    const category = MemePop.categoryForUrl(window.location.href);
+    const nextMessage = text
+        ? { text }
+        : MemePop.pickMessage(Math.random() > 0.82 ? "procrastination" : category, lastMessageText);
+    lastMessageText = nextMessage.text;
+    if (messageElement) {
+        messageElement.textContent = nextMessage.text;
+    }
+}
+function updateAccessoryClass() {
+    if (!rootElement) {
+        return;
+    }
+    rootElement.classList.remove("memepop-accessory-none", "memepop-accessory-partyHat", "memepop-accessory-sunglasses", "memepop-accessory-crown");
+    rootElement.classList.add(`memepop-accessory-${appState.settings.accessory}`);
+}
+function createButton(className, label, title) {
+    const button = document.createElement("button");
+    button.className = className;
+    button.type = "button";
+    button.textContent = label;
+    button.title = title;
+    button.setAttribute("aria-label", title);
+    return button;
+}
+function createMemePop(message) {
+    const root = document.createElement("aside");
+    root.id = "memepop-root";
+    root.setAttribute("aria-live", "polite");
+    root.className = "memepop-accessory-none";
+    const card = document.createElement("div");
+    card.className = "memepop-card";
+    const controls = document.createElement("div");
+    controls.className = "memepop-controls";
+    const closeButton = createButton("memepop-control", "x", "Close MemePop");
+    const muteButton = createButton("memepop-control", "mute", "Mute MemePop for 30 minutes");
+    const momentButton = createButton("memepop-control", "png", "Create Meme Moment");
+    const settingsButton = createButton("memepop-control", "set", "Open MemePop settings");
+    controls.append(momentButton, muteButton, settingsButton, closeButton);
+    const characterButton = createButton("memepop-character", "", "Click MemePop for a reaction");
+    const image = document.createElement("img");
+    image.src = chrome.runtime.getURL("assets/character/memepop.png");
+    image.alt = "MemePop character";
+    image.decoding = "async";
+    image.addEventListener("error", () => {
+        characterButton.classList.add("memepop-character-fallback");
+    });
+    characterButton.append(image);
+    const accessory = document.createElement("span");
+    accessory.className = "memepop-accessory";
+    accessory.setAttribute("aria-hidden", "true");
+    const bubble = document.createElement("div");
+    bubble.className = "memepop-bubble";
+    const messageText = document.createElement("p");
+    messageText.className = "memepop-message";
+    bubble.append(messageText);
+    const reward = document.createElement("span");
+    reward.className = "memepop-reward";
+    reward.textContent = "+1 coin";
+    card.append(controls, characterButton, accessory, bubble, reward);
+    root.append(card);
+    rootElement = root;
+    cardElement = card;
+    messageElement = messageText;
+    updateAccessoryClass();
+    setMessage(message);
+    closeButton.addEventListener("click", () => hideMemePop(true));
+    muteButton.addEventListener("click", () => {
+        void MemePop.updateState((state) => {
+            state.settings.mutedUntil = Date.now() + 30 * 60000;
+        }).then((state) => {
+            appState = state;
+            hideMemePop(true);
+            scheduleNextAppearance();
+        });
+    });
+    settingsButton.addEventListener("click", () => {
+        chrome.runtime.sendMessage({ type: "MEMEPOP_OPEN_SETTINGS" });
+    });
+    momentButton.addEventListener("click", () => {
+        chrome.runtime.sendMessage({ type: "MEMEPOP_OPEN_MOMENT", message: lastMessageText });
+    });
+    characterButton.addEventListener("click", () => {
+        if (dragMoved) {
+            dragMoved = false;
+            return;
+        }
+        setMessage();
+        playTone("click");
+        resetAutoHide(true);
+        chrome.runtime.sendMessage({ type: "MEMEPOP_CHARACTER_CLICKED" }, (response) => {
+            if (chrome.runtime.lastError || !response?.awarded) {
+                return;
+            }
+            card.classList.remove("memepop-earned");
+            void card.offsetWidth;
+            card.classList.add("memepop-earned");
+        });
+    });
+    card.addEventListener("pointerdown", (event) => {
+        const target = event.target;
+        if (target?.closest(".memepop-control") || !rootElement || !cardElement) {
+            return;
+        }
+        dragging = true;
+        dragMoved = false;
+        const rect = cardElement.getBoundingClientRect();
+        dragOffsetX = event.clientX - rect.left;
+        dragOffsetY = event.clientY - rect.top;
+        card.setPointerCapture(event.pointerId);
+        card.classList.add("memepop-dragging");
+        resetAutoHide(true);
+    });
+    card.addEventListener("pointermove", (event) => {
+        if (!dragging || !rootElement || !cardElement) {
+            return;
+        }
+        const rect = cardElement.getBoundingClientRect();
+        const x = clamp(event.clientX - dragOffsetX, 8, window.innerWidth - rect.width - 8);
+        const y = clamp(event.clientY - dragOffsetY, 8, window.innerHeight - rect.height - 8);
+        rootElement.style.left = `${x}px`;
+        rootElement.style.top = `${y}px`;
+        dragMoved = true;
+    });
+    card.addEventListener("pointerup", (event) => {
+        if (!dragging || !rootElement || !cardElement) {
+            return;
+        }
+        dragging = false;
+        card.releasePointerCapture(event.pointerId);
+        card.classList.remove("memepop-dragging");
+        const rect = cardElement.getBoundingClientRect();
+        savePosition(rect.left, rect.top);
+    });
+    card.addEventListener("pointercancel", () => {
+        dragging = false;
+        card.classList.remove("memepop-dragging");
+    });
+    return root;
+}
+function showMemePop(force, message) {
+    if (!canShow(force)) {
+        return false;
+    }
+    if (rootElement) {
+        setMessage(message);
+        resetAutoHide(true);
+        return true;
     }
     const target = document.body || document.documentElement;
     if (!target) {
-        return;
+        return false;
     }
-    const popup = createMemePopup(pickMeme());
-    target.append(popup);
-    currentPopup = popup;
-    playPopSound();
-    startAutoRemoveTimer();
+    target.append(createMemePop(message));
+    applySavedPosition();
+    playTone(message && MemePop.FOCUS_DONE_MESSAGES.includes(message) ? "finish" : "appear");
+    resetAutoHide();
+    return true;
 }
-chrome.storage.onChanged.addListener((changes, areaName) => {
-    if (areaName !== "local" || !changes.memePopSettings) {
-        return;
-    }
-    contentSettings = normalizeContentSettings(changes.memePopSettings.newValue);
-    if (!contentSettings.enabled) {
-        beginRemovePopup(true);
-    }
-    scheduleNextMeme();
-});
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-    if (message?.type !== "MEME_POP_SHOW_NOW") {
+    if (message?.type === "MEMEPOP_SHOW_NOW") {
+        showMemePop(true, message.message);
+        scheduleNextAppearance();
+        sendResponse({ ok: Boolean(rootElement) });
         return;
     }
-    if (message.settings) {
-        contentSettings = normalizeContentSettings(message.settings);
+    if (message?.type === "MEMEPOP_FOCUS_START") {
+        showMemePop(true, message.message ?? MemePop.FOCUS_START_MESSAGES[0]);
+        sendResponse({ ok: true });
+        return;
     }
-    showMeme(true);
-    scheduleNextMeme();
-    sendResponse({ ok: Boolean(document.getElementById("meme-pop-root")) });
+    if (message?.type === "MEMEPOP_FOCUS_DONE") {
+        showMemePop(true, message.message ?? MemePop.FOCUS_DONE_MESSAGES[0]);
+        sendResponse({ ok: true });
+    }
 });
-void loadContentSettings().then((settings) => {
-    contentSettings = settings;
-    scheduleNextMeme();
+chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName !== "local" || !changes[MemePop.STATE_KEY]) {
+        return;
+    }
+    appState = MemePop.normalizeState(changes[MemePop.STATE_KEY].newValue);
+    updateAccessoryClass();
+    if (MemePop.isQuiet(appState)) {
+        hideMemePop(true);
+    }
+    scheduleNextAppearance();
+});
+window.addEventListener("resize", applySavedPosition);
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+        scheduleNextAppearance();
+    }
+});
+void MemePop.readState().then((state) => {
+    appState = state;
+    scheduleNextAppearance();
 });

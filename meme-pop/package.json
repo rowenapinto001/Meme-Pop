@@ -1,7 +1,7 @@
 {
   "name": "meme-pop",
   "version": "1.0.0",
-  "description": "A Manifest V3 Chrome extension that pops original meme characters onto webpages.",
+  "description": "A Manifest V3 Chrome extension with a cute local-only meme companion.",
   "private": true,
   "scripts": {
     "build": "tsc",

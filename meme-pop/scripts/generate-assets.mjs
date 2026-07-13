@@ -484,10 +484,39 @@ function drawIcon(size) {
   return canvas;
 }
 
+function drawMemePopCharacter() {
+  const canvas = new TinyCanvas(512, 512);
+  canvas.fillEllipse(256, 465, 144, 30, [58, 43, 42, 42]);
+  canvas.fillCircle(165, 214, 48, [58, 43, 42, 255]);
+  canvas.fillCircle(347, 214, 48, [58, 43, 42, 255]);
+  canvas.fillCircle(165, 214, 34, [255, 222, 95, 255]);
+  canvas.fillCircle(347, 214, 34, [255, 128, 139, 255]);
+  canvas.fillRoundRect(132, 132, 248, 286, 76, [58, 43, 42, 255]);
+  canvas.fillRoundRect(145, 143, 222, 264, 66, [255, 244, 214, 255]);
+  canvas.fillCircle(198, 286, 25, [255, 154, 139, 215]);
+  canvas.fillCircle(314, 286, 25, [255, 154, 139, 215]);
+  canvas.fillCircle(214, 242, 25, [58, 43, 42, 255]);
+  canvas.fillCircle(298, 242, 25, [58, 43, 42, 255]);
+  canvas.fillCircle(222, 234, 8, [255, 255, 255, 255]);
+  canvas.fillCircle(306, 234, 8, [255, 255, 255, 255]);
+  canvas.fillEllipse(256, 274, 17, 12, [58, 43, 42, 255]);
+  canvas.strokeArc(256, 290, 37, 0.2, Math.PI - 0.2, 8, [58, 43, 42, 255]);
+  canvas.strokeLine(150, 344, 102, 385, 26, [255, 244, 214, 255]);
+  canvas.strokeLine(362, 344, 410, 385, 26, [255, 244, 214, 255]);
+  canvas.fillCircle(101, 386, 18, [255, 244, 214, 255]);
+  canvas.fillCircle(411, 386, 18, [255, 244, 214, 255]);
+  canvas.fillCircle(135, 118, 12, [255, 210, 86, 255]);
+  canvas.fillCircle(377, 122, 10, [77, 210, 184, 255]);
+  drawSparkle(canvas, 105, 166, 0.55, [255, 225, 127, 220]);
+  drawSparkle(canvas, 402, 172, 0.48, [108, 226, 198, 210]);
+  return canvas;
+}
+
 const outputs = [
   ["assets/icons/icon16.png", drawIcon(16)],
   ["assets/icons/icon48.png", drawIcon(48)],
   ["assets/icons/icon128.png", drawIcon(128)],
+  ["assets/character/memepop.png", drawMemePopCharacter()],
   ["assets/memes/office-1.png", drawOfficeCharacter()],
   ["assets/memes/coding-1.png", drawCodingCharacter()],
   ["assets/memes/study-1.png", drawStudyCharacter()],
@@ -500,4 +529,4 @@ for (const [relativePath, canvas] of outputs) {
   canvas.save(outputPath);
 }
 
-console.log(`Generated ${outputs.length} original Meme Pop PNG assets.`);
+console.log(`Generated ${outputs.length} original MemePop PNG assets.`);

@@ -10,5 +10,5 @@
     "removeComments": true,
     "skipLibCheck": true
   },
-  "include": ["popup.ts", "content.ts", "background.ts", "types.d.ts"]
+  "include": ["shared.ts", "popup.ts", "content.ts", "background.ts", "options.ts", "moment.ts", "types.d.ts"]
 }

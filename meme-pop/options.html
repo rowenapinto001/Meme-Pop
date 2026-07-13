@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MemePop Settings</title>
+    <link rel="stylesheet" href="options.css">
+  </head>
+  <body>
+    <main class="page">
+      <header class="page-header">
+        <img src="assets/icons/icon48.png" alt="" class="page-icon">
+        <div>
+          <h1>MemePop Settings</h1>
+          <p>Local controls for your tiny browser companion.</p>
+        </div>
+      </header>
+
+      <section class="panel">
+        <h2>Behavior</h2>
+        <label class="row">
+          <span>
+            <strong>Enable MemePop</strong>
+            <small>Allow MemePop to appear on normal webpages.</small>
+          </span>
+          <input id="enabledInput" type="checkbox" role="switch">
+        </label>
+        <label class="row">
+          <span>
+            <strong>Do Not Disturb</strong>
+            <small>Keep MemePop quiet until you turn this off.</small>
+          </span>
+          <input id="dndInput" type="checkbox" role="switch">
+        </label>
+        <label class="field">
+          <span>Frequency</span>
+          <select id="frequencySelect">
+            <option value="off">Off</option>
+            <option value="rare">Rare: 15-20 min</option>
+            <option value="normal">Normal: 7-12 min</option>
+            <option value="frequent">Frequent: 3-6 min</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="panel">
+        <h2>Local data</h2>
+        <div class="metric-row">
+          <span id="coinCount">Meme Coins: 0</span>
+          <span id="streakCount">Current streak: 0</span>
+          <span id="longestStreak">Longest streak: 0</span>
+        </div>
+        <div class="button-row">
+          <button id="resetPositionButton" type="button">Reset Character Position</button>
+          <button id="clearMuteButton" type="button">Clear Temporary Mute</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Privacy</h2>
+        <p>MemePop stores settings, coins, streaks, focus state, accessory choices, and character position locally with Chrome storage.</p>
+        <p>MemePop does not sell data, read private webpage content, track passwords or messages, capture pages, or send browsing data to a server.</p>
+        <p>Website reactions use only broad URL/domain categories such as video, coding, shopping, education, social, or general.</p>
+      </section>
+
+      <p id="statusText" class="status" role="status" aria-live="polite"></p>
+    </main>
+
+    <script src="dist/shared.js"></script>
+    <script src="dist/options.js"></script>
+  </body>
+</html>

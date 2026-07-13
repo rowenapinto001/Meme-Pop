@@ -3,67 +3,104 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Meme Pop</title>
+    <title>MemePop</title>
     <link rel="stylesheet" href="popup.css">
   </head>
   <body>
     <main class="popup-shell">
-      <header class="popup-header">
-        <img src="assets/icons/icon48.png" alt="" class="popup-icon">
+      <header class="hero">
+        <img src="assets/icons/icon48.png" alt="" class="hero-icon">
         <div>
-          <h1>Meme Pop</h1>
-          <p>Small jokes. Sudden appearances.</p>
+          <h1>MemePop</h1>
+          <p>Cute reactions for your browser.</p>
         </div>
+        <button id="settingsButton" class="icon-button" type="button" title="Settings" aria-label="Open settings">set</button>
       </header>
 
-      <form id="settingsForm" class="settings-form">
-        <label class="toggle-row">
+      <section class="stats-grid" aria-label="MemePop stats">
+        <article class="stat-card">
+          <span>Meme Coins</span>
+          <strong id="coinCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span>Current streak</span>
+          <strong id="streakCount">0</strong>
+        </article>
+      </section>
+
+      <section class="panel">
+        <label class="switch-row">
           <span>
-            <strong>Enable Meme Pop</strong>
-            <small>Let characters appear automatically.</small>
+            <strong>MemePop</strong>
+            <small>Let your companion appear on webpages.</small>
           </span>
-          <input id="enabled" type="checkbox" role="switch">
+          <input id="enabledInput" type="checkbox" role="switch">
         </label>
 
         <label class="field">
-          <span>Theme</span>
-          <select id="theme">
-            <option value="random">Random</option>
-            <option value="office">Office</option>
-            <option value="coding">Coding</option>
-            <option value="studying">Studying</option>
-            <option value="gaming">Gaming</option>
+          <span>Frequency</span>
+          <select id="frequencySelect">
+            <option value="off">Off</option>
+            <option value="rare">Rare: 15-20 min</option>
+            <option value="normal">Normal: 7-12 min</option>
+            <option value="frequent">Frequent: 3-6 min</option>
           </select>
         </label>
 
-        <label class="field">
-          <span>Appearance frequency</span>
-          <select id="intervalSeconds">
-            <option value="10">Test mode: 10 seconds</option>
-            <option value="60">1 minute</option>
-            <option value="180">3 minutes</option>
-            <option value="300">5 minutes</option>
-            <option value="600">10 minutes</option>
-          </select>
-        </label>
-
-        <label class="toggle-row compact">
-          <span>
-            <strong>Sound</strong>
-            <small>Play a tiny pop when allowed by the page.</small>
-          </span>
-          <input id="soundEnabled" type="checkbox" role="switch">
-        </label>
-
-        <div class="button-row">
-          <button id="showNow" class="secondary-button" type="button">Show Meme Now</button>
-          <button class="primary-button" type="submit">Save Settings</button>
+        <div class="split-switches">
+          <label class="mini-switch">
+            <span>Sound</span>
+            <input id="soundInput" type="checkbox" role="switch">
+          </label>
+          <label class="mini-switch">
+            <span>Do Not Disturb</span>
+            <input id="dndInput" type="checkbox" role="switch">
+          </label>
         </div>
+      </section>
 
-        <p id="status" class="status" role="status" aria-live="polite"></p>
-      </form>
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <h2>Focus mode</h2>
+            <p id="focusStatus">No focus session running.</p>
+          </div>
+        </div>
+        <div class="focus-row">
+          <select id="focusDuration">
+            <option value="15">15 min</option>
+            <option value="25">25 min</option>
+            <option value="45">45 min</option>
+            <option value="60">60 min</option>
+          </select>
+          <button id="focusButton" class="secondary-button" type="button">Start</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <h2>Change accessory</h2>
+            <p id="accessoryStatus">No accessory selected.</p>
+          </div>
+        </div>
+        <div id="accessoryList" class="accessory-list"></div>
+      </section>
+
+      <section class="action-grid">
+        <button id="showNowButton" class="primary-button" type="button">Show MemePop Now</button>
+        <button id="momentButton" class="secondary-button" type="button">Create Meme Moment</button>
+      </section>
+
+      <section class="meta-panel">
+        <span id="lastActive">Last active: never</span>
+        <span id="longestStreak">Longest streak: 0</span>
+      </section>
+
+      <p id="statusText" class="status" role="status" aria-live="polite"></p>
     </main>
 
+    <script src="dist/shared.js"></script>
     <script src="dist/popup.js"></script>
   </body>
 </html>

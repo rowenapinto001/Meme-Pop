@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "Meme Pop",
+  "name": "MemePop",
   "version": "1.0.0",
-  "description": "Original meme characters pop up on webpages with quick jokes and reactions.",
-  "permissions": ["storage", "activeTab", "tabs"],
+  "description": "A cute browser companion with meme reactions, focus mode, coins, streaks, and Meme Moments.",
+  "permissions": ["storage", "activeTab", "tabs", "notifications", "alarms"],
   "action": {
-    "default_title": "Meme Pop",
+    "default_title": "MemePop",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "assets/icons/icon16.png",
@@ -21,17 +21,19 @@
   "background": {
     "service_worker": "dist/background.js"
   },
+  "options_page": "options.html",
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["dist/content.js"],
+      "exclude_matches": ["*://chrome.google.com/webstore/*"],
+      "js": ["dist/shared.js", "dist/content.js"],
       "css": ["content.css"],
       "run_at": "document_idle"
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["assets/memes/*.png"],
+      "resources": ["assets/character/*.png"],
       "matches": ["<all_urls>"]
     }
   ]

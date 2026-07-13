@@ -1,0 +1,158 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #26313f;
+  background: #fff7ed;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(255, 204, 102, 0.42), transparent 24%),
+    radial-gradient(circle at 95% 9%, rgba(93, 214, 189, 0.3), transparent 26%),
+    #fff7ed;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.moment-page {
+  width: min(1040px, calc(100vw - 32px));
+  margin: 0 auto;
+  padding: 30px 0;
+}
+
+.moment-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.moment-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  box-shadow: 0 12px 24px rgba(58, 43, 42, 0.16);
+}
+
+h1,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 32px;
+  letter-spacing: 0;
+}
+
+.moment-header p,
+.status {
+  color: #6b7280;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(320px, 560px) minmax(280px, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.preview-panel,
+.creator-panel {
+  border: 1px solid rgba(58, 43, 42, 0.1);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 16px 36px rgba(58, 43, 42, 0.07);
+}
+
+.preview-panel {
+  padding: 16px;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(58, 43, 42, 0.08);
+}
+
+.creator-panel {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+}
+
+.field {
+  display: grid;
+  gap: 7px;
+  font-weight: 900;
+}
+
+select,
+textarea {
+  width: 100%;
+  border: 1px solid rgba(38, 49, 63, 0.14);
+  border-radius: 14px;
+  color: #26313f;
+  background: #ffffff;
+  outline: none;
+}
+
+select {
+  min-height: 42px;
+  padding: 0 12px;
+}
+
+textarea {
+  padding: 12px;
+  resize: vertical;
+}
+
+.button-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+button,
+a {
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  border: 0;
+  border-radius: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+button {
+  color: #17202b;
+  background: #ffcc4d;
+}
+
+a {
+  color: #ffffff;
+  background: #4f6bed;
+}
+
+.status {
+  min-height: 20px;
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+}
