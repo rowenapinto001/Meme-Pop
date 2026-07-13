@@ -19,6 +19,15 @@ let dragMoved = false;
 let dragOffsetX = 0;
 let dragOffsetY = 0;
 const VISIBLE_DURATION_MS = 10000;
+const HYDRATION_MESSAGES = [
+  "Hydration break! Your tabs look thirsty.",
+  "Tiny sip. Dramatic spill.",
+  "Water has entered the chat.",
+  "This page is now lightly moisturized.",
+  "Sip check: passed with splash damage.",
+  "MemePop brought water. The screen disagreed.",
+  "Stay hydrated. Tabs are absorbent, probably."
+];
 
 function clearTimer(timer: number | undefined): void {
   if (timer) {
@@ -142,6 +151,22 @@ function centerAndRememberPosition(): void {
   });
 }
 
+function restartHydrationSplash(): void {
+  if (!rootElement) {
+    return;
+  }
+
+  rootElement.classList.remove("memepop-splashing");
+  void rootElement.offsetWidth;
+  rootElement.classList.add("memepop-splashing");
+}
+
+function pickHydrationMessage(): string {
+  const choices = HYDRATION_MESSAGES.filter((message) => message !== lastMessageText);
+  const messages = choices.length ? choices : HYDRATION_MESSAGES;
+  return messages[Math.floor(Math.random() * messages.length)];
+}
+
 function updateCountdown(): void {
   if (!countdownElement) {
     return;
@@ -204,15 +229,12 @@ function hideMemePop(animated: boolean): void {
 }
 
 function setMessage(text?: string): void {
-  const category = MemePop.categoryForUrl(window.location.href);
-  const nextMessage = text
-    ? { text }
-    : MemePop.pickMessage(Math.random() > 0.82 ? "procrastination" : category, lastMessageText);
+  const nextMessage = text ?? pickHydrationMessage();
 
-  lastMessageText = nextMessage.text;
+  lastMessageText = nextMessage;
 
   if (messageElement) {
-    messageElement.textContent = nextMessage.text;
+    messageElement.textContent = nextMessage;
   }
 }
 
@@ -235,11 +257,35 @@ function createButton(className: string, label: string, title: string): HTMLButt
   return button;
 }
 
+function createHydrationSplash(): HTMLElement {
+  const splash = document.createElement("div");
+  splash.className = "memepop-hydration-splash";
+  splash.setAttribute("aria-hidden", "true");
+
+  const stream = document.createElement("span");
+  stream.className = "memepop-water-stream";
+  splash.append(stream);
+
+  for (let index = 1; index <= 14; index += 1) {
+    const drop = document.createElement("span");
+    drop.className = `memepop-water-drop memepop-water-drop-${index}`;
+    splash.append(drop);
+  }
+
+  const puddle = document.createElement("span");
+  puddle.className = "memepop-water-puddle";
+  splash.append(puddle);
+
+  return splash;
+}
+
 function createMemePop(message?: string): HTMLElement {
   const root = document.createElement("aside");
   root.id = "memepop-root";
   root.setAttribute("aria-live", "polite");
-  root.className = "memepop-accessory-none";
+  root.className = "memepop-accessory-none memepop-splashing";
+
+  const splash = createHydrationSplash();
 
   const card = document.createElement("div");
   card.className = "memepop-card";
@@ -255,8 +301,8 @@ function createMemePop(message?: string): HTMLElement {
 
   const characterButton = createButton("memepop-character", "", "Click MemePop for a reaction");
   const image = document.createElement("img");
-  image.src = chrome.runtime.getURL("assets/character/memepop-study.png");
-  image.alt = "MemePop character";
+  image.src = chrome.runtime.getURL("assets/character/memepop-hydration.png");
+  image.alt = "MemePop hydration character";
   image.decoding = "async";
   image.addEventListener("error", () => {
     characterButton.classList.add("memepop-character-fallback");
@@ -284,7 +330,7 @@ function createMemePop(message?: string): HTMLElement {
   countdown.setAttribute("aria-label", "MemePop closes in 10 seconds");
 
   card.append(controls, countdown, characterButton, accessory, bubble, reward);
-  root.append(card);
+  root.append(splash, card);
 
   rootElement = root;
   cardElement = card;
@@ -316,6 +362,7 @@ function createMemePop(message?: string): HTMLElement {
     }
 
     setMessage();
+    restartHydrationSplash();
     playTone("click");
     resetAutoHide(true);
     chrome.runtime.sendMessage({ type: "MEMEPOP_CHARACTER_CLICKED" }, (response?: { awarded?: boolean; coins?: number }) => {
@@ -383,6 +430,7 @@ function showMemePop(force: boolean, message?: string): boolean {
 
   if (rootElement) {
     setMessage(message);
+    restartHydrationSplash();
     centerAndRememberPosition();
     resetAutoHide(true);
     return true;

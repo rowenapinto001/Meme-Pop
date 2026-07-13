@@ -23,13 +23,200 @@
   position: absolute !important;
   inset: 0 !important;
   background:
+    radial-gradient(circle at 42% 40%, rgba(96, 205, 255, 0.22), transparent 30%),
     radial-gradient(circle at 50% 52%, rgba(255, 213, 112, 0.18), transparent 36%),
     radial-gradient(circle at 50% 52%, rgba(58, 43, 42, 0.08), transparent 48%) !important;
   pointer-events: none !important;
 }
 
+#memepop-root .memepop-hydration-splash {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 3 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+#memepop-root.memepop-splashing .memepop-hydration-splash {
+  opacity: 1 !important;
+}
+
+#memepop-root .memepop-water-stream {
+  position: absolute !important;
+  left: calc(50% - 220px) !important;
+  top: calc(50% - 154px) !important;
+  width: min(260px, 26vw) !important;
+  height: 30px !important;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.88), rgba(89, 201, 255, 0.88) 38%, rgba(18, 146, 223, 0.62)) !important;
+  filter: drop-shadow(0 8px 8px rgba(18, 146, 223, 0.18)) !important;
+  opacity: 0 !important;
+  transform: rotate(22deg) scaleX(0.2) !important;
+  transform-origin: 0 50% !important;
+}
+
+#memepop-root.memepop-splashing .memepop-water-stream {
+  animation: memepop-water-stream 1450ms ease-out 260ms both !important;
+}
+
+#memepop-root .memepop-water-drop {
+  --drift-x: 0px;
+  --fall-y: 360px;
+  --drop-scale: 1;
+  --rotate: 22deg;
+  position: absolute !important;
+  left: calc(50% - 140px) !important;
+  top: calc(50% - 144px) !important;
+  width: 18px !important;
+  height: 26px !important;
+  border-radius: 58% 42% 64% 36% / 62% 44% 56% 38% !important;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.92) 0 18%, transparent 19%),
+    linear-gradient(145deg, rgba(118, 220, 255, 0.94), rgba(17, 139, 218, 0.86)) !important;
+  box-shadow: 0 10px 18px rgba(17, 139, 218, 0.18) !important;
+  opacity: 0 !important;
+  transform: translate3d(0, 0, 0) scale(0.35) rotate(0deg) !important;
+}
+
+#memepop-root.memepop-splashing .memepop-water-drop {
+  animation: memepop-water-drop 3400ms cubic-bezier(0.18, 0.72, 0.18, 1) both !important;
+}
+
+#memepop-root .memepop-water-drop-1 {
+  --drift-x: -360px;
+  --fall-y: 330px;
+  --drop-scale: 1.1;
+  --rotate: -36deg;
+  animation-delay: 220ms !important;
+}
+
+#memepop-root .memepop-water-drop-2 {
+  --drift-x: -250px;
+  --fall-y: 520px;
+  --drop-scale: 0.8;
+  --rotate: 28deg;
+  animation-delay: 350ms !important;
+}
+
+#memepop-root .memepop-water-drop-3 {
+  --drift-x: -90px;
+  --fall-y: 430px;
+  --drop-scale: 1.25;
+  --rotate: 42deg;
+  animation-delay: 160ms !important;
+}
+
+#memepop-root .memepop-water-drop-4 {
+  --drift-x: 110px;
+  --fall-y: 390px;
+  --drop-scale: 0.9;
+  --rotate: -18deg;
+  animation-delay: 420ms !important;
+}
+
+#memepop-root .memepop-water-drop-5 {
+  --drift-x: 310px;
+  --fall-y: 500px;
+  --drop-scale: 1.15;
+  --rotate: 35deg;
+  animation-delay: 520ms !important;
+}
+
+#memepop-root .memepop-water-drop-6 {
+  --drift-x: 440px;
+  --fall-y: 300px;
+  --drop-scale: 0.7;
+  --rotate: -44deg;
+  animation-delay: 300ms !important;
+}
+
+#memepop-root .memepop-water-drop-7 {
+  --drift-x: -480px;
+  --fall-y: 160px;
+  --drop-scale: 0.65;
+  --rotate: 64deg;
+  animation-delay: 620ms !important;
+}
+
+#memepop-root .memepop-water-drop-8 {
+  --drift-x: 30px;
+  --fall-y: 610px;
+  --drop-scale: 0.92;
+  --rotate: -28deg;
+  animation-delay: 720ms !important;
+}
+
+#memepop-root .memepop-water-drop-9 {
+  --drift-x: 560px;
+  --fall-y: 120px;
+  --drop-scale: 0.58;
+  --rotate: 48deg;
+  animation-delay: 470ms !important;
+}
+
+#memepop-root .memepop-water-drop-10 {
+  --drift-x: -610px;
+  --fall-y: 420px;
+  --drop-scale: 0.78;
+  --rotate: -58deg;
+  animation-delay: 880ms !important;
+}
+
+#memepop-root .memepop-water-drop-11 {
+  --drift-x: 650px;
+  --fall-y: 510px;
+  --drop-scale: 0.82;
+  --rotate: 25deg;
+  animation-delay: 760ms !important;
+}
+
+#memepop-root .memepop-water-drop-12 {
+  --drift-x: -160px;
+  --fall-y: 650px;
+  --drop-scale: 0.62;
+  --rotate: -10deg;
+  animation-delay: 1020ms !important;
+}
+
+#memepop-root .memepop-water-drop-13 {
+  --drift-x: 210px;
+  --fall-y: 650px;
+  --drop-scale: 0.72;
+  --rotate: 54deg;
+  animation-delay: 940ms !important;
+}
+
+#memepop-root .memepop-water-drop-14 {
+  --drift-x: 0px;
+  --fall-y: 280px;
+  --drop-scale: 1.45;
+  --rotate: 8deg;
+  animation-delay: 120ms !important;
+}
+
+#memepop-root .memepop-water-puddle {
+  position: absolute !important;
+  left: 50% !important;
+  top: calc(50% + 230px) !important;
+  width: min(520px, 56vw) !important;
+  height: 72px !important;
+  border-radius: 50% !important;
+  background:
+    radial-gradient(ellipse at 50% 48%, rgba(122, 217, 255, 0.48), rgba(45, 154, 229, 0.18) 54%, transparent 68%) !important;
+  opacity: 0 !important;
+  transform: translateX(-50%) scale(0.32, 0.5) !important;
+  filter: blur(0.2px) !important;
+}
+
+#memepop-root.memepop-splashing .memepop-water-puddle {
+  animation: memepop-water-puddle 4200ms ease-out 1080ms both !important;
+}
+
 #memepop-root .memepop-card {
   position: relative !important;
+  z-index: 4 !important;
   display: grid !important;
   grid-template-columns: minmax(260px, 320px) minmax(260px, 1fr) !important;
   gap: 24px !important;
@@ -40,6 +227,7 @@
   border: 6px solid #4a3a3a !important;
   border-radius: 36px !important;
   background:
+    radial-gradient(circle at 28% 18%, rgba(117, 219, 255, 0.38), transparent 28%),
     radial-gradient(circle at 16% 12%, rgba(255, 247, 180, 0.85), transparent 26%),
     radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.9), transparent 21%),
     linear-gradient(145deg, rgba(255, 222, 145, 0.98), rgba(255, 247, 225, 0.98)),
@@ -358,6 +546,55 @@
   }
 }
 
+@keyframes memepop-water-stream {
+  0% {
+    opacity: 0;
+    transform: rotate(22deg) scaleX(0.16);
+  }
+  18%,
+  62% {
+    opacity: 0.92;
+    transform: rotate(22deg) scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(22deg) translate3d(92px, 58px, 0) scaleX(0.48);
+  }
+}
+
+@keyframes memepop-water-drop {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.32) rotate(0deg);
+  }
+  12% {
+    opacity: 0.96;
+  }
+  78% {
+    opacity: 0.84;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--drift-x), var(--fall-y), 0) scale(var(--drop-scale)) rotate(var(--rotate));
+  }
+}
+
+@keyframes memepop-water-puddle {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.28, 0.38);
+  }
+  24%,
+  72% {
+    opacity: 0.72;
+    transform: translateX(-50%) scale(1, 1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scale(1.12, 0.82);
+  }
+}
+
 @keyframes memepop-coin {
   0% {
     opacity: 0;
@@ -386,6 +623,22 @@
 }
 
 @media (max-width: 760px) {
+  #memepop-root .memepop-water-stream {
+    left: calc(50% - 120px) !important;
+    top: calc(50% - 210px) !important;
+    width: min(180px, 42vw) !important;
+  }
+
+  #memepop-root .memepop-water-drop {
+    left: calc(50% - 80px) !important;
+    top: calc(50% - 200px) !important;
+  }
+
+  #memepop-root .memepop-water-puddle {
+    top: calc(50% + 260px) !important;
+    width: min(340px, 78vw) !important;
+  }
+
   #memepop-root .memepop-card {
     width: min(420px, calc(100vw - 24px)) !important;
   }
