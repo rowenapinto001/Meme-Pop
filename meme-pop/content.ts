@@ -8,14 +8,17 @@ let appState: MemePop.AppState = MemePop.normalizeState(undefined);
 let rootElement: HTMLElement | null = null;
 let cardElement: HTMLElement | null = null;
 let messageElement: HTMLElement | null = null;
+let countdownElement: HTMLElement | null = null;
 let nextAppearTimer: number | undefined;
 let autoHideTimer: number | undefined;
+let countdownTimer: number | undefined;
 let removeTimer: number | undefined;
 let lastMessageText = "";
 let dragging = false;
 let dragMoved = false;
 let dragOffsetX = 0;
 let dragOffsetY = 0;
+const VISIBLE_DURATION_MS = 10000;
 
 function clearTimer(timer: number | undefined): void {
   if (timer) {
@@ -100,24 +103,31 @@ function scheduleNextAppearance(): void {
 }
 
 function getDefaultPosition(): MemePop.CharacterPosition {
-  const width = Math.min(window.innerWidth, 240);
-  const height = Math.min(window.innerHeight, 245);
+  return getCenteredPosition();
+}
+
+function getCenteredPosition(): MemePop.CharacterPosition {
+  const rect = cardElement?.getBoundingClientRect();
+  const width = rect?.width ?? Math.min(window.innerWidth - 24, 760);
+  const height = rect?.height ?? Math.min(window.innerHeight - 24, 430);
 
   return {
-    x: window.innerWidth - width - 20,
-    y: window.innerHeight - height - 20
+    x: Math.max(12, (window.innerWidth - width) / 2),
+    y: Math.max(12, (window.innerHeight - height) / 2)
   };
 }
 
-function applySavedPosition(): void {
+function applySavedPosition(center = false): void {
   if (!rootElement || !cardElement) {
     return;
   }
 
   const cardRect = cardElement.getBoundingClientRect();
-  const fallback = getDefaultPosition();
-  const savedX = appState.position.x ?? fallback.x ?? 20;
-  const savedY = appState.position.y ?? fallback.y ?? 20;
+  const fallback = center ? getCenteredPosition() : getDefaultPosition();
+  const fallbackX = fallback.x ?? 20;
+  const fallbackY = fallback.y ?? 20;
+  const savedX = center ? fallbackX : appState.position.x ?? fallbackX;
+  const savedY = center ? fallbackY : appState.position.y ?? fallbackY;
   const maxX = Math.max(12, window.innerWidth - cardRect.width - 12);
   const maxY = Math.max(12, window.innerHeight - cardRect.height - 12);
   const x = clamp(savedX, 12, maxX);
@@ -127,6 +137,17 @@ function applySavedPosition(): void {
   rootElement.style.top = `${y}px`;
 }
 
+function centerAndRememberPosition(): void {
+  applySavedPosition(true);
+
+  if (!cardElement) {
+    return;
+  }
+
+  const rect = cardElement.getBoundingClientRect();
+  savePosition(rect.left, rect.top);
+}
+
 function savePosition(x: number, y: number): void {
   appState.position = { x, y };
   void MemePop.updateState((state) => {
@@ -134,17 +155,38 @@ function savePosition(x: number, y: number): void {
   });
 }
 
-function resetAutoHide(extended = false): void {
+function updateCountdown(): void {
+  if (!countdownElement) {
+    return;
+  }
+
+  const visibleUntil = Number(countdownElement.dataset.visibleUntil ?? 0);
+  const secondsLeft = Math.max(0, Math.ceil((visibleUntil - Date.now()) / 1000));
+  countdownElement.textContent = `${secondsLeft}s`;
+  countdownElement.setAttribute("aria-label", `MemePop closes in ${secondsLeft} seconds`);
+
+  if (secondsLeft > 0) {
+    countdownTimer = window.setTimeout(updateCountdown, 250);
+  }
+}
+
+function resetAutoHide(_extended = false): void {
   clearTimer(autoHideTimer);
-  const delay = extended ? 14000 : MemePop.randomBetween(MemePop.AUTO_HIDE_MIN_MS, MemePop.AUTO_HIDE_MAX_MS);
+  clearTimer(countdownTimer);
+
+  if (countdownElement) {
+    countdownElement.dataset.visibleUntil = String(Date.now() + VISIBLE_DURATION_MS);
+    updateCountdown();
+  }
 
   autoHideTimer = window.setTimeout(() => {
     hideMemePop(true);
-  }, delay);
+  }, VISIBLE_DURATION_MS);
 }
 
 function hideMemePop(animated: boolean): void {
   clearTimer(autoHideTimer);
+  clearTimer(countdownTimer);
   clearTimer(removeTimer);
 
   if (!rootElement) {
@@ -158,6 +200,7 @@ function hideMemePop(animated: boolean): void {
     rootElement = null;
     cardElement = null;
     messageElement = null;
+    countdownElement = null;
     return;
   }
 
@@ -168,6 +211,7 @@ function hideMemePop(animated: boolean): void {
       rootElement = null;
       cardElement = null;
       messageElement = null;
+      countdownElement = null;
     }
   }, 420);
 }
@@ -246,12 +290,19 @@ function createMemePop(message?: string): HTMLElement {
   const reward = document.createElement("span");
   reward.className = "memepop-reward";
   reward.textContent = "+1 coin";
-  card.append(controls, characterButton, accessory, bubble, reward);
+
+  const countdown = document.createElement("span");
+  countdown.className = "memepop-timer";
+  countdown.textContent = "10s";
+  countdown.setAttribute("aria-label", "MemePop closes in 10 seconds");
+
+  card.append(controls, countdown, characterButton, accessory, bubble, reward);
   root.append(card);
 
   rootElement = root;
   cardElement = card;
   messageElement = messageText;
+  countdownElement = countdown;
   updateAccessoryClass();
   setMessage(message);
 
@@ -348,6 +399,7 @@ function showMemePop(force: boolean, message?: string): boolean {
 
   if (rootElement) {
     setMessage(message);
+    centerAndRememberPosition();
     resetAutoHide(true);
     return true;
   }
@@ -359,7 +411,7 @@ function showMemePop(force: boolean, message?: string): boolean {
   }
 
   target.append(createMemePop(message));
-  applySavedPosition();
+  centerAndRememberPosition();
   playTone(message && MemePop.FOCUS_DONE_MESSAGES.includes(message) ? "finish" : "appear");
   resetAutoHide();
   return true;
@@ -400,7 +452,7 @@ chrome.storage.onChanged.addListener((changes: Record<string, { newValue?: Parti
   scheduleNextAppearance();
 });
 
-window.addEventListener("resize", applySavedPosition);
+window.addEventListener("resize", () => centerAndRememberPosition());
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible") {
     scheduleNextAppearance();

@@ -3,8 +3,8 @@
   position: fixed !important;
   z-index: 2147483647 !important;
   display: block !important;
-  width: 232px !important;
-  max-width: calc(100vw - 16px) !important;
+  width: min(760px, calc(100vw - 32px)) !important;
+  max-width: calc(100vw - 32px) !important;
   pointer-events: none !important;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
   color: #352b35 !important;
@@ -17,16 +17,20 @@
 
 #memepop-root .memepop-card {
   position: relative !important;
-  width: 232px !important;
-  min-height: 226px !important;
-  padding: 10px !important;
-  border: 3px solid rgba(58, 43, 42, 0.86) !important;
-  border-radius: 28px !important;
+  display: grid !important;
+  grid-template-columns: minmax(260px, 320px) minmax(260px, 1fr) !important;
+  gap: 24px !important;
+  align-items: center !important;
+  width: min(760px, calc(100vw - 32px)) !important;
+  min-height: min(430px, calc(100vh - 32px)) !important;
+  padding: 28px !important;
+  border: 5px solid rgba(58, 43, 42, 0.9) !important;
+  border-radius: 36px !important;
   background:
     radial-gradient(circle at 16% 12%, rgba(255, 247, 180, 0.85), transparent 26%),
     linear-gradient(145deg, rgba(255, 222, 145, 0.98), rgba(255, 247, 225, 0.98)),
     #ffe2a3 !important;
-  box-shadow: 0 24px 56px rgba(15, 23, 42, 0.24), 0 8px 18px rgba(58, 43, 42, 0.16) !important;
+  box-shadow: 0 36px 90px rgba(15, 23, 42, 0.32), 0 12px 28px rgba(58, 43, 42, 0.18) !important;
   cursor: grab !important;
   pointer-events: auto !important;
   transform-origin: 50% 100% !important;
@@ -47,9 +51,11 @@
   position: relative !important;
   display: grid !important;
   place-items: center !important;
-  width: 136px !important;
-  height: 136px !important;
-  margin: 8px auto 0 !important;
+  grid-column: 1 !important;
+  grid-row: 1 / span 2 !important;
+  width: min(320px, 36vw) !important;
+  height: min(320px, 36vw) !important;
+  margin: 0 auto !important;
   padding: 0 !important;
   border: 0 !important;
   border-radius: 28px !important;
@@ -67,8 +73,8 @@
 
 #memepop-root .memepop-character img {
   display: block !important;
-  width: 136px !important;
-  height: 136px !important;
+  width: min(320px, 36vw) !important;
+  height: min(320px, 36vw) !important;
   object-fit: contain !important;
   filter: drop-shadow(0 12px 12px rgba(58, 43, 42, 0.18)) !important;
 }
@@ -80,8 +86,8 @@
 #memepop-root .memepop-character-fallback::before {
   content: "" !important;
   display: block !important;
-  width: 104px !important;
-  height: 104px !important;
+  width: 240px !important;
+  height: 240px !important;
   border: 5px solid #3a2b2a !important;
   border-radius: 34px 34px 42px 42px !important;
   background:
@@ -93,11 +99,12 @@
 
 #memepop-root .memepop-bubble {
   position: relative !important;
-  margin-top: -2px !important;
-  min-height: 72px !important;
-  padding: 14px 16px 15px !important;
-  border: 3px solid rgba(58, 43, 42, 0.86) !important;
-  border-radius: 22px 22px 22px 10px !important;
+  grid-column: 2 !important;
+  margin-top: 0 !important;
+  min-height: 190px !important;
+  padding: 30px 30px 32px !important;
+  border: 5px solid rgba(58, 43, 42, 0.9) !important;
+  border-radius: 32px 32px 32px 12px !important;
   background: #fffaf0 !important;
   box-shadow: inset 0 -8px 0 rgba(255, 204, 77, 0.18) !important;
   animation: memepop-bubble 2300ms ease-in-out 800ms infinite !important;
@@ -106,13 +113,15 @@
 #memepop-root .memepop-bubble::before {
   content: "" !important;
   position: absolute !important;
-  top: -13px !important;
-  left: 48px !important;
-  width: 20px !important;
-  height: 20px !important;
-  border-top: 3px solid rgba(58, 43, 42, 0.86) !important;
-  border-left: 3px solid rgba(58, 43, 42, 0.86) !important;
-  border-radius: 6px 0 0 !important;
+  top: auto !important;
+  left: -18px !important;
+  bottom: 54px !important;
+  width: 30px !important;
+  height: 30px !important;
+  border-left: 5px solid rgba(58, 43, 42, 0.9) !important;
+  border-bottom: 5px solid rgba(58, 43, 42, 0.9) !important;
+  border-top: 0 !important;
+  border-radius: 0 0 0 7px !important;
   background: #fffaf0 !important;
   transform: rotate(45deg) !important;
 }
@@ -121,17 +130,17 @@
   display: block !important;
   margin: 0 !important;
   color: #3a2b2a !important;
-  font-size: 16px !important;
+  font-size: clamp(26px, 3vw, 36px) !important;
   font-weight: 900 !important;
-  line-height: 1.18 !important;
+  line-height: 1.14 !important;
   letter-spacing: 0 !important;
   text-align: center !important;
 }
 
 #memepop-root .memepop-controls {
   position: absolute !important;
-  top: 8px !important;
-  right: 8px !important;
+  top: 14px !important;
+  right: 14px !important;
   z-index: 3 !important;
   display: flex !important;
   gap: 4px !important;
@@ -140,17 +149,36 @@
 #memepop-root .memepop-control {
   display: grid !important;
   place-items: center !important;
-  min-width: 26px !important;
-  height: 26px !important;
+  min-width: 40px !important;
+  height: 40px !important;
   margin: 0 !important;
-  padding: 0 7px !important;
+  padding: 0 11px !important;
   border: 0 !important;
   border-radius: 999px !important;
   color: #3a2b2a !important;
   background: rgba(255, 250, 240, 0.92) !important;
   box-shadow: 0 3px 8px rgba(58, 43, 42, 0.12) !important;
   cursor: pointer !important;
-  font: 900 10px/1 Inter, ui-sans-serif, system-ui, sans-serif !important;
+  font: 900 12px/1 Inter, ui-sans-serif, system-ui, sans-serif !important;
+  letter-spacing: 0 !important;
+}
+
+#memepop-root .memepop-timer {
+  position: absolute !important;
+  top: 14px !important;
+  left: 14px !important;
+  z-index: 4 !important;
+  display: grid !important;
+  place-items: center !important;
+  min-width: 54px !important;
+  height: 40px !important;
+  padding: 0 12px !important;
+  border: 3px solid rgba(58, 43, 42, 0.86) !important;
+  border-radius: 999px !important;
+  color: #3a2b2a !important;
+  background: #fffaf0 !important;
+  box-shadow: 0 8px 18px rgba(58, 43, 42, 0.14) !important;
+  font: 900 15px/1 Inter, ui-sans-serif, system-ui, sans-serif !important;
   letter-spacing: 0 !important;
 }
 
@@ -166,10 +194,10 @@
 }
 
 #memepop-root.memepop-accessory-partyHat .memepop-accessory {
-  top: 10px !important;
-  left: 78px !important;
-  width: 44px !important;
-  height: 52px !important;
+  top: 32px !important;
+  left: 142px !important;
+  width: 78px !important;
+  height: 90px !important;
   background: linear-gradient(135deg, #ff7a90, #ffd45a) !important;
   clip-path: polygon(50% 0, 100% 100%, 0 100%) !important;
   filter: drop-shadow(0 4px 0 rgba(58, 43, 42, 0.9)) !important;
@@ -177,10 +205,10 @@
 }
 
 #memepop-root.memepop-accessory-sunglasses .memepop-accessory {
-  top: 64px !important;
-  left: 64px !important;
-  width: 76px !important;
-  height: 27px !important;
+  top: 152px !important;
+  left: 116px !important;
+  width: 126px !important;
+  height: 45px !important;
 }
 
 #memepop-root.memepop-accessory-sunglasses .memepop-accessory::before,
@@ -188,9 +216,9 @@
   content: "" !important;
   position: absolute !important;
   top: 0 !important;
-  width: 30px !important;
-  height: 24px !important;
-  border: 4px solid #3a2b2a !important;
+  width: 50px !important;
+  height: 39px !important;
+  border: 6px solid #3a2b2a !important;
   border-radius: 8px 8px 12px 12px !important;
   background: #1d273b !important;
 }
@@ -204,11 +232,11 @@
 }
 
 #memepop-root.memepop-accessory-crown .memepop-accessory {
-  top: 18px !important;
-  left: 72px !important;
-  width: 60px !important;
-  height: 42px !important;
-  border: 4px solid #3a2b2a !important;
+  top: 44px !important;
+  left: 126px !important;
+  width: 104px !important;
+  height: 72px !important;
+  border: 6px solid #3a2b2a !important;
   border-radius: 8px !important;
   background:
     linear-gradient(135deg, transparent 0 18%, #ffd34d 18% 35%, transparent 35% 48%, #ffd34d 48% 65%, transparent 65% 78%, #ffd34d 78%),
@@ -219,14 +247,14 @@
 #memepop-root .memepop-reward {
   position: absolute !important;
   left: 50% !important;
-  bottom: 72px !important;
+  bottom: 120px !important;
   z-index: 5 !important;
   padding: 5px 10px !important;
   border-radius: 999px !important;
   color: #3a2b2a !important;
   background: #ffdb65 !important;
   box-shadow: 0 8px 18px rgba(58, 43, 42, 0.16) !important;
-  font: 900 12px/1 Inter, ui-sans-serif, system-ui, sans-serif !important;
+  font: 900 16px/1 Inter, ui-sans-serif, system-ui, sans-serif !important;
   opacity: 0 !important;
   transform: translate(-50%, 12px) scale(0.88) !important;
   pointer-events: none !important;
@@ -243,11 +271,11 @@
 @keyframes memepop-enter {
   0% {
     opacity: 0;
-    transform: translate3d(18px, 42px, 0) scale(0.74) rotate(5deg);
+    transform: translate3d(0, 44px, 0) scale(0.56) rotate(-6deg);
   }
   62% {
     opacity: 1;
-    transform: translate3d(0, -8px, 0) scale(1.04) rotate(-2deg);
+    transform: translate3d(0, -10px, 0) scale(1.04) rotate(2deg);
   }
   100% {
     opacity: 1;
@@ -314,23 +342,52 @@
   }
   100% {
     opacity: 0;
-    transform: translate3d(20px, 30px, 0) scale(0.78) rotate(5deg);
+    transform: translate3d(0, 48px, 0) scale(0.72) rotate(5deg);
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 760px) {
   #memepop-root,
   #memepop-root .memepop-card {
-    width: 204px !important;
+    width: min(420px, calc(100vw - 24px)) !important;
+  }
+
+  #memepop-root .memepop-card {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    min-height: auto !important;
+    padding: 18px !important;
+  }
+
+  #memepop-root .memepop-character {
+    grid-column: 1 !important;
+    grid-row: auto !important;
   }
 
   #memepop-root .memepop-character,
   #memepop-root .memepop-character img {
-    width: 116px !important;
-    height: 116px !important;
+    width: min(230px, 62vw) !important;
+    height: min(230px, 62vw) !important;
+  }
+
+  #memepop-root .memepop-bubble {
+    grid-column: 1 !important;
+    min-height: 132px !important;
+    padding: 20px 46px 20px 20px !important;
+    border-radius: 26px !important;
+  }
+
+  #memepop-root .memepop-bubble::before {
+    left: 42px !important;
+    top: -17px !important;
+    bottom: auto !important;
+    border-left: 5px solid rgba(58, 43, 42, 0.9) !important;
+    border-top: 5px solid rgba(58, 43, 42, 0.9) !important;
+    border-bottom: 0 !important;
+    transform: rotate(45deg) !important;
   }
 
   #memepop-root .memepop-message {
-    font-size: 14px !important;
+    font-size: 22px !important;
   }
 }
