@@ -34,6 +34,10 @@ npm run build
 
 - Load the unpacked extension without manifest errors.
 - Open a normal webpage and click Show MemePop Now.
+- Set custom appearance and break minutes from 1 to 300, then confirm the countdown follows that break time.
+- Add up to 10 target sites and confirm MemePop appears only on matching domains.
+- Choose Assignment / Project Deadline Mode, add a project card, and confirm reminders, progress, focus start, overdue grouping, and completion coins work locally.
+- Choose Exercise / Movement Break Mode and confirm the movement meme artwork and stretch messages appear.
 - Drag MemePop and confirm the position is remembered after reload.
 - Click MemePop and confirm the message changes.
 - Confirm click coins have a cooldown.

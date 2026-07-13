@@ -17,6 +17,17 @@
         <button id="settingsButton" class="icon-button" type="button" title="Settings" aria-label="Open settings">set</button>
       </header>
 
+      <section id="startScreen" class="start-screen" aria-label="Daily start">
+        <div>
+          <h2>MemePop is ready for today. Are you?</h2>
+          <p>Let’s finish your tasks, beat your deadlines, and earn some Meme Coins.</p>
+        </div>
+        <div class="start-actions">
+          <button id="readyButton" class="primary-button" type="button">Ready to Begin</button>
+          <button id="planDayButton" class="secondary-button" type="button">Plan My Day</button>
+        </div>
+      </section>
+
       <section class="stats-grid" aria-label="MemePop stats">
         <article class="stat-card">
           <span>Meme Coins</span>
@@ -31,7 +42,7 @@
       <section class="panel">
         <label class="switch-row">
           <span>
-            <strong>MemePop</strong>
+            <strong>Show MemePop</strong>
             <small>Let your companion appear on webpages.</small>
           </span>
           <input id="enabledInput" type="checkbox" role="switch">
@@ -47,6 +58,8 @@
             <option value="procrastination">Procrastination Mode</option>
             <option value="lateNight">Late-Night Mode</option>
             <option value="social">Social Media Mode</option>
+            <option value="deadline">Assignment / Project Deadline Mode</option>
+            <option value="movement">Exercise / Movement Break Mode</option>
             <option value="hydration">Hydration Break</option>
             <option value="studying">Studying</option>
             <option value="gaming">Gaming</option>
@@ -56,13 +69,19 @@
         </label>
 
         <label class="field">
-          <span>Frequency</span>
-          <select id="frequencySelect">
-            <option value="off">Off</option>
-            <option value="rare">Rare: 15-20 min</option>
-            <option value="normal">Normal: 7-12 min</option>
-            <option value="frequent">Frequent: 3-6 min</option>
-          </select>
+          <span>Minutes before MemePop appears</span>
+          <input id="appearanceMinutesInput" type="number" min="1" max="300" step="1" inputmode="numeric">
+        </label>
+
+        <label class="field">
+          <span>Break time (minutes)</span>
+          <input id="breakMinutesInput" type="number" min="1" max="300" step="1" inputmode="numeric">
+        </label>
+
+        <label class="field">
+          <span>Target sites</span>
+          <textarea id="targetSitesInput" rows="5" spellcheck="false" placeholder="x.com&#10;youtube.com&#10;google.com"></textarea>
+          <small>Up to 10 sites. Leave blank for every normal webpage.</small>
         </label>
 
         <div class="split-switches">
@@ -93,6 +112,66 @@
           </select>
           <button id="focusButton" class="secondary-button" type="button">Start</button>
         </div>
+      </section>
+
+      <section class="panel deadline-panel">
+        <div class="section-head">
+          <div>
+            <h2>Deadline mode</h2>
+            <p>Track assignments, projects, and submissions.</p>
+          </div>
+        </div>
+
+        <div class="deadline-form">
+          <label class="field">
+            <span>Assignment or project title</span>
+            <input id="deadlineTitleInput" type="text" maxlength="80" placeholder="Science Project">
+          </label>
+          <div class="deadline-grid">
+            <label class="field">
+              <span>Deadline date and time</span>
+              <input id="deadlineDueInput" type="datetime-local">
+            </label>
+            <label class="field">
+              <span>Priority</span>
+              <select id="deadlinePrioritySelect">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+              </select>
+            </label>
+          </div>
+          <label class="field">
+            <span>Subject or category</span>
+            <input id="deadlineSubjectInput" type="text" maxlength="50" placeholder="Science">
+          </label>
+          <label class="field">
+            <span>Task checklist</span>
+            <textarea id="deadlineTasksInput" rows="3" spellcheck="true" placeholder="Research&#10;Make slides&#10;Practice presentation"></textarea>
+          </label>
+          <div class="deadline-grid">
+            <label class="field">
+              <span>Reminder</span>
+              <select id="deadlineReminderSelect">
+                <option value="week">One week before</option>
+                <option value="threeDays">Three days before</option>
+                <option value="oneDay" selected>One day before</option>
+                <option value="threeHours">Three hours before</option>
+                <option value="oneHour">One hour before</option>
+                <option value="custom">Custom reminder</option>
+                <option value="none">No reminder</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Custom minutes</span>
+              <input id="deadlineCustomReminderInput" type="number" min="1" max="300" step="1" inputmode="numeric" value="60">
+            </label>
+          </div>
+          <button id="addDeadlineButton" class="secondary-button" type="button">Add Deadline</button>
+        </div>
+
+        <div id="deadlineList" class="deadline-list" aria-label="Active deadlines"></div>
+        <div id="overdueDeadlineList" class="deadline-list overdue-list" aria-label="Overdue deadlines"></div>
       </section>
 
       <section class="panel">

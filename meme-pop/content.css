@@ -35,6 +35,20 @@
     radial-gradient(circle at 50% 52%, rgba(58, 43, 42, 0.08), transparent 48%) !important;
 }
 
+#memepop-root.memepop-theme-deadline::before {
+  background:
+    radial-gradient(circle at 50% 44%, rgba(255, 98, 98, 0.18), transparent 28%),
+    radial-gradient(circle at 50% 52%, rgba(255, 213, 112, 0.18), transparent 36%),
+    radial-gradient(circle at 50% 52%, rgba(58, 43, 42, 0.08), transparent 48%) !important;
+}
+
+#memepop-root.memepop-theme-movement::before {
+  background:
+    radial-gradient(circle at 42% 42%, rgba(93, 214, 189, 0.2), transparent 30%),
+    radial-gradient(circle at 58% 54%, rgba(79, 107, 237, 0.12), transparent 34%),
+    radial-gradient(circle at 50% 52%, rgba(58, 43, 42, 0.08), transparent 48%) !important;
+}
+
 #memepop-root .memepop-hydration-splash {
   position: absolute !important;
   inset: 0 !important;
@@ -267,6 +281,32 @@
     0 14px 0 rgba(58, 43, 42, 0.12) !important;
 }
 
+#memepop-root.memepop-theme-deadline .memepop-card {
+  background:
+    radial-gradient(circle at 24% 18%, rgba(255, 111, 111, 0.28), transparent 25%),
+    radial-gradient(circle at 86% 16%, rgba(255, 204, 77, 0.42), transparent 24%),
+    linear-gradient(145deg, rgba(255, 241, 210, 0.98), rgba(255, 249, 238, 0.98)),
+    #fff0d2 !important;
+  box-shadow:
+    0 0 0 6px rgba(255, 255, 255, 0.74),
+    0 0 0 14px rgba(255, 111, 111, 0.12),
+    0 34px 80px rgba(15, 23, 42, 0.32),
+    0 14px 0 rgba(58, 43, 42, 0.12) !important;
+}
+
+#memepop-root.memepop-theme-movement .memepop-card {
+  background:
+    radial-gradient(circle at 22% 18%, rgba(93, 214, 189, 0.3), transparent 27%),
+    radial-gradient(circle at 88% 18%, rgba(122, 190, 255, 0.28), transparent 24%),
+    linear-gradient(145deg, rgba(238, 255, 245, 0.98), rgba(255, 249, 226, 0.98)),
+    #eefcf5 !important;
+  box-shadow:
+    0 0 0 6px rgba(255, 255, 255, 0.74),
+    0 0 0 14px rgba(93, 214, 189, 0.15),
+    0 34px 80px rgba(15, 23, 42, 0.32),
+    0 14px 0 rgba(58, 43, 42, 0.12) !important;
+}
+
 #memepop-root .memepop-card::before,
 #memepop-root .memepop-card::after {
   content: "" !important;
@@ -327,6 +367,14 @@
 
 #memepop-root.memepop-theme-hydration .memepop-character {
   animation: memepop-hydration-wave 1800ms ease-in-out 650ms infinite !important;
+}
+
+#memepop-root.memepop-theme-deadline .memepop-character {
+  animation: memepop-deadline-hustle 1350ms ease-in-out 650ms infinite !important;
+}
+
+#memepop-root.memepop-theme-movement .memepop-character {
+  animation: memepop-movement-stretch 1800ms ease-in-out 650ms infinite !important;
 }
 
 #memepop-root .memepop-hydration-arm,
@@ -439,10 +487,34 @@
   box-shadow: inset 0 -8px 0 rgba(96, 205, 255, 0.18) !important;
 }
 
+#memepop-root.memepop-theme-deadline .memepop-bubble {
+  border-color: rgba(108, 64, 46, 0.9) !important;
+  background: #fff7e8 !important;
+  box-shadow: inset 0 -8px 0 rgba(255, 111, 111, 0.14) !important;
+}
+
+#memepop-root.memepop-theme-movement .memepop-bubble {
+  border-color: rgba(31, 101, 91, 0.9) !important;
+  background: #f2fff9 !important;
+  box-shadow: inset 0 -8px 0 rgba(93, 214, 189, 0.15) !important;
+}
+
 #memepop-root.memepop-theme-hydration .memepop-bubble::before {
   border-left-color: rgba(38, 96, 129, 0.88) !important;
   border-bottom-color: rgba(38, 96, 129, 0.88) !important;
   background: #f4fcff !important;
+}
+
+#memepop-root.memepop-theme-deadline .memepop-bubble::before {
+  border-left-color: rgba(108, 64, 46, 0.9) !important;
+  border-bottom-color: rgba(108, 64, 46, 0.9) !important;
+  background: #fff7e8 !important;
+}
+
+#memepop-root.memepop-theme-movement .memepop-bubble::before {
+  border-left-color: rgba(31, 101, 91, 0.9) !important;
+  border-bottom-color: rgba(31, 101, 91, 0.9) !important;
+  background: #f2fff9 !important;
 }
 
 #memepop-root .memepop-bubble::before {
@@ -657,6 +729,41 @@
   }
   68% {
     transform: translateY(-5px) rotate(2deg) scale(1.02);
+  }
+}
+
+@keyframes memepop-deadline-hustle {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-2deg) scale(1);
+  }
+  20% {
+    transform: translate3d(-6px, -7px, 0) rotate(-5deg) scale(1.03);
+  }
+  42% {
+    transform: translate3d(7px, 1px, 0) rotate(4deg) scale(0.99, 1.03);
+  }
+  64% {
+    transform: translate3d(-3px, -5px, 0) rotate(-3deg) scale(1.02);
+  }
+  82% {
+    transform: translate3d(3px, 0, 0) rotate(2deg) scale(1);
+  }
+}
+
+@keyframes memepop-movement-stretch {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-4deg) scale(1);
+  }
+  26% {
+    transform: translate3d(-8px, -9px, 0) rotate(-10deg) scale(1.03, 0.98);
+  }
+  52% {
+    transform: translate3d(7px, 2px, 0) rotate(7deg) scale(0.98, 1.04);
+  }
+  76% {
+    transform: translate3d(0, -5px, 0) rotate(-2deg) scale(1.02);
   }
 }
 

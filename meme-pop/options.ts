@@ -1,7 +1,9 @@
 const optionsEnabledInput = document.querySelector<HTMLInputElement>("#enabledInput");
 const optionsDndInput = document.querySelector<HTMLInputElement>("#dndInput");
 const optionsThemeSelect = document.querySelector<HTMLSelectElement>("#themeSelect");
-const optionsFrequencySelect = document.querySelector<HTMLSelectElement>("#frequencySelect");
+const optionsAppearanceMinutesInput = document.querySelector<HTMLInputElement>("#appearanceMinutesInput");
+const optionsBreakMinutesInput = document.querySelector<HTMLInputElement>("#breakMinutesInput");
+const optionsTargetSitesInput = document.querySelector<HTMLTextAreaElement>("#targetSitesInput");
 const optionsCoinCount = document.querySelector<HTMLElement>("#coinCount");
 const optionsStreakCount = document.querySelector<HTMLElement>("#streakCount");
 const optionsLongestStreak = document.querySelector<HTMLElement>("#longestStreak");
@@ -33,8 +35,16 @@ function renderOptions(): void {
     optionsDndInput.checked = optionsState.settings.doNotDisturb;
   }
 
-  if (optionsFrequencySelect) {
-    optionsFrequencySelect.value = optionsState.settings.frequency;
+  if (optionsAppearanceMinutesInput) {
+    optionsAppearanceMinutesInput.value = String(optionsState.settings.appearanceMinutes);
+  }
+
+  if (optionsBreakMinutesInput) {
+    optionsBreakMinutesInput.value = String(optionsState.settings.breakMinutes);
+  }
+
+  if (optionsTargetSitesInput) {
+    optionsTargetSitesInput.value = MemePop.targetSitesToText(optionsState.settings.targetSites);
   }
 
   if (optionsThemeSelect) {
@@ -59,7 +69,12 @@ async function saveOptions(): Promise<void> {
     state.settings.enabled = optionsEnabledInput?.checked ?? state.settings.enabled;
     state.settings.doNotDisturb = optionsDndInput?.checked ?? state.settings.doNotDisturb;
     state.settings.theme = (optionsThemeSelect?.value as MemePop.Theme | undefined) ?? state.settings.theme;
-    state.settings.frequency = (optionsFrequencySelect?.value as MemePop.Frequency | undefined) ?? state.settings.frequency;
+    state.settings.appearanceMinutes = MemePop.clampSettingMinutes(
+      optionsAppearanceMinutesInput?.value,
+      state.settings.appearanceMinutes
+    );
+    state.settings.breakMinutes = MemePop.clampSettingMinutes(optionsBreakMinutesInput?.value, state.settings.breakMinutes);
+    state.settings.targetSites = MemePop.normalizeTargetSites(optionsTargetSitesInput?.value ?? state.settings.targetSites);
   });
   renderOptions();
   setOptionsStatus("Settings saved.");
@@ -68,7 +83,9 @@ async function saveOptions(): Promise<void> {
 optionsEnabledInput?.addEventListener("change", () => void saveOptions());
 optionsDndInput?.addEventListener("change", () => void saveOptions());
 optionsThemeSelect?.addEventListener("change", () => void saveOptions());
-optionsFrequencySelect?.addEventListener("change", () => void saveOptions());
+optionsAppearanceMinutesInput?.addEventListener("change", () => void saveOptions());
+optionsBreakMinutesInput?.addEventListener("change", () => void saveOptions());
+optionsTargetSitesInput?.addEventListener("change", () => void saveOptions());
 
 resetPositionButton?.addEventListener("click", () => {
   void MemePop.updateState((state) => {

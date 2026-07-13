@@ -1,7 +1,9 @@
 "use strict";
 const enabledInput = document.querySelector("#enabledInput");
 const themeSelect = document.querySelector("#themeSelect");
-const frequencySelect = document.querySelector("#frequencySelect");
+const appearanceMinutesInput = document.querySelector("#appearanceMinutesInput");
+const breakMinutesInput = document.querySelector("#breakMinutesInput");
+const targetSitesInput = document.querySelector("#targetSitesInput");
 const soundInput = document.querySelector("#soundInput");
 const dndInput = document.querySelector("#dndInput");
 const coinCount = document.querySelector("#coinCount");
@@ -13,9 +15,22 @@ const accessoryStatus = document.querySelector("#accessoryStatus");
 const focusStatus = document.querySelector("#focusStatus");
 const focusDuration = document.querySelector("#focusDuration");
 const focusButton = document.querySelector("#focusButton");
+const deadlineTitleInput = document.querySelector("#deadlineTitleInput");
+const deadlineDueInput = document.querySelector("#deadlineDueInput");
+const deadlineSubjectInput = document.querySelector("#deadlineSubjectInput");
+const deadlinePrioritySelect = document.querySelector("#deadlinePrioritySelect");
+const deadlineTasksInput = document.querySelector("#deadlineTasksInput");
+const deadlineReminderSelect = document.querySelector("#deadlineReminderSelect");
+const deadlineCustomReminderInput = document.querySelector("#deadlineCustomReminderInput");
+const addDeadlineButton = document.querySelector("#addDeadlineButton");
+const deadlineList = document.querySelector("#deadlineList");
+const overdueDeadlineList = document.querySelector("#overdueDeadlineList");
 const showNowButton = document.querySelector("#showNowButton");
 const momentButton = document.querySelector("#momentButton");
 const settingsButton = document.querySelector("#settingsButton");
+const startScreen = document.querySelector("#startScreen");
+const readyButton = document.querySelector("#readyButton");
+const planDayButton = document.querySelector("#planDayButton");
 const statusText = document.querySelector("#statusText");
 let state = MemePop.normalizeState(undefined);
 let statusTimer;
@@ -77,6 +92,127 @@ function renderFocus() {
         focusTickTimer = window.setTimeout(renderFocus, 1000);
     }
 }
+function formatDueTime(timestamp) {
+    return new Intl.DateTimeFormat(undefined, {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
+    }).format(new Date(timestamp));
+}
+function formatDeadlineRemaining(timestamp) {
+    const diff = timestamp - Date.now();
+    const absoluteMs = Math.abs(diff);
+    const totalHours = Math.floor(absoluteMs / 3600000);
+    const days = Math.floor(totalHours / 24);
+    const hours = totalHours % 24;
+    const minutes = Math.max(0, Math.floor((absoluteMs % 3600000) / 60000));
+    const label = days > 0 ? `${days}d ${hours}h` : hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+    return diff < 0 ? `${label} overdue` : `${label} remaining`;
+}
+function parseTaskLines(value) {
+    return value
+        .split(/\n+/)
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .slice(0, 12)
+        .map((text) => ({
+        id: MemePop.createId("task"),
+        text,
+        done: false
+    }));
+}
+function deadlineProgress(deadline) {
+    const completed = deadline.tasks.filter((task) => task.done).length;
+    const total = deadline.tasks.length;
+    return total > 0 ? `Progress: ${completed} of ${total} tasks completed` : "Progress: no checklist yet";
+}
+function renderDeadlineList(container, deadlines, emptyMessage, heading) {
+    if (!container) {
+        return;
+    }
+    container.textContent = "";
+    if (heading && deadlines.length > 0) {
+        const title = document.createElement("strong");
+        title.className = "deadline-list-title";
+        title.textContent = heading;
+        container.append(title);
+    }
+    if (deadlines.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "deadline-empty";
+        empty.textContent = emptyMessage;
+        container.append(empty);
+        return;
+    }
+    for (const deadline of deadlines) {
+        container.append(createDeadlineCard(deadline));
+    }
+}
+function createDeadlineCard(deadline) {
+    const card = document.createElement("article");
+    const overdue = deadline.dueAt < Date.now();
+    card.className = `deadline-card${overdue ? " is-overdue" : ""}`;
+    const header = document.createElement("header");
+    const titleGroup = document.createElement("div");
+    const title = document.createElement("h3");
+    title.textContent = deadline.title;
+    const subject = document.createElement("p");
+    subject.textContent = deadline.subject || "No subject";
+    titleGroup.append(title, subject);
+    const priority = document.createElement("span");
+    priority.className = `deadline-priority ${deadline.priority}`;
+    priority.textContent = deadline.priority;
+    header.append(titleGroup, priority);
+    const meta = document.createElement("small");
+    meta.textContent = `Due: ${formatDueTime(deadline.dueAt)} · ${formatDeadlineRemaining(deadline.dueAt)}`;
+    const progress = document.createElement("small");
+    progress.textContent = deadlineProgress(deadline);
+    const tasks = document.createElement("div");
+    tasks.className = "deadline-tasks";
+    for (const task of deadline.tasks) {
+        const label = document.createElement("label");
+        label.className = "deadline-task";
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = task.done;
+        checkbox.addEventListener("change", () => toggleDeadlineTask(deadline.id, task.id, checkbox.checked));
+        label.append(checkbox, document.createTextNode(task.text));
+        tasks.append(label);
+    }
+    const actions = document.createElement("div");
+    actions.className = "deadline-actions";
+    const continueButton = document.createElement("button");
+    continueButton.type = "button";
+    continueButton.textContent = "Continue";
+    continueButton.addEventListener("click", () => continueDeadline(deadline));
+    const focusButton = document.createElement("button");
+    focusButton.type = "button";
+    focusButton.textContent = "Start Focus";
+    focusButton.addEventListener("click", () => startDeadlineFocus(deadline));
+    const completeButton = document.createElement("button");
+    completeButton.type = "button";
+    completeButton.textContent = "Complete";
+    completeButton.addEventListener("click", () => completeDeadline(deadline.id));
+    actions.append(continueButton, focusButton, completeButton);
+    card.append(header, meta, progress);
+    if (deadline.tasks.length > 0) {
+        card.append(tasks);
+    }
+    card.append(actions);
+    return card;
+}
+function renderDeadlines() {
+    const activeDeadlines = state.deadlines
+        .filter((deadline) => !deadline.completed && deadline.dueAt >= Date.now())
+        .sort((first, second) => first.dueAt - second.dueAt);
+    const overdueDeadlines = state.deadlines
+        .filter((deadline) => !deadline.completed && deadline.dueAt < Date.now())
+        .sort((first, second) => first.dueAt - second.dueAt);
+    renderDeadlineList(deadlineList, activeDeadlines, "No active deadlines yet.");
+    renderDeadlineList(overdueDeadlineList, overdueDeadlines, "No overdue deadlines.", "Overdue");
+}
 function accessoryPreviewLabel(accessory) {
     if (accessory.id === "partyHat") {
         return "hat";
@@ -132,11 +268,20 @@ function renderAccessories() {
     }
 }
 function render() {
+    if (startScreen) {
+        startScreen.classList.toggle("is-hidden", state.startScreenLastSeenDate === MemePop.todayKey());
+    }
     if (enabledInput) {
         enabledInput.checked = state.settings.enabled;
     }
-    if (frequencySelect) {
-        frequencySelect.value = state.settings.frequency;
+    if (appearanceMinutesInput) {
+        appearanceMinutesInput.value = String(state.settings.appearanceMinutes);
+    }
+    if (breakMinutesInput) {
+        breakMinutesInput.value = String(state.settings.breakMinutes);
+    }
+    if (targetSitesInput) {
+        targetSitesInput.value = MemePop.targetSitesToText(state.settings.targetSites);
     }
     if (themeSelect) {
         themeSelect.value = state.settings.theme;
@@ -160,13 +305,16 @@ function render() {
         lastActive.textContent = `Last active: ${state.streak.lastActiveDate || "never"}`;
     }
     renderFocus();
+    renderDeadlines();
     renderAccessories();
 }
 async function saveSettings() {
     state = await MemePop.updateState((nextState) => {
         nextState.settings.enabled = enabledInput?.checked ?? nextState.settings.enabled;
         nextState.settings.theme = themeSelect?.value ?? nextState.settings.theme;
-        nextState.settings.frequency = frequencySelect?.value ?? nextState.settings.frequency;
+        nextState.settings.appearanceMinutes = MemePop.clampSettingMinutes(appearanceMinutesInput?.value, nextState.settings.appearanceMinutes);
+        nextState.settings.breakMinutes = MemePop.clampSettingMinutes(breakMinutesInput?.value, nextState.settings.breakMinutes);
+        nextState.settings.targetSites = MemePop.normalizeTargetSites(targetSitesInput?.value ?? nextState.settings.targetSites);
         nextState.settings.soundEnabled = soundInput?.checked ?? nextState.settings.soundEnabled;
         nextState.settings.doNotDisturb = dndInput?.checked ?? nextState.settings.doNotDisturb;
     });
@@ -231,11 +379,36 @@ function showMemePopNow() {
         });
     });
 }
+function showMessageInActiveTab(message) {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const tabId = tabs[0]?.id;
+        if (!tabId) {
+            setStatus("Open a normal webpage first.");
+            return;
+        }
+        chrome.tabs.sendMessage(tabId, { type: "MEMEPOP_SHOW_NOW", force: true, message }, () => {
+            if (chrome.runtime.lastError) {
+                setStatus("Reload a normal webpage first.");
+                return;
+            }
+        });
+    });
+}
 function openMomentCreator() {
     chrome.tabs.create({ url: chrome.runtime.getURL("moment.html") });
 }
 function openSettings() {
     chrome.runtime.openOptionsPage();
+}
+async function completeStartScreen(openPlanner = false) {
+    state = await MemePop.updateState((nextState) => {
+        nextState.startScreenLastSeenDate = MemePop.todayKey();
+    });
+    render();
+    setStatus(openPlanner ? "Opening your day plan." : "MemePop is ready.");
+    if (openPlanner) {
+        openSettings();
+    }
 }
 function toggleFocus() {
     const active = state.focus.active && state.focus.endsAt > Date.now();
@@ -269,15 +442,104 @@ function toggleFocus() {
         });
     });
 }
+async function addDeadline() {
+    const title = deadlineTitleInput?.value.trim() ?? "";
+    const dueValue = deadlineDueInput?.value ?? "";
+    const dueAt = dueValue ? new Date(dueValue).getTime() : NaN;
+    if (!title) {
+        setStatus("Add a project title first.");
+        return;
+    }
+    if (!Number.isFinite(dueAt)) {
+        setStatus("Choose a deadline date and time.");
+        return;
+    }
+    const deadline = {
+        id: MemePop.createId("deadline"),
+        title,
+        subject: deadlineSubjectInput?.value.trim() ?? "",
+        dueAt,
+        priority: deadlinePrioritySelect?.value ?? "medium",
+        tasks: parseTaskLines(deadlineTasksInput?.value ?? ""),
+        reminder: deadlineReminderSelect?.value ?? "oneDay",
+        customReminderMinutes: MemePop.clampSettingMinutes(deadlineCustomReminderInput?.value, 60),
+        completed: false,
+        completedAt: 0,
+        createdAt: Date.now()
+    };
+    state = await MemePop.updateState((nextState) => {
+        nextState.deadlines.push(deadline);
+    });
+    if (deadlineTitleInput)
+        deadlineTitleInput.value = "";
+    if (deadlineDueInput)
+        deadlineDueInput.value = "";
+    if (deadlineSubjectInput)
+        deadlineSubjectInput.value = "";
+    if (deadlineTasksInput)
+        deadlineTasksInput.value = "";
+    setStatus("Deadline added.");
+    render();
+}
+async function toggleDeadlineTask(deadlineId, taskId, done) {
+    state = await MemePop.updateState((nextState) => {
+        const deadline = nextState.deadlines.find((item) => item.id === deadlineId);
+        const task = deadline?.tasks.find((item) => item.id === taskId);
+        if (task) {
+            task.done = done;
+        }
+    });
+    render();
+}
+function continueDeadline(deadline) {
+    showMessageInActiveTab(`Deadline detected: ${deadline.title}. Complete one section now.`);
+    setStatus("Deadline nudge sent.");
+}
+function startDeadlineFocus(deadline) {
+    chrome.runtime.sendMessage({ type: "MEMEPOP_FOCUS_START", durationMinutes: Number(focusDuration?.value ?? 25) }, (response) => {
+        if (chrome.runtime.lastError || !response?.ok) {
+            setStatus("Could not start focus mode.");
+            return;
+        }
+        showMessageInActiveTab(`Focus mode recommended for ${deadline.title}.`);
+        setStatus("Focus timer started.");
+        void MemePop.readState().then((nextState) => {
+            state = nextState;
+            render();
+        });
+    });
+}
+async function completeDeadline(deadlineId) {
+    let completedTitle = "";
+    state = await MemePop.updateState((nextState) => {
+        const deadline = nextState.deadlines.find((item) => item.id === deadlineId);
+        if (!deadline || deadline.completed) {
+            return;
+        }
+        deadline.completed = true;
+        deadline.completedAt = Date.now();
+        completedTitle = deadline.title;
+        nextState.wallet.coins += MemePop.COMPLETION_COIN_REWARD;
+    });
+    playUiTone();
+    setStatus(`${completedTitle || "Deadline"} complete. +${MemePop.COMPLETION_COIN_REWARD} Meme Coins.`);
+    showMessageInActiveTab("Focus session complete. Tiny victory achieved.");
+    render();
+}
 enabledInput?.addEventListener("change", () => void saveSettings());
 themeSelect?.addEventListener("change", () => void saveSettings());
-frequencySelect?.addEventListener("change", () => void saveSettings());
+appearanceMinutesInput?.addEventListener("change", () => void saveSettings());
+breakMinutesInput?.addEventListener("change", () => void saveSettings());
+targetSitesInput?.addEventListener("change", () => void saveSettings());
 soundInput?.addEventListener("change", () => void saveSettings());
 dndInput?.addEventListener("change", () => void saveSettings());
 showNowButton?.addEventListener("click", showMemePopNow);
 momentButton?.addEventListener("click", openMomentCreator);
 settingsButton?.addEventListener("click", openSettings);
+readyButton?.addEventListener("click", () => void completeStartScreen());
+planDayButton?.addEventListener("click", () => void completeStartScreen(true));
 focusButton?.addEventListener("click", toggleFocus);
+addDeadlineButton?.addEventListener("click", () => void addDeadline());
 chrome.storage.onChanged.addListener((changes, areaName) => {
     if (areaName !== "local" || !changes[MemePop.STATE_KEY]) {
         return;

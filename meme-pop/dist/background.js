@@ -1,6 +1,33 @@
 "use strict";
 importScripts("shared.js");
 const FOCUS_ALARM_NAME = "memepop-focus-complete";
+const DEADLINE_ALARM_PREFIX = "memepop-deadline-reminder:";
+function deadlineAlarmName(deadlineId) {
+    return `${DEADLINE_ALARM_PREFIX}${deadlineId}`;
+}
+function scheduleDeadlineReminders(state) {
+    chrome.alarms.getAll((alarms) => {
+        for (const alarm of alarms) {
+            if (alarm.name.startsWith(DEADLINE_ALARM_PREFIX)) {
+                void chrome.alarms.clear(alarm.name);
+            }
+        }
+        const now = Date.now();
+        for (const deadline of state.deadlines) {
+            if (deadline.completed) {
+                continue;
+            }
+            const reminderMinutes = MemePop.getDeadlineReminderMinutes(deadline);
+            if (!reminderMinutes) {
+                continue;
+            }
+            const reminderAt = deadline.dueAt - reminderMinutes * 60000;
+            if (reminderAt > now) {
+                chrome.alarms.create(deadlineAlarmName(deadline.id), { when: reminderAt });
+            }
+        }
+    });
+}
 function sendToActiveTab(message) {
     try {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -36,6 +63,7 @@ async function ensureInitialState() {
     if (state.focus.active && state.focus.endsAt > Date.now()) {
         chrome.alarms.create(FOCUS_ALARM_NAME, { when: state.focus.endsAt });
     }
+    scheduleDeadlineReminders(state);
 }
 chrome.runtime.onInstalled.addListener(() => {
     void ensureInitialState();
@@ -104,6 +132,26 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     }
 });
 chrome.alarms.onAlarm.addListener((alarm) => {
+    if (alarm.name.startsWith(DEADLINE_ALARM_PREFIX)) {
+        const deadlineId = alarm.name.slice(DEADLINE_ALARM_PREFIX.length);
+        void MemePop.readState().then((state) => {
+            const deadline = state.deadlines.find((item) => item.id === deadlineId && !item.completed);
+            if (!deadline) {
+                return;
+            }
+            const dueTime = new Date(deadline.dueAt).toLocaleString(undefined, {
+                weekday: "short",
+                hour: "numeric",
+                minute: "2-digit"
+            });
+            createNotification("MemePop deadline reminder", `${deadline.title} is due ${dueTime}.`);
+            sendToActiveTab({
+                type: "MEMEPOP_SHOW_NOW",
+                message: `Deadline detected. ${deadline.title} is getting closer.`
+            });
+        });
+        return;
+    }
     if (alarm.name !== FOCUS_ALARM_NAME) {
         return;
     }
@@ -119,4 +167,10 @@ chrome.alarms.onAlarm.addListener((alarm) => {
         createNotification("MemePop focus complete", "Nice work. You earned 10 Meme Coins.");
         sendToActiveTab({ type: "MEMEPOP_FOCUS_DONE", message });
     });
+});
+chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName !== "local" || !changes[MemePop.STATE_KEY]) {
+        return;
+    }
+    scheduleDeadlineReminders(MemePop.normalizeState(changes[MemePop.STATE_KEY].newValue));
 });

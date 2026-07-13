@@ -22,7 +22,8 @@ body {
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
 }
 
@@ -37,17 +38,67 @@ button {
 }
 
 .hero {
+  position: relative;
   display: grid;
   grid-template-columns: 52px 1fr 38px;
   gap: 10px;
   align-items: center;
+  overflow: hidden;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.76);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 11% 18%, rgba(255, 204, 77, 0.58), transparent 28%),
+    radial-gradient(circle at 86% 14%, rgba(93, 214, 189, 0.42), transparent 30%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.78), rgba(255, 248, 231, 0.72));
+  box-shadow:
+    0 18px 34px rgba(58, 43, 42, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.hero::before {
+  right: 44px;
+  top: -34px;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  background: rgba(79, 107, 237, 0.13);
+}
+
+.hero::after {
+  right: 78px;
+  bottom: 12px;
+  width: 42px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 204, 77, 0.48);
+  box-shadow:
+    -22px -20px 0 -1px rgba(93, 214, 189, 0.4),
+    32px -12px 0 -3px rgba(255, 122, 144, 0.34);
 }
 
 .hero-icon {
+  position: relative;
+  z-index: 1;
   width: 52px;
   height: 52px;
   border-radius: 18px;
-  box-shadow: 0 12px 24px rgba(58, 43, 42, 0.16);
+  background: #ffffff;
+  box-shadow:
+    0 12px 24px rgba(58, 43, 42, 0.16),
+    0 0 0 5px rgba(255, 255, 255, 0.58);
+}
+
+.hero > div {
+  position: relative;
+  z-index: 1;
 }
 
 h1,
@@ -80,18 +131,26 @@ h2 {
 
 .hero p {
   margin-top: 5px;
+  color: #687083;
   font-size: 12px;
+  font-weight: 800;
 }
 
 .icon-button {
+  position: relative;
+  z-index: 1;
   min-width: 38px;
   height: 38px;
-  border-radius: 14px;
-  color: #243044;
-  background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 8px 18px rgba(58, 43, 42, 0.08);
+  border-radius: 16px;
+  color: #17202b;
+  background:
+    linear-gradient(145deg, #ffffff, #eafff8);
+  box-shadow:
+    0 9px 18px rgba(58, 43, 42, 0.1),
+    inset 0 -2px 0 rgba(93, 214, 189, 0.2);
   cursor: pointer;
   font-weight: 900;
+  text-transform: uppercase;
 }
 
 .stats-grid,
@@ -104,11 +163,105 @@ h2 {
 
 .stat-card,
 .panel,
-.meta-panel {
+.meta-panel,
+.start-screen {
   border: 1px solid rgba(58, 43, 42, 0.1);
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.84);
   box-shadow: 0 12px 30px rgba(58, 43, 42, 0.07);
+}
+
+.start-screen {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  padding: 17px;
+  overflow: hidden;
+  border-color: rgba(255, 204, 77, 0.52);
+  border-width: 2px;
+  background:
+    radial-gradient(circle at 9% 9%, rgba(255, 204, 77, 0.64), transparent 25%),
+    radial-gradient(circle at 100% 0%, rgba(93, 214, 189, 0.56), transparent 30%),
+    radial-gradient(circle at 94% 90%, rgba(79, 107, 237, 0.16), transparent 29%),
+    linear-gradient(145deg, rgba(255, 253, 244, 0.98), rgba(255, 240, 205, 0.96));
+  box-shadow:
+    0 18px 36px rgba(58, 43, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+.start-screen::before,
+.start-screen::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.start-screen::before {
+  right: -20px;
+  top: -24px;
+  width: 104px;
+  height: 104px;
+  border-radius: 38px;
+  background:
+    linear-gradient(145deg, rgba(93, 214, 189, 0.34), rgba(255, 255, 255, 0.18));
+  transform: rotate(16deg);
+}
+
+.start-screen::after {
+  right: 28px;
+  bottom: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 204, 77, 0.46);
+  box-shadow:
+    -246px -96px 0 -17px rgba(93, 214, 189, 0.46),
+    -202px -74px 0 -20px rgba(255, 122, 144, 0.38),
+    -34px -118px 0 -18px rgba(79, 107, 237, 0.22);
+}
+
+.start-screen > * {
+  position: relative;
+  z-index: 1;
+}
+
+.start-screen.is-hidden {
+  display: none;
+}
+
+.start-screen h2 {
+  max-width: 290px;
+  color: #182236;
+  font-size: 22px;
+  line-height: 1.08;
+}
+
+.start-screen p {
+  margin-top: 8px;
+  max-width: 286px;
+  color: #566176;
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.start-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.start-actions .primary-button,
+.start-actions .secondary-button {
+  min-height: 44px;
+  border-radius: 15px;
+  box-shadow:
+    0 12px 22px rgba(58, 43, 42, 0.12),
+    inset 0 -3px 0 rgba(23, 32, 43, 0.08);
+}
+
+.start-actions .secondary-button {
+  background: linear-gradient(145deg, #657bff, #445fe8);
 }
 
 .stat-card {
@@ -173,10 +326,12 @@ h2 {
   gap: 6px;
 }
 
-select {
+select,
+input[type="number"],
+input[type="text"],
+input[type="datetime-local"],
+textarea {
   width: 100%;
-  min-height: 46px;
-  padding: 0 14px;
   border: 1px solid rgba(38, 49, 63, 0.14);
   border-radius: 14px;
   color: #26313f;
@@ -185,6 +340,27 @@ select {
   font-weight: 700;
   line-height: 1.35;
   outline: none;
+}
+
+select,
+input[type="number"],
+input[type="text"],
+input[type="datetime-local"] {
+  min-height: 46px;
+  padding: 0 14px;
+}
+
+textarea {
+  min-height: 118px;
+  padding: 12px 14px;
+  resize: vertical;
+}
+
+.field small {
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.35;
 }
 
 select option {
@@ -232,6 +408,142 @@ input[type="checkbox"]:checked::after {
   display: grid;
   grid-template-columns: 1fr 112px;
   gap: 10px;
+}
+
+.deadline-panel {
+  gap: 14px;
+}
+
+.deadline-form,
+.deadline-list {
+  display: grid;
+  gap: 10px;
+}
+
+.deadline-grid {
+  display: grid;
+  grid-template-columns: 1fr 118px;
+  gap: 10px;
+}
+
+.deadline-card {
+  display: grid;
+  gap: 8px;
+  padding: 11px;
+  border: 1px solid rgba(58, 43, 42, 0.12);
+  border-radius: 16px;
+  background: #fffaf2;
+}
+
+.deadline-card.is-overdue {
+  border-color: rgba(239, 68, 68, 0.34);
+  background: #fff4f2;
+}
+
+.deadline-card header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.deadline-card h3 {
+  margin: 0;
+  color: #243044;
+  font-size: 14px;
+  line-height: 1.15;
+}
+
+.deadline-card p,
+.deadline-card small {
+  margin: 0;
+  color: #6b7280;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.deadline-priority {
+  align-self: start;
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: #243044;
+  background: #ffeab6;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.deadline-priority.high {
+  color: #ffffff;
+  background: #ef4444;
+}
+
+.deadline-priority.low {
+  background: #d9f7ef;
+}
+
+.deadline-tasks {
+  display: grid;
+  gap: 5px;
+}
+
+.deadline-task {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #2f3442;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.deadline-task input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+}
+
+.deadline-task input[type="checkbox"]::after {
+  top: 3px;
+  left: 3px;
+  width: 14px;
+  height: 14px;
+}
+
+.deadline-task input[type="checkbox"]:checked::after {
+  transform: none;
+}
+
+.deadline-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 7px;
+}
+
+.deadline-actions button {
+  min-height: 34px;
+  border-radius: 12px;
+  color: #ffffff;
+  background: #4f6bed;
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.deadline-actions button:last-child {
+  color: #17202b;
+  background: #ffcc4d;
+}
+
+.deadline-empty {
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.deadline-list-title {
+  color: #ef4444;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .accessory-list {
@@ -327,7 +639,8 @@ button:active {
 
 select:focus,
 button:focus-visible,
-input:focus-visible {
+input:focus-visible,
+textarea:focus {
   outline: 3px solid rgba(255, 181, 64, 0.55);
   outline-offset: 2px;
 }

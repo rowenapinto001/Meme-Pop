@@ -8,6 +8,8 @@ namespace MemePop {
     | "procrastination"
     | "lateNight"
     | "social"
+    | "deadline"
+    | "movement"
     | "studying"
     | "gaming"
     | "office"
@@ -23,6 +25,8 @@ namespace MemePop {
     | "procrastinationMode"
     | "lateNightMode"
     | "socialMode"
+    | "deadlineMode"
+    | "movementMode"
     | "office"
     | "studying"
     | "coding"
@@ -33,7 +37,9 @@ namespace MemePop {
     | "lateNight"
     | "motivation"
     | "procrastination"
-    | "social";
+    | "social"
+    | "deadline"
+    | "movement";
 
   export type CharacterPosition = {
     x: number | null;
@@ -47,14 +53,40 @@ namespace MemePop {
     endsAt: number;
   };
 
+  export type DeadlinePriority = "low" | "medium" | "high";
+  export type DeadlineReminder = "week" | "threeDays" | "oneDay" | "threeHours" | "oneHour" | "custom" | "none";
+
+  export type DeadlineTask = {
+    id: string;
+    text: string;
+    done: boolean;
+  };
+
+  export type DeadlineItem = {
+    id: string;
+    title: string;
+    subject: string;
+    dueAt: number;
+    priority: DeadlinePriority;
+    tasks: DeadlineTask[];
+    reminder: DeadlineReminder;
+    customReminderMinutes: number;
+    completed: boolean;
+    completedAt: number;
+    createdAt: number;
+  };
+
   export type Settings = {
     enabled: boolean;
     theme: Theme;
     frequency: Frequency;
+    appearanceMinutes: number;
+    breakMinutes: number;
     soundEnabled: boolean;
     doNotDisturb: boolean;
     mutedUntil: number;
     accessory: AccessoryId;
+    targetSites: string[];
   };
 
   export type Wallet = {
@@ -76,6 +108,8 @@ namespace MemePop {
     focus: FocusState;
     position: CharacterPosition;
     unlockedAccessories: AccessoryId[];
+    startScreenLastSeenDate: string;
+    deadlines: DeadlineItem[];
   };
 
   export type MessageItem = {
@@ -95,6 +129,17 @@ namespace MemePop {
   export const CLICK_COIN_COOLDOWN_MS = 15000;
   export const AUTO_HIDE_MIN_MS = 6000;
   export const AUTO_HIDE_MAX_MS = 10000;
+  export const MIN_SETTING_MINUTES = 1;
+  export const MAX_SETTING_MINUTES = 300;
+  export const MAX_TARGET_SITES = 10;
+  export const COMPLETION_COIN_REWARD = 15;
+  export const REMINDER_MINUTES: Record<Exclude<DeadlineReminder, "custom" | "none">, number> = {
+    week: 7 * 24 * 60,
+    threeDays: 3 * 24 * 60,
+    oneDay: 24 * 60,
+    threeHours: 3 * 60,
+    oneHour: 60
+  };
   export const DEFAULT_CHARACTER_THEME: CharacterTheme = "studying";
 
   export const THEME_CHARACTER_ASSETS: Record<CharacterTheme, string> = {
@@ -104,6 +149,8 @@ namespace MemePop {
     procrastination: "assets/character/memepop-procrastination.png",
     lateNight: "assets/character/memepop-late-night.png",
     social: "assets/character/memepop-social.png",
+    deadline: "assets/character/memepop-deadline.png",
+    movement: "assets/character/memepop-movement.png",
     studying: "assets/character/memepop-study.png",
     gaming: "assets/character/memepop-gaming.png",
     office: "assets/character/memepop-office.png",
@@ -123,10 +170,13 @@ namespace MemePop {
       enabled: true,
       theme: "random",
       frequency: "normal",
+      appearanceMinutes: 15,
+      breakMinutes: 1,
       soundEnabled: false,
       doNotDisturb: false,
       mutedUntil: 0,
-      accessory: "none"
+      accessory: "none",
+      targetSites: []
     },
     wallet: {
       coins: 0,
@@ -148,7 +198,9 @@ namespace MemePop {
       x: null,
       y: null
     },
-    unlockedAccessories: ["none"]
+    unlockedAccessories: ["none"],
+    startScreenLastSeenDate: "",
+    deadlines: []
   };
 
   export const MESSAGES: MessageItem[] = [
@@ -207,6 +259,28 @@ namespace MemePop {
     { id: "social-mode-4", category: "socialMode", text: "MemePop suggests touching grass." },
     { id: "social-mode-5", category: "socialMode", text: "That comment section looks dangerous." },
     { id: "social-mode-6", category: "socialMode", text: "Close the tab while you still can." },
+
+    { id: "deadline-mode-1", category: "deadlineMode", text: "That deadline is getting closer." },
+    { id: "deadline-mode-2", category: "deadlineMode", text: "Future-you will appreciate starting now." },
+    { id: "deadline-mode-3", category: "deadlineMode", text: "The project will not complete itself." },
+    { id: "deadline-mode-4", category: "deadlineMode", text: "Submission day is approaching." },
+    { id: "deadline-mode-5", category: "deadlineMode", text: "One small task before the panic begins." },
+    { id: "deadline-mode-6", category: "deadlineMode", text: "Deadline detected. Focus mode recommended." },
+    { id: "deadline-mode-7", category: "deadlineMode", text: "You still have time. Use it wisely." },
+    { id: "deadline-mode-8", category: "deadlineMode", text: "Last-minute mode is not a strategy." },
+    { id: "deadline-mode-9", category: "deadlineMode", text: "Complete one section now." },
+    { id: "deadline-mode-10", category: "deadlineMode", text: "MemePop believes this can be finished." },
+
+    { id: "movement-mode-1", category: "movementMode", text: "Time to move those pixels and muscles." },
+    { id: "movement-mode-2", category: "movementMode", text: "Stand up before you become part of the chair." },
+    { id: "movement-mode-3", category: "movementMode", text: "Quick stretch break." },
+    { id: "movement-mode-4", category: "movementMode", text: "Ten squats. MemePop is counting." },
+    { id: "movement-mode-5", category: "movementMode", text: "Your shoulders need a reset." },
+    { id: "movement-mode-6", category: "movementMode", text: "Walk for two minutes." },
+    { id: "movement-mode-7", category: "movementMode", text: "Tiny workout, big energy." },
+    { id: "movement-mode-8", category: "movementMode", text: "Screen break activated." },
+    { id: "movement-mode-9", category: "movementMode", text: "Move now, scroll later." },
+    { id: "movement-mode-10", category: "movementMode", text: "MemePop requests five jumping jacks." },
 
     { id: "office-1", category: "office", text: "That meeting could have been a snack." },
     { id: "office-2", category: "office", text: "Spreadsheet opened. Confidence pending." },
@@ -363,6 +437,7 @@ namespace MemePop {
     const streak = (raw?.streak ?? {}) as Partial<Streak>;
     const focus = (raw?.focus ?? {}) as Partial<FocusState>;
     const position = (raw?.position ?? {}) as Partial<CharacterPosition>;
+    const deadlines = Array.isArray(raw?.deadlines) ? raw.deadlines.map(normalizeDeadline).filter(Boolean) as DeadlineItem[] : [];
     const unlockedAccessories = Array.isArray(raw?.unlockedAccessories)
       ? raw.unlockedAccessories.filter((item): item is AccessoryId => ACCESSORIES.some((accessoryItem) => accessoryItem.id === item))
       : DEFAULT_STATE.unlockedAccessories;
@@ -381,6 +456,8 @@ namespace MemePop {
       "procrastination",
       "lateNight",
       "social",
+      "deadline",
+      "movement",
       "studying",
       "gaming",
       "office",
@@ -395,10 +472,13 @@ namespace MemePop {
         enabled: typeof settings.enabled === "boolean" ? settings.enabled : DEFAULT_STATE.settings.enabled,
         theme,
         frequency,
+        appearanceMinutes: clampSettingMinutes(settings.appearanceMinutes, DEFAULT_STATE.settings.appearanceMinutes),
+        breakMinutes: clampSettingMinutes(settings.breakMinutes, DEFAULT_STATE.settings.breakMinutes),
         soundEnabled: typeof settings.soundEnabled === "boolean" ? settings.soundEnabled : DEFAULT_STATE.settings.soundEnabled,
         doNotDisturb: typeof settings.doNotDisturb === "boolean" ? settings.doNotDisturb : DEFAULT_STATE.settings.doNotDisturb,
         mutedUntil: typeof settings.mutedUntil === "number" ? Math.max(0, settings.mutedUntil) : DEFAULT_STATE.settings.mutedUntil,
-        accessory
+        accessory,
+        targetSites: normalizeTargetSites(settings.targetSites)
       },
       wallet: {
         coins: typeof wallet.coins === "number" ? Math.max(0, Math.floor(wallet.coins)) : DEFAULT_STATE.wallet.coins,
@@ -420,7 +500,9 @@ namespace MemePop {
         x: typeof position.x === "number" ? position.x : null,
         y: typeof position.y === "number" ? position.y : null
       },
-      unlockedAccessories: normalizedUnlocked
+      unlockedAccessories: normalizedUnlocked,
+      startScreenLastSeenDate: typeof raw?.startScreenLastSeenDate === "string" ? raw.startScreenLastSeenDate : "",
+      deadlines
     };
   }
 
@@ -496,6 +578,85 @@ namespace MemePop {
     return 0;
   }
 
+  export function clampSettingMinutes(value: unknown, fallback: number): number {
+    const numericValue = typeof value === "number" ? value : Number(value);
+    const minutes = Number.isFinite(numericValue) ? Math.floor(numericValue) : fallback;
+    return Math.min(Math.max(minutes, MIN_SETTING_MINUTES), MAX_SETTING_MINUTES);
+  }
+
+  export function minutesToMs(minutes: number): number {
+    return clampSettingMinutes(minutes, DEFAULT_STATE.settings.appearanceMinutes) * 60000;
+  }
+
+  export function createId(prefix: string): string {
+    return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  }
+
+  export function normalizeDeadline(raw: unknown): DeadlineItem | null {
+    const item = (raw ?? {}) as Partial<DeadlineItem>;
+    const title = typeof item.title === "string" ? item.title.trim() : "";
+    const dueAt = typeof item.dueAt === "number" ? item.dueAt : Number(item.dueAt);
+
+    if (!title || !Number.isFinite(dueAt)) {
+      return null;
+    }
+
+    const priority: DeadlinePriority = item.priority === "low" || item.priority === "high" ? item.priority : "medium";
+    const reminder: DeadlineReminder =
+      item.reminder === "week" ||
+      item.reminder === "threeDays" ||
+      item.reminder === "oneDay" ||
+      item.reminder === "threeHours" ||
+      item.reminder === "oneHour" ||
+      item.reminder === "custom" ||
+      item.reminder === "none"
+        ? item.reminder
+        : "oneDay";
+    const tasks = Array.isArray(item.tasks)
+      ? item.tasks
+          .map((task): DeadlineTask | null => {
+            const text = typeof task?.text === "string" ? task.text.trim() : "";
+
+            if (!text) {
+              return null;
+            }
+
+            return {
+              id: typeof task.id === "string" && task.id ? task.id : createId("task"),
+              text,
+              done: Boolean(task.done)
+            };
+          })
+          .filter((task): task is DeadlineTask => Boolean(task))
+      : [];
+
+    return {
+      id: typeof item.id === "string" && item.id ? item.id : createId("deadline"),
+      title,
+      subject: typeof item.subject === "string" ? item.subject.trim() : "",
+      dueAt,
+      priority,
+      tasks,
+      reminder,
+      customReminderMinutes: clampSettingMinutes(item.customReminderMinutes, 60),
+      completed: Boolean(item.completed),
+      completedAt: typeof item.completedAt === "number" ? Math.max(0, item.completedAt) : 0,
+      createdAt: typeof item.createdAt === "number" ? Math.max(0, item.createdAt) : Date.now()
+    };
+  }
+
+  export function getDeadlineReminderMinutes(deadline: DeadlineItem): number {
+    if (deadline.reminder === "none") {
+      return 0;
+    }
+
+    if (deadline.reminder === "custom") {
+      return clampSettingMinutes(deadline.customReminderMinutes, 60);
+    }
+
+    return REMINDER_MINUTES[deadline.reminder];
+  }
+
   export function randomBetween(min: number, max: number): number {
     return Math.floor(min + Math.random() * (max - min + 1));
   }
@@ -505,11 +666,62 @@ namespace MemePop {
     const focusActive = state.focus.active && state.focus.endsAt > now;
     return (
       !state.settings.enabled ||
-      state.settings.frequency === "off" ||
       state.settings.doNotDisturb ||
       state.settings.mutedUntil > now ||
       focusActive
     );
+  }
+
+  export function normalizeTargetSite(value: string): string {
+    const cleanedValue = value.trim().toLowerCase();
+
+    if (!cleanedValue) {
+      return "";
+    }
+
+    const withoutWildcard = cleanedValue.replace(/^\*\./, "");
+    const candidate = withoutWildcard.includes("://") ? withoutWildcard : `https://${withoutWildcard}`;
+
+    try {
+      return new URL(candidate).hostname.replace(/^www\./, "");
+    } catch {
+      return withoutWildcard
+        .replace(/^www\./, "")
+        .split(/[/?#\s]/)[0]
+        .replace(/[^a-z0-9.-]/g, "");
+    }
+  }
+
+  export function normalizeTargetSites(value: unknown): string[] {
+    const rawItems = Array.isArray(value)
+      ? value
+      : typeof value === "string"
+        ? value.split(/[\n,]+/)
+        : [];
+    const sites = rawItems
+      .map((item) => normalizeTargetSite(String(item)))
+      .filter((item) => item.length > 0 && item.includes("."));
+
+    return Array.from(new Set(sites)).slice(0, MAX_TARGET_SITES);
+  }
+
+  export function targetSitesToText(sites: string[]): string {
+    return normalizeTargetSites(sites).join("\n");
+  }
+
+  export function isAllowedTargetUrl(url: string, targetSites: string[]): boolean {
+    const sites = normalizeTargetSites(targetSites);
+
+    if (sites.length === 0) {
+      return true;
+    }
+
+    try {
+      const host = new URL(url).hostname.toLowerCase().replace(/^www\./, "");
+      return sites.some((site) => host === site || host.endsWith(`.${site}`));
+    } catch {
+      return false;
+    }
   }
 
   export function categoryForUrl(url: string): MessageCategory {
@@ -621,11 +833,27 @@ namespace MemePop {
       return "social";
     }
 
+    if (category === "deadlineMode") {
+      return "deadline";
+    }
+
+    if (category === "movementMode") {
+      return "movement";
+    }
+
     if (category === "videos") {
       return "gaming";
     }
 
-    if (category === "office" || category === "studying" || category === "coding" || category === "gaming" || category === "hydration") {
+    if (
+      category === "office" ||
+      category === "studying" ||
+      category === "coding" ||
+      category === "gaming" ||
+      category === "hydration" ||
+      category === "deadline" ||
+      category === "movement"
+    ) {
       return category;
     }
 

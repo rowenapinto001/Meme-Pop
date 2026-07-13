@@ -5,6 +5,17 @@ var MemePop;
     MemePop.CLICK_COIN_COOLDOWN_MS = 15000;
     MemePop.AUTO_HIDE_MIN_MS = 6000;
     MemePop.AUTO_HIDE_MAX_MS = 10000;
+    MemePop.MIN_SETTING_MINUTES = 1;
+    MemePop.MAX_SETTING_MINUTES = 300;
+    MemePop.MAX_TARGET_SITES = 10;
+    MemePop.COMPLETION_COIN_REWARD = 15;
+    MemePop.REMINDER_MINUTES = {
+        week: 7 * 24 * 60,
+        threeDays: 3 * 24 * 60,
+        oneDay: 24 * 60,
+        threeHours: 3 * 60,
+        oneHour: 60
+    };
     MemePop.DEFAULT_CHARACTER_THEME = "studying";
     MemePop.THEME_CHARACTER_ASSETS = {
         focus: "assets/character/memepop-focus.png",
@@ -13,6 +24,8 @@ var MemePop;
         procrastination: "assets/character/memepop-procrastination.png",
         lateNight: "assets/character/memepop-late-night.png",
         social: "assets/character/memepop-social.png",
+        deadline: "assets/character/memepop-deadline.png",
+        movement: "assets/character/memepop-movement.png",
         studying: "assets/character/memepop-study.png",
         gaming: "assets/character/memepop-gaming.png",
         office: "assets/character/memepop-office.png",
@@ -30,10 +43,13 @@ var MemePop;
             enabled: true,
             theme: "random",
             frequency: "normal",
+            appearanceMinutes: 15,
+            breakMinutes: 1,
             soundEnabled: false,
             doNotDisturb: false,
             mutedUntil: 0,
-            accessory: "none"
+            accessory: "none",
+            targetSites: []
         },
         wallet: {
             coins: 0,
@@ -55,7 +71,9 @@ var MemePop;
             x: null,
             y: null
         },
-        unlockedAccessories: ["none"]
+        unlockedAccessories: ["none"],
+        startScreenLastSeenDate: "",
+        deadlines: []
     };
     MemePop.MESSAGES = [
         { id: "general-1", category: "general", text: "MemePop has entered the tab." },
@@ -107,6 +125,26 @@ var MemePop;
         { id: "social-mode-4", category: "socialMode", text: "MemePop suggests touching grass." },
         { id: "social-mode-5", category: "socialMode", text: "That comment section looks dangerous." },
         { id: "social-mode-6", category: "socialMode", text: "Close the tab while you still can." },
+        { id: "deadline-mode-1", category: "deadlineMode", text: "That deadline is getting closer." },
+        { id: "deadline-mode-2", category: "deadlineMode", text: "Future-you will appreciate starting now." },
+        { id: "deadline-mode-3", category: "deadlineMode", text: "The project will not complete itself." },
+        { id: "deadline-mode-4", category: "deadlineMode", text: "Submission day is approaching." },
+        { id: "deadline-mode-5", category: "deadlineMode", text: "One small task before the panic begins." },
+        { id: "deadline-mode-6", category: "deadlineMode", text: "Deadline detected. Focus mode recommended." },
+        { id: "deadline-mode-7", category: "deadlineMode", text: "You still have time. Use it wisely." },
+        { id: "deadline-mode-8", category: "deadlineMode", text: "Last-minute mode is not a strategy." },
+        { id: "deadline-mode-9", category: "deadlineMode", text: "Complete one section now." },
+        { id: "deadline-mode-10", category: "deadlineMode", text: "MemePop believes this can be finished." },
+        { id: "movement-mode-1", category: "movementMode", text: "Time to move those pixels and muscles." },
+        { id: "movement-mode-2", category: "movementMode", text: "Stand up before you become part of the chair." },
+        { id: "movement-mode-3", category: "movementMode", text: "Quick stretch break." },
+        { id: "movement-mode-4", category: "movementMode", text: "Ten squats. MemePop is counting." },
+        { id: "movement-mode-5", category: "movementMode", text: "Your shoulders need a reset." },
+        { id: "movement-mode-6", category: "movementMode", text: "Walk for two minutes." },
+        { id: "movement-mode-7", category: "movementMode", text: "Tiny workout, big energy." },
+        { id: "movement-mode-8", category: "movementMode", text: "Screen break activated." },
+        { id: "movement-mode-9", category: "movementMode", text: "Move now, scroll later." },
+        { id: "movement-mode-10", category: "movementMode", text: "MemePop requests five jumping jacks." },
         { id: "office-1", category: "office", text: "That meeting could have been a snack." },
         { id: "office-2", category: "office", text: "Spreadsheet opened. Confidence pending." },
         { id: "office-3", category: "office", text: "Pretending to look busy: advanced mode." },
@@ -249,6 +287,7 @@ var MemePop;
         const streak = (raw?.streak ?? {});
         const focus = (raw?.focus ?? {});
         const position = (raw?.position ?? {});
+        const deadlines = Array.isArray(raw?.deadlines) ? raw.deadlines.map(normalizeDeadline).filter(Boolean) : [];
         const unlockedAccessories = Array.isArray(raw?.unlockedAccessories)
             ? raw.unlockedAccessories.filter((item) => MemePop.ACCESSORIES.some((accessoryItem) => accessoryItem.id === item))
             : MemePop.DEFAULT_STATE.unlockedAccessories;
@@ -266,6 +305,8 @@ var MemePop;
             "procrastination",
             "lateNight",
             "social",
+            "deadline",
+            "movement",
             "studying",
             "gaming",
             "office",
@@ -279,10 +320,13 @@ var MemePop;
                 enabled: typeof settings.enabled === "boolean" ? settings.enabled : MemePop.DEFAULT_STATE.settings.enabled,
                 theme,
                 frequency,
+                appearanceMinutes: clampSettingMinutes(settings.appearanceMinutes, MemePop.DEFAULT_STATE.settings.appearanceMinutes),
+                breakMinutes: clampSettingMinutes(settings.breakMinutes, MemePop.DEFAULT_STATE.settings.breakMinutes),
                 soundEnabled: typeof settings.soundEnabled === "boolean" ? settings.soundEnabled : MemePop.DEFAULT_STATE.settings.soundEnabled,
                 doNotDisturb: typeof settings.doNotDisturb === "boolean" ? settings.doNotDisturb : MemePop.DEFAULT_STATE.settings.doNotDisturb,
                 mutedUntil: typeof settings.mutedUntil === "number" ? Math.max(0, settings.mutedUntil) : MemePop.DEFAULT_STATE.settings.mutedUntil,
-                accessory
+                accessory,
+                targetSites: normalizeTargetSites(settings.targetSites)
             },
             wallet: {
                 coins: typeof wallet.coins === "number" ? Math.max(0, Math.floor(wallet.coins)) : MemePop.DEFAULT_STATE.wallet.coins,
@@ -304,7 +348,9 @@ var MemePop;
                 x: typeof position.x === "number" ? position.x : null,
                 y: typeof position.y === "number" ? position.y : null
             },
-            unlockedAccessories: normalizedUnlocked
+            unlockedAccessories: normalizedUnlocked,
+            startScreenLastSeenDate: typeof raw?.startScreenLastSeenDate === "string" ? raw.startScreenLastSeenDate : "",
+            deadlines
         };
     }
     MemePop.normalizeState = normalizeState;
@@ -375,6 +421,77 @@ var MemePop;
         return 0;
     }
     MemePop.getRandomDelayMs = getRandomDelayMs;
+    function clampSettingMinutes(value, fallback) {
+        const numericValue = typeof value === "number" ? value : Number(value);
+        const minutes = Number.isFinite(numericValue) ? Math.floor(numericValue) : fallback;
+        return Math.min(Math.max(minutes, MemePop.MIN_SETTING_MINUTES), MemePop.MAX_SETTING_MINUTES);
+    }
+    MemePop.clampSettingMinutes = clampSettingMinutes;
+    function minutesToMs(minutes) {
+        return clampSettingMinutes(minutes, MemePop.DEFAULT_STATE.settings.appearanceMinutes) * 60000;
+    }
+    MemePop.minutesToMs = minutesToMs;
+    function createId(prefix) {
+        return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    }
+    MemePop.createId = createId;
+    function normalizeDeadline(raw) {
+        const item = (raw ?? {});
+        const title = typeof item.title === "string" ? item.title.trim() : "";
+        const dueAt = typeof item.dueAt === "number" ? item.dueAt : Number(item.dueAt);
+        if (!title || !Number.isFinite(dueAt)) {
+            return null;
+        }
+        const priority = item.priority === "low" || item.priority === "high" ? item.priority : "medium";
+        const reminder = item.reminder === "week" ||
+            item.reminder === "threeDays" ||
+            item.reminder === "oneDay" ||
+            item.reminder === "threeHours" ||
+            item.reminder === "oneHour" ||
+            item.reminder === "custom" ||
+            item.reminder === "none"
+            ? item.reminder
+            : "oneDay";
+        const tasks = Array.isArray(item.tasks)
+            ? item.tasks
+                .map((task) => {
+                const text = typeof task?.text === "string" ? task.text.trim() : "";
+                if (!text) {
+                    return null;
+                }
+                return {
+                    id: typeof task.id === "string" && task.id ? task.id : createId("task"),
+                    text,
+                    done: Boolean(task.done)
+                };
+            })
+                .filter((task) => Boolean(task))
+            : [];
+        return {
+            id: typeof item.id === "string" && item.id ? item.id : createId("deadline"),
+            title,
+            subject: typeof item.subject === "string" ? item.subject.trim() : "",
+            dueAt,
+            priority,
+            tasks,
+            reminder,
+            customReminderMinutes: clampSettingMinutes(item.customReminderMinutes, 60),
+            completed: Boolean(item.completed),
+            completedAt: typeof item.completedAt === "number" ? Math.max(0, item.completedAt) : 0,
+            createdAt: typeof item.createdAt === "number" ? Math.max(0, item.createdAt) : Date.now()
+        };
+    }
+    MemePop.normalizeDeadline = normalizeDeadline;
+    function getDeadlineReminderMinutes(deadline) {
+        if (deadline.reminder === "none") {
+            return 0;
+        }
+        if (deadline.reminder === "custom") {
+            return clampSettingMinutes(deadline.customReminderMinutes, 60);
+        }
+        return MemePop.REMINDER_MINUTES[deadline.reminder];
+    }
+    MemePop.getDeadlineReminderMinutes = getDeadlineReminderMinutes;
     function randomBetween(min, max) {
         return Math.floor(min + Math.random() * (max - min + 1));
     }
@@ -383,12 +500,59 @@ var MemePop;
         const now = Date.now();
         const focusActive = state.focus.active && state.focus.endsAt > now;
         return (!state.settings.enabled ||
-            state.settings.frequency === "off" ||
             state.settings.doNotDisturb ||
             state.settings.mutedUntil > now ||
             focusActive);
     }
     MemePop.isQuiet = isQuiet;
+    function normalizeTargetSite(value) {
+        const cleanedValue = value.trim().toLowerCase();
+        if (!cleanedValue) {
+            return "";
+        }
+        const withoutWildcard = cleanedValue.replace(/^\*\./, "");
+        const candidate = withoutWildcard.includes("://") ? withoutWildcard : `https://${withoutWildcard}`;
+        try {
+            return new URL(candidate).hostname.replace(/^www\./, "");
+        }
+        catch {
+            return withoutWildcard
+                .replace(/^www\./, "")
+                .split(/[/?#\s]/)[0]
+                .replace(/[^a-z0-9.-]/g, "");
+        }
+    }
+    MemePop.normalizeTargetSite = normalizeTargetSite;
+    function normalizeTargetSites(value) {
+        const rawItems = Array.isArray(value)
+            ? value
+            : typeof value === "string"
+                ? value.split(/[\n,]+/)
+                : [];
+        const sites = rawItems
+            .map((item) => normalizeTargetSite(String(item)))
+            .filter((item) => item.length > 0 && item.includes("."));
+        return Array.from(new Set(sites)).slice(0, MemePop.MAX_TARGET_SITES);
+    }
+    MemePop.normalizeTargetSites = normalizeTargetSites;
+    function targetSitesToText(sites) {
+        return normalizeTargetSites(sites).join("\n");
+    }
+    MemePop.targetSitesToText = targetSitesToText;
+    function isAllowedTargetUrl(url, targetSites) {
+        const sites = normalizeTargetSites(targetSites);
+        if (sites.length === 0) {
+            return true;
+        }
+        try {
+            const host = new URL(url).hostname.toLowerCase().replace(/^www\./, "");
+            return sites.some((site) => host === site || host.endsWith(`.${site}`));
+        }
+        catch {
+            return false;
+        }
+    }
+    MemePop.isAllowedTargetUrl = isAllowedTargetUrl;
     function categoryForUrl(url) {
         let parsed;
         try {
@@ -472,10 +636,22 @@ var MemePop;
         if (category === "socialMode" || category === "social") {
             return "social";
         }
+        if (category === "deadlineMode") {
+            return "deadline";
+        }
+        if (category === "movementMode") {
+            return "movement";
+        }
         if (category === "videos") {
             return "gaming";
         }
-        if (category === "office" || category === "studying" || category === "coding" || category === "gaming" || category === "hydration") {
+        if (category === "office" ||
+            category === "studying" ||
+            category === "coding" ||
+            category === "gaming" ||
+            category === "hydration" ||
+            category === "deadline" ||
+            category === "movement") {
             return category;
         }
         return MemePop.DEFAULT_CHARACTER_THEME;

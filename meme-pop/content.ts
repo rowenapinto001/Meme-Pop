@@ -20,7 +20,6 @@ let dragging = false;
 let dragMoved = false;
 let dragOffsetX = 0;
 let dragOffsetY = 0;
-const VISIBLE_DURATION_MS = 10000;
 let characterImageElement: HTMLImageElement | null = null;
 const THEME_CATEGORIES: Record<Exclude<MemePop.Theme, "random">, MemePop.MessageCategory> = {
   focus: "focusMode",
@@ -29,6 +28,8 @@ const THEME_CATEGORIES: Record<Exclude<MemePop.Theme, "random">, MemePop.Message
   procrastination: "procrastinationMode",
   lateNight: "lateNightMode",
   social: "socialMode",
+  deadline: "deadlineMode",
+  movement: "movementMode",
   studying: "studying",
   gaming: "gaming",
   office: "office",
@@ -150,6 +151,10 @@ function canShow(force: boolean): boolean {
     return false;
   }
 
+  if (!MemePop.isAllowedTargetUrl(window.location.href, appState.settings.targetSites)) {
+    return false;
+  }
+
   if (!appState.settings.enabled || appState.settings.doNotDisturb || appState.settings.mutedUntil > Date.now()) {
     return false;
   }
@@ -172,7 +177,7 @@ function scheduleNextAppearance(): void {
     return;
   }
 
-  const delay = MemePop.getRandomDelayMs(appState.settings.frequency);
+  const delay = MemePop.minutesToMs(appState.settings.appearanceMinutes);
 
   if (!delay) {
     return;
@@ -225,7 +230,7 @@ function centerAndRememberPosition(): void {
 }
 
 function isHydrationTheme(): boolean {
-  return appState.settings.theme === "hydration";
+  return getCharacterTheme() === "hydration";
 }
 
 function getActiveMessageCategory(): MemePop.MessageCategory {
@@ -249,6 +254,14 @@ function getCategoryForText(text?: string): MemePop.MessageCategory | null {
 
   if (MemePop.FOCUS_START_MESSAGES.includes(text) || MemePop.FOCUS_DONE_MESSAGES.includes(text)) {
     return "focusMode";
+  }
+
+  if (text.toLowerCase().includes("deadline")) {
+    return "deadlineMode";
+  }
+
+  if (text.toLowerCase().includes("move") || text.toLowerCase().includes("stretch")) {
+    return "movementMode";
   }
 
   return null;
@@ -290,6 +303,8 @@ function updateThemeClass(): void {
     "memepop-theme-procrastination",
     "memepop-theme-lateNight",
     "memepop-theme-social",
+    "memepop-theme-deadline",
+    "memepop-theme-movement",
     "memepop-theme-office",
     "memepop-theme-studying",
     "memepop-theme-gaming",
@@ -298,7 +313,7 @@ function updateThemeClass(): void {
     "memepop-offering",
     "memepop-splashing"
   );
-  rootElement.classList.add(`memepop-theme-${appState.settings.theme}`);
+  rootElement.classList.add(`memepop-theme-${getCharacterTheme()}`);
   updateCharacterImage();
 
   if (isHydrationTheme()) {
@@ -322,27 +337,49 @@ function updateCountdown(): void {
   }
 
   const visibleUntil = Number(countdownElement.dataset.visibleUntil ?? 0);
-  const secondsLeft = Math.max(0, Math.ceil((visibleUntil - Date.now()) / 1000));
-  countdownElement.textContent = `${secondsLeft}s`;
-  countdownElement.setAttribute("aria-label", `MemePop closes in ${secondsLeft} seconds`);
+  const msLeft = Math.max(0, visibleUntil - Date.now());
+  countdownElement.textContent = formatCountdown(msLeft);
+  countdownElement.setAttribute("aria-label", `MemePop closes in ${formatCountdown(msLeft)}`);
 
-  if (secondsLeft > 0) {
-    countdownTimer = window.setTimeout(updateCountdown, 250);
+  if (msLeft > 0) {
+    countdownTimer = window.setTimeout(updateCountdown, 1000);
   }
+}
+
+function getVisibleDurationMs(): number {
+  return MemePop.minutesToMs(appState.settings.breakMinutes);
+}
+
+function formatCountdown(ms: number): string {
+  const totalSeconds = Math.max(0, Math.ceil(ms / 1000));
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  if (hours > 0) {
+    return `${hours}h ${minutes}m`;
+  }
+
+  if (minutes > 0) {
+    return `${minutes}m ${String(seconds).padStart(2, "0")}s`;
+  }
+
+  return `${seconds}s`;
 }
 
 function resetAutoHide(_extended = false): void {
   clearTimer(autoHideTimer);
   clearTimer(countdownTimer);
+  const visibleDurationMs = getVisibleDurationMs();
 
   if (countdownElement) {
-    countdownElement.dataset.visibleUntil = String(Date.now() + VISIBLE_DURATION_MS);
+    countdownElement.dataset.visibleUntil = String(Date.now() + visibleDurationMs);
     updateCountdown();
   }
 
   autoHideTimer = window.setTimeout(() => {
     hideMemePop(true);
-  }, VISIBLE_DURATION_MS);
+  }, visibleDurationMs);
 }
 
 function hideMemePop(animated: boolean): void {
@@ -385,7 +422,7 @@ function setMessage(text?: string): void {
 
   activeMessageCategory = category;
   lastMessageText = nextMessage;
-  updateCharacterImage();
+  updateThemeClass();
 
   if (messageElement) {
     messageElement.textContent = nextMessage;
@@ -500,8 +537,8 @@ function createMemePop(message?: string): HTMLElement | null {
 
   const countdown = document.createElement("span");
   countdown.className = "memepop-timer";
-  countdown.textContent = "10s";
-  countdown.setAttribute("aria-label", "MemePop closes in 10 seconds");
+  countdown.textContent = formatCountdown(getVisibleDurationMs());
+  countdown.setAttribute("aria-label", `MemePop closes in ${formatCountdown(getVisibleDurationMs())}`);
 
   card.append(controls, countdown, characterButton, accessory, bubble, reward);
   root.append(splash, card);

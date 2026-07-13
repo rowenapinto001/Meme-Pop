@@ -20,7 +20,7 @@
         <h2>Behavior</h2>
         <label class="row">
           <span>
-            <strong>Enable MemePop</strong>
+            <strong>Show MemePop</strong>
             <small>Allow MemePop to appear on normal webpages.</small>
           </span>
           <input id="enabledInput" type="checkbox" role="switch">
@@ -42,6 +42,8 @@
             <option value="procrastination">Procrastination Mode</option>
             <option value="lateNight">Late-Night Mode</option>
             <option value="social">Social Media Mode</option>
+            <option value="deadline">Assignment / Project Deadline Mode</option>
+            <option value="movement">Exercise / Movement Break Mode</option>
             <option value="hydration">Hydration Break</option>
             <option value="studying">Studying</option>
             <option value="gaming">Gaming</option>
@@ -50,13 +52,17 @@
           </select>
         </label>
         <label class="field">
-          <span>Frequency</span>
-          <select id="frequencySelect">
-            <option value="off">Off</option>
-            <option value="rare">Rare: 15-20 min</option>
-            <option value="normal">Normal: 7-12 min</option>
-            <option value="frequent">Frequent: 3-6 min</option>
-          </select>
+          <span>Minutes before MemePop appears</span>
+          <input id="appearanceMinutesInput" type="number" min="1" max="300" step="1" inputmode="numeric">
+        </label>
+        <label class="field">
+          <span>Break time (minutes)</span>
+          <input id="breakMinutesInput" type="number" min="1" max="300" step="1" inputmode="numeric">
+        </label>
+        <label class="field field-wide">
+          <span>Target sites</span>
+          <textarea id="targetSitesInput" rows="5" spellcheck="false" placeholder="x.com&#10;youtube.com&#10;google.com"></textarea>
+          <small>Use up to 10 sites. Leave blank to allow MemePop on every normal webpage.</small>
         </label>
       </section>
 
@@ -75,7 +81,7 @@
 
       <section class="panel">
         <h2>Privacy</h2>
-        <p>MemePop stores settings, coins, streaks, focus state, accessory choices, and character position locally with Chrome storage.</p>
+        <p>MemePop stores settings, target sites, coins, streaks, focus state, accessory choices, and character position locally with Chrome storage.</p>
         <p>MemePop does not sell data, read private webpage content, track passwords or messages, capture pages, or send browsing data to a server.</p>
         <p>Website reactions use only broad URL/domain categories such as video, coding, shopping, education, social, or general.</p>
       </section>
