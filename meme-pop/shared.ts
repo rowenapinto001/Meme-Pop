@@ -1,9 +1,27 @@
 namespace MemePop {
   export type Frequency = "off" | "rare" | "normal" | "frequent";
-  export type Theme = "random" | "office" | "studying" | "gaming" | "coding" | "hydration";
+  export type Theme =
+    | "random"
+    | "focus"
+    | "break"
+    | "motivation"
+    | "procrastination"
+    | "lateNight"
+    | "social"
+    | "studying"
+    | "gaming"
+    | "office"
+    | "coding"
+    | "hydration";
   export type AccessoryId = "none" | "partyHat" | "sunglasses" | "crown";
   export type MessageCategory =
     | "general"
+    | "focusMode"
+    | "breakTime"
+    | "motivationMode"
+    | "procrastinationMode"
+    | "lateNightMode"
+    | "socialMode"
     | "office"
     | "studying"
     | "coding"
@@ -131,6 +149,48 @@ namespace MemePop {
     { id: "general-11", category: "general", text: "You look like someone who deserves a snack break." },
     { id: "general-12", category: "general", text: "MemePop approves this click. Probably." },
     { id: "general-13", category: "general", text: "Keep going. The tabs believe in you." },
+
+    { id: "focus-mode-1", category: "focusMode", text: "Focus mode activated." },
+    { id: "focus-mode-2", category: "focusMode", text: "The distractions can wait." },
+    { id: "focus-mode-3", category: "focusMode", text: "You have this." },
+    { id: "focus-mode-4", category: "focusMode", text: "Stay with the task." },
+    { id: "focus-mode-5", category: "focusMode", text: "Five more focused minutes." },
+    { id: "focus-mode-6", category: "focusMode", text: "Focus session complete. Tiny victory achieved." },
+
+    { id: "break-time-1", category: "breakTime", text: "Your eyes need a screen break." },
+    { id: "break-time-2", category: "breakTime", text: "Stand up before becoming furniture." },
+    { id: "break-time-3", category: "breakTime", text: "Stretch those shoulders." },
+    { id: "break-time-4", category: "breakTime", text: "Look at something far away." },
+    { id: "break-time-5", category: "breakTime", text: "Walk around for two minutes." },
+    { id: "break-time-6", category: "breakTime", text: "Rest is part of productivity." },
+
+    { id: "motivation-mode-1", category: "motivationMode", text: "You are doing better than you think." },
+    { id: "motivation-mode-2", category: "motivationMode", text: "Start small. Keep going." },
+    { id: "motivation-mode-3", category: "motivationMode", text: "Progress does not need to be perfect." },
+    { id: "motivation-mode-4", category: "motivationMode", text: "One task at a time." },
+    { id: "motivation-mode-5", category: "motivationMode", text: "Today still has potential." },
+    { id: "motivation-mode-6", category: "motivationMode", text: "MemePop believes in you." },
+
+    { id: "procrastination-mode-1", category: "procrastinationMode", text: "Interesting. This is not the task." },
+    { id: "procrastination-mode-2", category: "procrastinationMode", text: "You came here for five minutes." },
+    { id: "procrastination-mode-3", category: "procrastinationMode", text: "The assignment is still waiting." },
+    { id: "procrastination-mode-4", category: "procrastinationMode", text: "Productivity has left the browser." },
+    { id: "procrastination-mode-5", category: "procrastinationMode", text: "Should we return to work?" },
+    { id: "procrastination-mode-6", category: "procrastinationMode", text: "MemePop caught you procrastinating." },
+
+    { id: "late-night-mode-1", category: "lateNightMode", text: "Why are we still awake?" },
+    { id: "late-night-mode-2", category: "lateNightMode", text: "Tomorrow-you will remember this." },
+    { id: "late-night-mode-3", category: "lateNightMode", text: "Sleep is a free productivity upgrade." },
+    { id: "late-night-mode-4", category: "lateNightMode", text: "One more scroll is never one more scroll." },
+    { id: "late-night-mode-5", category: "lateNightMode", text: "Your pillow misses you." },
+    { id: "late-night-mode-6", category: "lateNightMode", text: "MemePop recommends bedtime." },
+
+    { id: "social-mode-1", category: "socialMode", text: "The scroll has no ending." },
+    { id: "social-mode-2", category: "socialMode", text: "You have seen enough posts." },
+    { id: "social-mode-3", category: "socialMode", text: "Time disappeared again." },
+    { id: "social-mode-4", category: "socialMode", text: "MemePop suggests touching grass." },
+    { id: "social-mode-5", category: "socialMode", text: "That comment section looks dangerous." },
+    { id: "social-mode-6", category: "socialMode", text: "Close the tab while you still can." },
 
     { id: "office-1", category: "office", text: "That meeting could have been a snack." },
     { id: "office-2", category: "office", text: "Spreadsheet opened. Confidence pending." },
@@ -270,17 +330,15 @@ namespace MemePop {
   ];
 
   export const FOCUS_START_MESSAGES = [
-    "Focus mode activated. Tiny progress incoming.",
-    "MemePop will guard the quiet zone.",
-    "Deep breath. The timer has your back.",
-    "Starting strong with soft paws."
+    "Focus mode activated.",
+    "The distractions can wait.",
+    "You have this.",
+    "Stay with the task.",
+    "Five more focused minutes."
   ];
 
   export const FOCUS_DONE_MESSAGES = [
-    "Focus session complete. MemePop is proud.",
-    "You did the focused thing. Coins delivered.",
-    "Timer finished. Tiny victory parade.",
-    "That was real progress. Sparkles approved."
+    "Focus session complete. Tiny victory achieved."
   ];
 
   export function normalizeState(raw: Partial<AppState> | undefined): AppState {
@@ -299,7 +357,20 @@ namespace MemePop {
     const frequency: Frequency = ["off", "rare", "normal", "frequent"].includes(settings.frequency as string)
       ? (settings.frequency as Frequency)
       : DEFAULT_STATE.settings.frequency;
-    const theme: Theme = ["random", "office", "studying", "gaming", "coding", "hydration"].includes(settings.theme as string)
+    const theme: Theme = [
+      "random",
+      "focus",
+      "break",
+      "motivation",
+      "procrastination",
+      "lateNight",
+      "social",
+      "studying",
+      "gaming",
+      "office",
+      "coding",
+      "hydration"
+    ].includes(settings.theme as string)
       ? (settings.theme as Theme)
       : DEFAULT_STATE.settings.theme;
 

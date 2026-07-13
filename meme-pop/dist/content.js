@@ -16,9 +16,15 @@ let dragOffsetY = 0;
 const VISIBLE_DURATION_MS = 10000;
 let characterImageElement = null;
 const THEME_CATEGORIES = {
-    office: "office",
+    focus: "focusMode",
+    break: "breakTime",
+    motivation: "motivationMode",
+    procrastination: "procrastinationMode",
+    lateNight: "lateNightMode",
+    social: "socialMode",
     studying: "studying",
     gaming: "gaming",
+    office: "office",
     coding: "coding",
     hydration: "hydration"
 };
@@ -143,7 +149,7 @@ function updateThemeClass() {
     if (!rootElement) {
         return;
     }
-    rootElement.classList.remove("memepop-theme-random", "memepop-theme-office", "memepop-theme-studying", "memepop-theme-gaming", "memepop-theme-coding", "memepop-theme-hydration", "memepop-splashing");
+    rootElement.classList.remove("memepop-theme-random", "memepop-theme-focus", "memepop-theme-break", "memepop-theme-motivation", "memepop-theme-procrastination", "memepop-theme-lateNight", "memepop-theme-social", "memepop-theme-office", "memepop-theme-studying", "memepop-theme-gaming", "memepop-theme-coding", "memepop-theme-hydration", "memepop-splashing");
     rootElement.classList.add(`memepop-theme-${appState.settings.theme}`);
     updateCharacterImage();
     if (isHydrationTheme()) {
