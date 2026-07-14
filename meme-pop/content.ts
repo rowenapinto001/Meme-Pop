@@ -13,6 +13,8 @@ let nextAppearTimer: number | undefined;
 let autoHideTimer: number | undefined;
 let countdownTimer: number | undefined;
 let removeTimer: number | undefined;
+let entranceTimer: number | undefined;
+let shellTimer: number | undefined;
 let lastMessageText = "";
 let activeMessageCategory: MemePop.MessageCategory | null = null;
 let extensionContextAvailable = true;
@@ -36,6 +38,17 @@ const THEME_CATEGORIES: Record<Exclude<MemePop.Theme, "random">, MemePop.Message
   coding: "coding",
   hydration: "hydration"
 };
+const DROP_SEQUENCE_MODES = new Set([
+  "focus",
+  "study",
+  "office",
+  "motivation",
+  "procrastination",
+  "assignment",
+  "project",
+  "assignment/project",
+  "coding"
+]);
 
 function clearTimer(timer: number | undefined): void {
   if (timer) {
@@ -49,6 +62,8 @@ function stopContentScript(): void {
   clearTimer(autoHideTimer);
   clearTimer(countdownTimer);
   clearTimer(removeTimer);
+  clearTimer(entranceTimer);
+  clearTimer(shellTimer);
   hideMemePop(false);
 }
 
@@ -275,6 +290,34 @@ function getCharacterAssetPath(): string {
   return MemePop.THEME_CHARACTER_ASSETS[getCharacterTheme()];
 }
 
+function normalizeDropSequenceMode(theme: MemePop.CharacterTheme): string {
+  if (theme === "studying") {
+    return "study";
+  }
+
+  if (theme === "deadline") {
+    return "assignment/project";
+  }
+
+  return theme;
+}
+
+function shouldUseDropSequence(): boolean {
+  return DROP_SEQUENCE_MODES.has(normalizeDropSequenceMode(getCharacterTheme()));
+}
+
+function reconcileCompletedDropSequence(): void {
+  if (!rootElement?.classList.contains("memepop-sequence-complete") || shouldUseDropSequence()) {
+    return;
+  }
+
+  rootElement.classList.remove("memepop-drop-supported", "memepop-shell-visible");
+}
+
+function isInteractionReady(): boolean {
+  return !rootElement?.classList.contains("memepop-drop-supported") || rootElement.classList.contains("memepop-sequence-complete");
+}
+
 function updateCharacterImage(): void {
   if (!characterImageElement) {
     return;
@@ -386,26 +429,15 @@ function hideMemePop(animated: boolean): void {
   clearTimer(autoHideTimer);
   clearTimer(countdownTimer);
   clearTimer(removeTimer);
+  clearTimer(entranceTimer);
+  clearTimer(shellTimer);
 
   if (!rootElement) {
     return;
   }
 
   const currentRoot = rootElement;
-
-  if (!animated) {
-    currentRoot.remove();
-    rootElement = null;
-    cardElement = null;
-    messageElement = null;
-    countdownElement = null;
-    characterImageElement = null;
-    return;
-  }
-
-  currentRoot.classList.add("memepop-leaving");
-  removeTimer = window.setTimeout(() => {
-    currentRoot.remove();
+  const resetReferences = () => {
     if (rootElement === currentRoot) {
       rootElement = null;
       cardElement = null;
@@ -413,6 +445,41 @@ function hideMemePop(animated: boolean): void {
       countdownElement = null;
       characterImageElement = null;
     }
+  };
+
+  if (!animated) {
+    currentRoot.remove();
+    resetReferences();
+    return;
+  }
+
+  currentRoot.classList.add("memepop-leaving");
+
+  if (currentRoot.classList.contains("memepop-drop-supported")) {
+    const character = currentRoot.querySelector<HTMLElement>(".memepop-character");
+    const removeSupportedRoot = () => {
+      clearTimer(removeTimer);
+      currentRoot.remove();
+      resetReferences();
+    };
+
+    if (character) {
+      const handleExit = (event: AnimationEvent) => {
+        if (event.target === character && (event.animationName === "memeExitUp" || event.animationName === "memeReducedExitUp")) {
+          character.removeEventListener("animationend", handleExit);
+          removeSupportedRoot();
+        }
+      };
+
+      character.addEventListener("animationend", handleExit);
+      removeTimer = window.setTimeout(removeSupportedRoot, 1100);
+      return;
+    }
+  }
+
+  removeTimer = window.setTimeout(() => {
+    currentRoot.remove();
+    resetReferences();
   }, 420);
 }
 
@@ -423,6 +490,7 @@ function setMessage(text?: string): void {
   activeMessageCategory = category;
   lastMessageText = nextMessage;
   updateThemeClass();
+  reconcileCompletedDropSequence();
 
   if (messageElement) {
     messageElement.textContent = nextMessage;
@@ -470,6 +538,55 @@ function createHydrationSplash(): HTMLElement {
   return splash;
 }
 
+function configureEntranceSequence(root: HTMLElement, character: HTMLElement, shell: HTMLElement): void {
+  root.classList.remove("memepop-drop-supported", "memepop-shell-visible", "memepop-sequence-complete");
+
+  if (!shouldUseDropSequence()) {
+    root.classList.add("memepop-sequence-complete");
+    return;
+  }
+
+  let dropFinished = false;
+  let shellFinished = false;
+
+  const finishShell = () => {
+    if (shellFinished || !root.isConnected || root.classList.contains("memepop-leaving")) {
+      return;
+    }
+
+    shellFinished = true;
+    clearTimer(shellTimer);
+    root.classList.add("memepop-sequence-complete");
+  };
+
+  const finishDrop = () => {
+    if (dropFinished || !root.isConnected || root.classList.contains("memepop-leaving")) {
+      return;
+    }
+
+    dropFinished = true;
+    clearTimer(entranceTimer);
+    root.classList.add("memepop-shell-visible");
+    shellTimer = window.setTimeout(finishShell, 700);
+  };
+
+  root.classList.add("memepop-drop-supported");
+
+  character.addEventListener("animationend", (event) => {
+    if (event.target === character && (event.animationName === "memeDropIn" || event.animationName === "memeReducedFadeIn")) {
+      finishDrop();
+    }
+  });
+
+  shell.addEventListener("animationend", (event) => {
+    if (event.target === shell && (event.animationName === "cardShellAppear" || event.animationName === "cardShellReducedAppear")) {
+      finishShell();
+    }
+  });
+
+  entranceTimer = window.setTimeout(finishDrop, 1400);
+}
+
 function createMemePop(message?: string): HTMLElement | null {
   if (!hasExtensionContext()) {
     return null;
@@ -484,6 +601,10 @@ function createMemePop(message?: string): HTMLElement | null {
 
   const card = document.createElement("div");
   card.className = "memepop-card";
+
+  const shell = document.createElement("div");
+  shell.className = "memepop-card-shell";
+  shell.setAttribute("aria-hidden", "true");
 
   const controls = document.createElement("div");
   controls.className = "memepop-controls";
@@ -540,7 +661,7 @@ function createMemePop(message?: string): HTMLElement | null {
   countdown.textContent = formatCountdown(getVisibleDurationMs());
   countdown.setAttribute("aria-label", `MemePop closes in ${formatCountdown(getVisibleDurationMs())}`);
 
-  card.append(controls, countdown, characterButton, accessory, bubble, reward);
+  card.append(shell, controls, countdown, characterButton, accessory, bubble, reward);
   root.append(splash, card);
 
   rootElement = root;
@@ -550,6 +671,7 @@ function createMemePop(message?: string): HTMLElement | null {
   updateAccessoryClass();
   updateThemeClass();
   setMessage(message);
+  configureEntranceSequence(root, characterButton, shell);
 
   closeButton.addEventListener("click", () => hideMemePop(true));
   muteButton.addEventListener("click", () => {
@@ -568,6 +690,10 @@ function createMemePop(message?: string): HTMLElement | null {
     sendRuntimeMessage({ type: "MEMEPOP_OPEN_MOMENT", message: lastMessageText });
   });
   characterButton.addEventListener("click", () => {
+    if (!isInteractionReady()) {
+      return;
+    }
+
     if (dragMoved) {
       dragMoved = false;
       return;
@@ -591,7 +717,7 @@ function createMemePop(message?: string): HTMLElement | null {
   card.addEventListener("pointerdown", (event) => {
     const target = event.target as HTMLElement | null;
 
-    if (target?.closest(".memepop-control") || !rootElement || !cardElement) {
+    if (target?.closest(".memepop-control") || !rootElement || !cardElement || !isInteractionReady()) {
       return;
     }
 

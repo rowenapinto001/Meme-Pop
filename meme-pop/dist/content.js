@@ -8,6 +8,8 @@ let nextAppearTimer;
 let autoHideTimer;
 let countdownTimer;
 let removeTimer;
+let entranceTimer;
+let shellTimer;
 let lastMessageText = "";
 let activeMessageCategory = null;
 let extensionContextAvailable = true;
@@ -31,6 +33,17 @@ const THEME_CATEGORIES = {
     coding: "coding",
     hydration: "hydration"
 };
+const DROP_SEQUENCE_MODES = new Set([
+    "focus",
+    "study",
+    "office",
+    "motivation",
+    "procrastination",
+    "assignment",
+    "project",
+    "assignment/project",
+    "coding"
+]);
 function clearTimer(timer) {
     if (timer) {
         window.clearTimeout(timer);
@@ -42,6 +55,8 @@ function stopContentScript() {
     clearTimer(autoHideTimer);
     clearTimer(countdownTimer);
     clearTimer(removeTimer);
+    clearTimer(entranceTimer);
+    clearTimer(shellTimer);
     hideMemePop(false);
 }
 function hasExtensionContext() {
@@ -224,6 +239,27 @@ function getCharacterTheme() {
 function getCharacterAssetPath() {
     return MemePop.THEME_CHARACTER_ASSETS[getCharacterTheme()];
 }
+function normalizeDropSequenceMode(theme) {
+    if (theme === "studying") {
+        return "study";
+    }
+    if (theme === "deadline") {
+        return "assignment/project";
+    }
+    return theme;
+}
+function shouldUseDropSequence() {
+    return DROP_SEQUENCE_MODES.has(normalizeDropSequenceMode(getCharacterTheme()));
+}
+function reconcileCompletedDropSequence() {
+    if (!rootElement?.classList.contains("memepop-sequence-complete") || shouldUseDropSequence()) {
+        return;
+    }
+    rootElement.classList.remove("memepop-drop-supported", "memepop-shell-visible");
+}
+function isInteractionReady() {
+    return !rootElement?.classList.contains("memepop-drop-supported") || rootElement.classList.contains("memepop-sequence-complete");
+}
 function updateCharacterImage() {
     if (!characterImageElement) {
         return;
@@ -298,22 +334,13 @@ function hideMemePop(animated) {
     clearTimer(autoHideTimer);
     clearTimer(countdownTimer);
     clearTimer(removeTimer);
+    clearTimer(entranceTimer);
+    clearTimer(shellTimer);
     if (!rootElement) {
         return;
     }
     const currentRoot = rootElement;
-    if (!animated) {
-        currentRoot.remove();
-        rootElement = null;
-        cardElement = null;
-        messageElement = null;
-        countdownElement = null;
-        characterImageElement = null;
-        return;
-    }
-    currentRoot.classList.add("memepop-leaving");
-    removeTimer = window.setTimeout(() => {
-        currentRoot.remove();
+    const resetReferences = () => {
         if (rootElement === currentRoot) {
             rootElement = null;
             cardElement = null;
@@ -321,6 +348,35 @@ function hideMemePop(animated) {
             countdownElement = null;
             characterImageElement = null;
         }
+    };
+    if (!animated) {
+        currentRoot.remove();
+        resetReferences();
+        return;
+    }
+    currentRoot.classList.add("memepop-leaving");
+    if (currentRoot.classList.contains("memepop-drop-supported")) {
+        const character = currentRoot.querySelector(".memepop-character");
+        const removeSupportedRoot = () => {
+            clearTimer(removeTimer);
+            currentRoot.remove();
+            resetReferences();
+        };
+        if (character) {
+            const handleExit = (event) => {
+                if (event.target === character && (event.animationName === "memeExitUp" || event.animationName === "memeReducedExitUp")) {
+                    character.removeEventListener("animationend", handleExit);
+                    removeSupportedRoot();
+                }
+            };
+            character.addEventListener("animationend", handleExit);
+            removeTimer = window.setTimeout(removeSupportedRoot, 1100);
+            return;
+        }
+    }
+    removeTimer = window.setTimeout(() => {
+        currentRoot.remove();
+        resetReferences();
     }, 420);
 }
 function setMessage(text) {
@@ -329,6 +385,7 @@ function setMessage(text) {
     activeMessageCategory = category;
     lastMessageText = nextMessage;
     updateThemeClass();
+    reconcileCompletedDropSequence();
     if (messageElement) {
         messageElement.textContent = nextMessage;
     }
@@ -366,6 +423,44 @@ function createHydrationSplash() {
     splash.append(puddle);
     return splash;
 }
+function configureEntranceSequence(root, character, shell) {
+    root.classList.remove("memepop-drop-supported", "memepop-shell-visible", "memepop-sequence-complete");
+    if (!shouldUseDropSequence()) {
+        root.classList.add("memepop-sequence-complete");
+        return;
+    }
+    let dropFinished = false;
+    let shellFinished = false;
+    const finishShell = () => {
+        if (shellFinished || !root.isConnected || root.classList.contains("memepop-leaving")) {
+            return;
+        }
+        shellFinished = true;
+        clearTimer(shellTimer);
+        root.classList.add("memepop-sequence-complete");
+    };
+    const finishDrop = () => {
+        if (dropFinished || !root.isConnected || root.classList.contains("memepop-leaving")) {
+            return;
+        }
+        dropFinished = true;
+        clearTimer(entranceTimer);
+        root.classList.add("memepop-shell-visible");
+        shellTimer = window.setTimeout(finishShell, 700);
+    };
+    root.classList.add("memepop-drop-supported");
+    character.addEventListener("animationend", (event) => {
+        if (event.target === character && (event.animationName === "memeDropIn" || event.animationName === "memeReducedFadeIn")) {
+            finishDrop();
+        }
+    });
+    shell.addEventListener("animationend", (event) => {
+        if (event.target === shell && (event.animationName === "cardShellAppear" || event.animationName === "cardShellReducedAppear")) {
+            finishShell();
+        }
+    });
+    entranceTimer = window.setTimeout(finishDrop, 1400);
+}
 function createMemePop(message) {
     if (!hasExtensionContext()) {
         return null;
@@ -377,6 +472,9 @@ function createMemePop(message) {
     const splash = createHydrationSplash();
     const card = document.createElement("div");
     card.className = "memepop-card";
+    const shell = document.createElement("div");
+    shell.className = "memepop-card-shell";
+    shell.setAttribute("aria-hidden", "true");
     const controls = document.createElement("div");
     controls.className = "memepop-controls";
     const closeButton = createButton("memepop-control", "x", "Close MemePop");
@@ -419,7 +517,7 @@ function createMemePop(message) {
     countdown.className = "memepop-timer";
     countdown.textContent = formatCountdown(getVisibleDurationMs());
     countdown.setAttribute("aria-label", `MemePop closes in ${formatCountdown(getVisibleDurationMs())}`);
-    card.append(controls, countdown, characterButton, accessory, bubble, reward);
+    card.append(shell, controls, countdown, characterButton, accessory, bubble, reward);
     root.append(splash, card);
     rootElement = root;
     cardElement = card;
@@ -428,6 +526,7 @@ function createMemePop(message) {
     updateAccessoryClass();
     updateThemeClass();
     setMessage(message);
+    configureEntranceSequence(root, characterButton, shell);
     closeButton.addEventListener("click", () => hideMemePop(true));
     muteButton.addEventListener("click", () => {
         void MemePop.updateState((state) => {
@@ -445,6 +544,9 @@ function createMemePop(message) {
         sendRuntimeMessage({ type: "MEMEPOP_OPEN_MOMENT", message: lastMessageText });
     });
     characterButton.addEventListener("click", () => {
+        if (!isInteractionReady()) {
+            return;
+        }
         if (dragMoved) {
             dragMoved = false;
             return;
@@ -464,7 +566,7 @@ function createMemePop(message) {
     });
     card.addEventListener("pointerdown", (event) => {
         const target = event.target;
-        if (target?.closest(".memepop-control") || !rootElement || !cardElement) {
+        if (target?.closest(".memepop-control") || !rootElement || !cardElement || !isInteractionReady()) {
             return;
         }
         dragging = true;
