@@ -61,12 +61,27 @@
 
 #memepop-root.memepop-accessory-partyHat .memepop-party-effects {
   display: block !important;
+  opacity: 0 !important;
+}
+
+#memepop-root.memepop-accessory-partyHat.memepop-shell-visible .memepop-party-effects,
+#memepop-root.memepop-accessory-partyHat:not(.memepop-entrance-sequenced) .memepop-party-effects {
   opacity: 1 !important;
+  animation: memepop-party-effects-appear 260ms ease-out both !important;
 }
 
 #memepop-root.memepop-accessory-partyHat.memepop-leaving .memepop-party-effects {
   opacity: 0 !important;
   transition: opacity 220ms ease !important;
+}
+
+#memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-confetti,
+#memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-balloon,
+#memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-party-popper,
+#memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-party-popper::before,
+#memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-party-popper::after {
+  animation: none !important;
+  opacity: 0 !important;
 }
 
 #memepop-root .memepop-confetti {
@@ -133,54 +148,56 @@
 #memepop-root .memepop-confetti-26 { --party-left: 98%; --party-delay: 1680ms; --party-drift: -112px; --party-rotate: -780deg; }
 
 #memepop-root .memepop-confetti-burst {
-  --burst-x: 360px;
+  --burst-x: min(43vw, 660px);
   --burst-y: -330px;
   --burst-fall: 120px;
   --burst-delay: 0ms;
+  --burst-mid-y: -118px;
   top: auto !important;
-  bottom: 18% !important;
-  left: 9% !important;
+  bottom: calc(12% + 88px) !important;
+  left: calc(7% + 46px) !important;
   opacity: 0 !important;
-  animation: memepop-confetti-pop 2400ms cubic-bezier(0.16, 0.78, 0.2, 1) var(--burst-delay) infinite !important;
+  transform-origin: center center !important;
+  animation: memepop-confetti-pop 1850ms cubic-bezier(0.12, 0.86, 0.2, 1) var(--burst-delay) infinite !important;
 }
 
 #memepop-root .memepop-confetti-right {
   left: auto !important;
-  right: 9% !important;
+  right: calc(7% + 46px) !important;
 }
 
-#memepop-root .memepop-confetti-1 { --burst-x: 230px; --burst-y: -430px; --burst-fall: 150px; --burst-delay: 0ms; }
-#memepop-root .memepop-confetti-2 { --burst-x: -250px; --burst-y: -420px; --burst-fall: 130px; --burst-delay: 70ms; }
-#memepop-root .memepop-confetti-3 { --burst-x: 340px; --burst-y: -360px; --burst-fall: 220px; --burst-delay: 130ms; }
-#memepop-root .memepop-confetti-4 { --burst-x: -330px; --burst-y: -370px; --burst-fall: 210px; --burst-delay: 190ms; }
-#memepop-root .memepop-confetti-5 { --burst-x: 440px; --burst-y: -280px; --burst-fall: 260px; --burst-delay: 260ms; }
-#memepop-root .memepop-confetti-6 { --burst-x: -430px; --burst-y: -290px; --burst-fall: 250px; --burst-delay: 320ms; }
-#memepop-root .memepop-confetti-7 { --burst-x: 170px; --burst-y: -520px; --burst-fall: 90px; --burst-delay: 390ms; }
-#memepop-root .memepop-confetti-8 { --burst-x: -180px; --burst-y: -510px; --burst-fall: 110px; --burst-delay: 440ms; }
-#memepop-root .memepop-confetti-9 { --burst-x: 520px; --burst-y: -210px; --burst-fall: 310px; --burst-delay: 520ms; }
-#memepop-root .memepop-confetti-10 { --burst-x: -510px; --burst-y: -220px; --burst-fall: 300px; --burst-delay: 590ms; }
-#memepop-root .memepop-confetti-11 { --burst-x: 290px; --burst-y: -470px; --burst-fall: 170px; --burst-delay: 660ms; }
-#memepop-root .memepop-confetti-12 { --burst-x: -300px; --burst-y: -460px; --burst-fall: 180px; --burst-delay: 720ms; }
-#memepop-root .memepop-confetti-13 { --burst-x: 620px; --burst-y: -340px; --burst-fall: 250px; --burst-delay: 780ms; }
-#memepop-root .memepop-confetti-14 { --burst-x: -610px; --burst-y: -330px; --burst-fall: 240px; --burst-delay: 850ms; }
-#memepop-root .memepop-confetti-15 { --burst-x: 390px; --burst-y: -540px; --burst-fall: 100px; --burst-delay: 920ms; }
-#memepop-root .memepop-confetti-16 { --burst-x: -380px; --burst-y: -530px; --burst-fall: 110px; --burst-delay: 980ms; }
-#memepop-root .memepop-confetti-17 { --burst-x: 250px; --burst-y: -310px; --burst-fall: 280px; --burst-delay: 1040ms; }
-#memepop-root .memepop-confetti-18 { --burst-x: -260px; --burst-y: -320px; --burst-fall: 270px; --burst-delay: 1110ms; }
-#memepop-root .memepop-confetti-19 { --burst-x: 560px; --burst-y: -470px; --burst-fall: 190px; --burst-delay: 1180ms; }
-#memepop-root .memepop-confetti-20 { --burst-x: -550px; --burst-y: -460px; --burst-fall: 190px; --burst-delay: 1240ms; }
-#memepop-root .memepop-confetti-21 { --burst-x: 130px; --burst-y: -390px; --burst-fall: 210px; --burst-delay: 1300ms; }
-#memepop-root .memepop-confetti-22 { --burst-x: -140px; --burst-y: -380px; --burst-fall: 220px; --burst-delay: 1370ms; }
-#memepop-root .memepop-confetti-23 { --burst-x: 470px; --burst-y: -610px; --burst-fall: 60px; --burst-delay: 1440ms; }
-#memepop-root .memepop-confetti-24 { --burst-x: -460px; --burst-y: -600px; --burst-fall: 70px; --burst-delay: 1510ms; }
-#memepop-root .memepop-confetti-25 { --burst-x: 670px; --burst-y: -250px; --burst-fall: 330px; --burst-delay: 1580ms; }
-#memepop-root .memepop-confetti-26 { --burst-x: -660px; --burst-y: -260px; --burst-fall: 320px; --burst-delay: 1640ms; }
-#memepop-root .memepop-confetti-27 { --burst-x: 330px; --burst-y: -680px; --burst-fall: 80px; --burst-delay: 1710ms; }
-#memepop-root .memepop-confetti-28 { --burst-x: -320px; --burst-y: -670px; --burst-fall: 90px; --burst-delay: 1780ms; }
-#memepop-root .memepop-confetti-29 { --burst-x: 740px; --burst-y: -420px; --burst-fall: 230px; --burst-delay: 1850ms; }
-#memepop-root .memepop-confetti-30 { --burst-x: -730px; --burst-y: -410px; --burst-fall: 220px; --burst-delay: 1920ms; }
-#memepop-root .memepop-confetti-31 { --burst-x: 210px; --burst-y: -260px; --burst-fall: 360px; --burst-delay: 1990ms; }
-#memepop-root .memepop-confetti-32 { --burst-x: -220px; --burst-y: -270px; --burst-fall: 350px; --burst-delay: 2060ms; }
+#memepop-root .memepop-confetti-1 { --burst-x: min(35vw, 520px); --burst-y: -405px; --burst-mid-y: -112px; --burst-fall: 118px; --burst-delay: 0ms; }
+#memepop-root .memepop-confetti-2 { --burst-x: max(-35vw, -520px); --burst-y: -398px; --burst-mid-y: -112px; --burst-fall: 112px; --burst-delay: 0ms; }
+#memepop-root .memepop-confetti-3 { --burst-x: min(40vw, 610px); --burst-y: -350px; --burst-mid-y: -96px; --burst-fall: 185px; --burst-delay: 50ms; }
+#memepop-root .memepop-confetti-4 { --burst-x: max(-40vw, -610px); --burst-y: -358px; --burst-mid-y: -96px; --burst-fall: 178px; --burst-delay: 50ms; }
+#memepop-root .memepop-confetti-5 { --burst-x: min(45vw, 690px); --burst-y: -288px; --burst-mid-y: -82px; --burst-fall: 226px; --burst-delay: 110ms; }
+#memepop-root .memepop-confetti-6 { --burst-x: max(-45vw, -690px); --burst-y: -292px; --burst-mid-y: -82px; --burst-fall: 222px; --burst-delay: 110ms; }
+#memepop-root .memepop-confetti-7 { --burst-x: min(30vw, 450px); --burst-y: -486px; --burst-mid-y: -134px; --burst-fall: 78px; --burst-delay: 170ms; }
+#memepop-root .memepop-confetti-8 { --burst-x: max(-30vw, -450px); --burst-y: -480px; --burst-mid-y: -134px; --burst-fall: 86px; --burst-delay: 170ms; }
+#memepop-root .memepop-confetti-9 { --burst-x: min(49vw, 730px); --burst-y: -230px; --burst-mid-y: -66px; --burst-fall: 270px; --burst-delay: 230ms; }
+#memepop-root .memepop-confetti-10 { --burst-x: max(-49vw, -730px); --burst-y: -238px; --burst-mid-y: -66px; --burst-fall: 264px; --burst-delay: 230ms; }
+#memepop-root .memepop-confetti-11 { --burst-x: min(37vw, 555px); --burst-y: -430px; --burst-mid-y: -120px; --burst-fall: 138px; --burst-delay: 290ms; }
+#memepop-root .memepop-confetti-12 { --burst-x: max(-37vw, -555px); --burst-y: -424px; --burst-mid-y: -120px; --burst-fall: 146px; --burst-delay: 290ms; }
+#memepop-root .memepop-confetti-13 { --burst-x: min(43vw, 650px); --burst-y: -318px; --burst-mid-y: -88px; --burst-fall: 218px; --burst-delay: 350ms; }
+#memepop-root .memepop-confetti-14 { --burst-x: max(-43vw, -650px); --burst-y: -324px; --burst-mid-y: -88px; --burst-fall: 210px; --burst-delay: 350ms; }
+#memepop-root .memepop-confetti-15 { --burst-x: min(34vw, 505px); --burst-y: -512px; --burst-mid-y: -144px; --burst-fall: 76px; --burst-delay: 410ms; }
+#memepop-root .memepop-confetti-16 { --burst-x: max(-34vw, -505px); --burst-y: -506px; --burst-mid-y: -144px; --burst-fall: 82px; --burst-delay: 410ms; }
+#memepop-root .memepop-confetti-17 { --burst-x: min(38vw, 575px); --burst-y: -285px; --burst-mid-y: -78px; --burst-fall: 250px; --burst-delay: 470ms; }
+#memepop-root .memepop-confetti-18 { --burst-x: max(-38vw, -575px); --burst-y: -294px; --burst-mid-y: -78px; --burst-fall: 244px; --burst-delay: 470ms; }
+#memepop-root .memepop-confetti-19 { --burst-x: min(47vw, 710px); --burst-y: -435px; --burst-mid-y: -124px; --burst-fall: 154px; --burst-delay: 530ms; }
+#memepop-root .memepop-confetti-20 { --burst-x: max(-47vw, -710px); --burst-y: -428px; --burst-mid-y: -124px; --burst-fall: 160px; --burst-delay: 530ms; }
+#memepop-root .memepop-confetti-21 { --burst-x: min(27vw, 420px); --burst-y: -365px; --burst-mid-y: -104px; --burst-fall: 190px; --burst-delay: 590ms; }
+#memepop-root .memepop-confetti-22 { --burst-x: max(-27vw, -420px); --burst-y: -370px; --burst-mid-y: -104px; --burst-fall: 196px; --burst-delay: 590ms; }
+#memepop-root .memepop-confetti-23 { --burst-x: min(41vw, 630px); --burst-y: -560px; --burst-mid-y: -154px; --burst-fall: 54px; --burst-delay: 650ms; }
+#memepop-root .memepop-confetti-24 { --burst-x: max(-41vw, -630px); --burst-y: -552px; --burst-mid-y: -154px; --burst-fall: 58px; --burst-delay: 650ms; }
+#memepop-root .memepop-confetti-25 { --burst-x: min(50vw, 760px); --burst-y: -255px; --burst-mid-y: -70px; --burst-fall: 290px; --burst-delay: 710ms; }
+#memepop-root .memepop-confetti-26 { --burst-x: max(-50vw, -760px); --burst-y: -262px; --burst-mid-y: -70px; --burst-fall: 284px; --burst-delay: 710ms; }
+#memepop-root .memepop-confetti-27 { --burst-x: min(36vw, 545px); --burst-y: -620px; --burst-mid-y: -170px; --burst-fall: 66px; --burst-delay: 770ms; }
+#memepop-root .memepop-confetti-28 { --burst-x: max(-36vw, -545px); --burst-y: -612px; --burst-mid-y: -170px; --burst-fall: 70px; --burst-delay: 770ms; }
+#memepop-root .memepop-confetti-29 { --burst-x: min(52vw, 790px); --burst-y: -385px; --burst-mid-y: -116px; --burst-fall: 202px; --burst-delay: 830ms; }
+#memepop-root .memepop-confetti-30 { --burst-x: max(-52vw, -790px); --burst-y: -392px; --burst-mid-y: -116px; --burst-fall: 196px; --burst-delay: 830ms; }
+#memepop-root .memepop-confetti-31 { --burst-x: min(32vw, 480px); --burst-y: -250px; --burst-mid-y: -74px; --burst-fall: 308px; --burst-delay: 890ms; }
+#memepop-root .memepop-confetti-32 { --burst-x: max(-32vw, -480px); --burst-y: -258px; --burst-mid-y: -74px; --burst-fall: 300px; --burst-delay: 890ms; }
 
 #memepop-root .memepop-balloon {
   --balloon-left: 12%;
@@ -237,6 +254,9 @@
 #memepop-root .memepop-balloon-10 { --balloon-left: 94%; --balloon-top: 18%; --balloon-delay: 2500ms; --balloon-drift: -28px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #fda4af, #f43f5e) !important; }
 
 #memepop-root .memepop-party-popper {
+  --popper-rotate: -30deg;
+  --popper-flip: 1;
+  --popper-recoil-x: -16px;
   position: absolute !important;
   bottom: 12% !important;
   width: 78px !important;
@@ -247,35 +267,65 @@
     linear-gradient(145deg, #ffcc4d, #ff7a90) !important;
   box-shadow: 0 10px 18px rgba(58, 43, 42, 0.18) !important;
   opacity: 0.94 !important;
-  animation: memepop-popper-bounce 1800ms ease-in-out infinite !important;
+  transform: rotate(var(--popper-rotate)) scaleX(var(--popper-flip)) !important;
+  transform-origin: 50% 92% !important;
+  animation: memepop-popper-fire 1850ms cubic-bezier(0.16, 0.86, 0.2, 1) infinite !important;
 }
 
 #memepop-root .memepop-party-popper::before {
   content: "" !important;
   position: absolute !important;
   left: 50% !important;
-  top: -112px !important;
-  width: 190px !important;
-  height: 148px !important;
+  top: -98px !important;
+  width: 210px !important;
+  height: 160px !important;
   background:
-    radial-gradient(circle at 18% 42%, #ffcc4d 0 7px, transparent 8px),
-    radial-gradient(circle at 42% 18%, #34c6a9 0 7px, transparent 8px),
-    radial-gradient(circle at 64% 52%, #ff7a90 0 7px, transparent 8px),
-    radial-gradient(circle at 82% 28%, #7c5cff 0 7px, transparent 8px),
-    linear-gradient(36deg, transparent 0 47%, #ffcc4d 48% 51%, transparent 52%),
-    linear-gradient(72deg, transparent 0 47%, #ff7a90 48% 51%, transparent 52%),
-    linear-gradient(112deg, transparent 0 47%, #34c6a9 48% 51%, transparent 52%) !important;
-  transform: translateX(-50%) !important;
+    radial-gradient(circle at 16% 50%, #ffcc4d 0 8px, transparent 9px),
+    radial-gradient(circle at 35% 24%, #34c6a9 0 7px, transparent 8px),
+    radial-gradient(circle at 58% 58%, #ff7a90 0 8px, transparent 9px),
+    radial-gradient(circle at 82% 30%, #7c5cff 0 8px, transparent 9px),
+    linear-gradient(31deg, transparent 0 46%, #ffcc4d 47% 51%, transparent 52%),
+    linear-gradient(68deg, transparent 0 46%, #ff7a90 47% 51%, transparent 52%),
+    linear-gradient(112deg, transparent 0 46%, #34c6a9 47% 51%, transparent 52%) !important;
+  opacity: 0 !important;
+  transform: translateX(-50%) scale(0.3) rotate(-8deg) !important;
+  transform-origin: 50% 100% !important;
+  animation: memepop-popper-mouth-burst 1850ms cubic-bezier(0.16, 0.86, 0.2, 1) infinite !important;
+}
+
+#memepop-root .memepop-party-popper::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: -12px !important;
+  width: 40px !important;
+  height: 18px !important;
+  border-radius: 999px !important;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.95) 0 34%, transparent 36%),
+    linear-gradient(90deg, rgba(255, 204, 77, 0.95), rgba(255, 122, 144, 0.9)) !important;
+  opacity: 0 !important;
+  filter: blur(0.2px) drop-shadow(0 0 8px rgba(255, 204, 77, 0.65)) !important;
+  transform: translateX(-50%) scale(0.4) !important;
+  animation: memepop-popper-flash 1850ms ease-out infinite !important;
 }
 
 #memepop-root .memepop-party-popper-left {
   left: 7% !important;
-  transform: rotate(-30deg) !important;
+  --popper-rotate: -30deg;
+  --popper-recoil-x: -16px;
 }
 
 #memepop-root .memepop-party-popper-right {
   right: 7% !important;
-  transform: rotate(30deg) scaleX(-1) !important;
+  --popper-rotate: 30deg;
+  --popper-flip: -1;
+  --popper-recoil-x: 16px;
+  animation-delay: 280ms !important;
+}
+
+#memepop-root .memepop-party-popper-right::before,
+#memepop-root .memepop-party-popper-right::after {
   animation-delay: 280ms !important;
 }
 
@@ -1306,19 +1356,31 @@
   }
 }
 
+@keyframes memepop-party-effects-appear {
+  0% {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 @keyframes memepop-confetti-pop {
   0% {
     opacity: 0;
-    transform: translate3d(0, 0, 0) scale(0.35) rotate(0deg);
+    transform: translate3d(0, 0, 0) scale(0.22) rotate(0deg);
   }
-  8% {
+  7% {
     opacity: 1;
+    transform: translate3d(calc(var(--burst-x) * 0.14), var(--burst-mid-y), 0) scale(1.12) rotate(120deg);
   }
-  42% {
+  46% {
     opacity: 1;
-    transform: translate3d(var(--burst-x), var(--burst-y), 0) scale(1.08) rotate(380deg);
+    transform: translate3d(var(--burst-x), var(--burst-y), 0) scale(1.08) rotate(410deg);
   }
-  76% {
+  78% {
     opacity: 0.88;
   }
   100% {
@@ -1342,15 +1404,67 @@
   }
 }
 
-@keyframes memepop-popper-bounce {
+@keyframes memepop-popper-fire {
   0%,
   100% {
     opacity: 0.82;
+    transform: translate3d(0, 0, 0) rotate(var(--popper-rotate)) scaleX(var(--popper-flip)) scale(1);
     filter: drop-shadow(0 8px 10px rgba(58, 43, 42, 0.16));
   }
-  50% {
+  8% {
     opacity: 1;
+    transform: translate3d(var(--popper-recoil-x), 9px, 0) rotate(calc(var(--popper-rotate) - 8deg)) scaleX(var(--popper-flip)) scale(0.96, 1.05);
+    filter: drop-shadow(0 18px 14px rgba(58, 43, 42, 0.24));
+  }
+  18% {
+    opacity: 1;
+    transform: translate3d(0, -5px, 0) rotate(calc(var(--popper-rotate) + 4deg)) scaleX(var(--popper-flip)) scale(1.04, 0.98);
+    filter: drop-shadow(0 14px 12px rgba(58, 43, 42, 0.2));
+  }
+  42% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(var(--popper-rotate)) scaleX(var(--popper-flip)) scale(1);
     filter: drop-shadow(0 14px 12px rgba(58, 43, 42, 0.22));
+  }
+}
+
+@keyframes memepop-popper-mouth-burst {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px) scale(0.24) rotate(-8deg);
+  }
+  6% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-2px) scale(1) rotate(2deg);
+  }
+  24% {
+    opacity: 0.82;
+    transform: translateX(-50%) translateY(-22px) scale(1.16) rotate(8deg);
+  }
+  46% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-36px) scale(1.3) rotate(14deg);
+  }
+}
+
+@keyframes memepop-popper-flash {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.35);
+  }
+  5% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.15);
+  }
+  16% {
+    opacity: 0.36;
+    transform: translateX(-50%) scale(1.6);
+  }
+  28% {
+    opacity: 0;
+    transform: translateX(-50%) scale(1.9);
   }
 }
 
@@ -1471,7 +1585,10 @@
 @media (prefers-reduced-motion: reduce) {
   #memepop-root.memepop-accessory-partyHat .memepop-confetti,
   #memepop-root.memepop-accessory-partyHat .memepop-balloon,
-  #memepop-root.memepop-accessory-partyHat .memepop-party-popper {
+  #memepop-root.memepop-accessory-partyHat .memepop-party-effects,
+  #memepop-root.memepop-accessory-partyHat .memepop-party-popper,
+  #memepop-root.memepop-accessory-partyHat .memepop-party-popper::before,
+  #memepop-root.memepop-accessory-partyHat .memepop-party-popper::after {
     animation: none !important;
     opacity: 0.82 !important;
   }
@@ -1482,8 +1599,17 @@
   }
 
   #memepop-root.memepop-accessory-partyHat .memepop-balloon {
-    bottom: 10% !important;
     transform: translate3d(var(--balloon-drift), 0, 0) !important;
+  }
+
+  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-party-effects,
+  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-confetti,
+  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-balloon,
+  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-party-popper,
+  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-party-popper::before,
+  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-party-popper::after {
+    animation: none !important;
+    opacity: 0 !important;
   }
 
   #memepop-root.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-character {

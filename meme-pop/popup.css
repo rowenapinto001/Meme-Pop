@@ -1542,26 +1542,43 @@ textarea:focus {
   font-weight: 900;
 }
 
-.accessory-partyHat .accessory-preview::before {
-  left: 15px;
-  top: 13px;
-  width: 30px;
-  height: 34px;
+.accessory-partyHat .accessory-preview {
   background:
-    radial-gradient(circle at 26% 22%, #34c6a9 0 3px, transparent 4px),
-    radial-gradient(circle at 70% 42%, #7c5cff 0 3px, transparent 4px),
-    linear-gradient(145deg, #ffcc4d, #ff7a90);
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
-  transform: rotate(-15deg);
+    radial-gradient(circle at 20% 28%, #34c6a9 0 3px, transparent 4px),
+    radial-gradient(circle at 82% 22%, #ffcc4d 0 3px, transparent 4px),
+    radial-gradient(circle at 78% 78%, #ff7a90 0 3px, transparent 4px),
+    linear-gradient(145deg, #fff7d6, #fff0fb);
+}
+
+.accessory-partyHat .accessory-preview::before {
+  left: 16px;
+  top: 8px;
+  width: 30px;
+  height: 38px;
+  border-radius: 18px 18px 6px 6px;
+  background:
+    radial-gradient(circle at 50% 5%, #ffcc4d 0 5px, transparent 6px),
+    radial-gradient(circle at 36% 42%, #ffffff 0 2px, transparent 3px),
+    radial-gradient(circle at 68% 58%, #ffffff 0 2px, transparent 3px),
+    linear-gradient(122deg, transparent 0 30%, #7c5cff 31% 42%, transparent 43% 100%),
+    linear-gradient(122deg, transparent 0 58%, #34c6a9 59% 70%, transparent 71% 100%),
+    linear-gradient(145deg, #ffcf55 0%, #ff9d6c 48%, #ff6f91 100%);
+  clip-path: polygon(50% 0, 96% 88%, 86% 100%, 14% 100%, 4% 88%);
+  filter: drop-shadow(0 4px 4px rgba(38, 49, 63, 0.16));
+  transform: rotate(-13deg);
+  transform-origin: 50% 92%;
 }
 
 .accessory-partyHat .accessory-preview::after {
-  left: 13px;
-  bottom: 11px;
-  width: 34px;
-  height: 8px;
+  left: 12px;
+  bottom: 10px;
+  width: 38px;
+  height: 10px;
   border-radius: 999px;
-  background: #7c5cff;
+  background:
+    linear-gradient(90deg, #7c5cff 0 28%, #ffffff 29% 41%, #7c5cff 42% 68%, #ffffff 69% 80%, #7c5cff 81%);
+  box-shadow: 0 3px 5px rgba(38, 49, 63, 0.14);
+  transform: rotate(-8deg);
 }
 
 .accessory-sunglasses .accessory-preview::before {
