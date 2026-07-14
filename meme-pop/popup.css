@@ -709,9 +709,18 @@ h2 {
     rgba(255, 255, 255, 0.66);
 }
 
+.mode-rotation-list.is-collapsed {
+  grid-template-columns: 1fr;
+}
+
+.mode-rotation-list.is-collapsed .mode-duration-chip.is-collapsible-mode {
+  display: none;
+}
+
 .mode-duration-chip {
+  position: relative;
   display: grid;
-  grid-template-columns: 26px minmax(0, 1fr) minmax(74px, 88px);
+  grid-template-columns: 26px minmax(0, 1fr) minmax(118px, 146px);
   gap: 10px;
   align-items: center;
   min-width: 0;
@@ -729,6 +738,10 @@ h2 {
   transform: translateY(-1px);
 }
 
+.mode-duration-chip.is-primary-mode {
+  padding-right: 46px;
+}
+
 .mode-duration-name {
   min-width: 0;
   color: var(--ink);
@@ -738,20 +751,11 @@ h2 {
 }
 
 .mode-duration-control {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
+  display: block;
   overflow: hidden;
   border: 1px solid rgba(38, 49, 63, 0.14);
   border-radius: 13px;
   background: #ffffff;
-}
-
-.mode-duration-control span {
-  padding-right: 8px;
-  color: #68758d;
-  font-size: 11px;
-  font-weight: 900;
 }
 
 .mode-duration-chip input[type="checkbox"].mode-duration-toggle {
@@ -777,6 +781,48 @@ h2 {
   transform: rotate(45deg);
 }
 
+.mode-rotation-toggle {
+  position: absolute;
+  right: 11px;
+  bottom: 8px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid rgba(124, 58, 237, 0.24);
+  border-radius: 999px;
+  color: #5b4df0;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.88), transparent 34%),
+    linear-gradient(145deg, #ffffff, #f1ecff);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.84),
+    0 8px 16px rgba(91, 111, 245, 0.16);
+  cursor: pointer;
+  font-size: 22px;
+  font-weight: 1000;
+  line-height: 1;
+  transform: rotate(0deg);
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.mode-rotation-toggle:hover {
+  background: #ffffff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    0 10px 18px rgba(91, 111, 245, 0.22);
+  transform: translateY(-1px);
+}
+
+.mode-rotation-list.is-expanded .mode-rotation-toggle {
+  transform: rotate(180deg);
+}
+
+.mode-rotation-list.is-expanded .mode-rotation-toggle:hover {
+  transform: rotate(180deg) translateY(1px);
+}
+
 .mode-duration-chip input[type="checkbox"].mode-duration-toggle:checked {
   background: linear-gradient(145deg, #8b5cf6, #4f7cff);
   border-color: transparent;
@@ -788,16 +834,18 @@ h2 {
   transform: rotate(45deg);
 }
 
-.mode-duration-chip input[type="number"].mode-duration-input {
-  min-height: 38px;
-  padding: 0 8px;
+.mode-duration-chip select.mode-duration-select {
+  min-height: 40px;
+  padding: 0 28px 0 10px;
   border: 0;
   border-radius: 0;
   background: transparent;
   box-shadow: none;
-  font-size: 15px;
+  color: var(--ink);
+  font-size: clamp(11px, 2.45vw, 13px);
   font-weight: 900;
-  text-align: center;
+  line-height: 1.15;
+  cursor: pointer;
 }
 
 select,

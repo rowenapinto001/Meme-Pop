@@ -36,6 +36,24 @@ const statusText = document.querySelector("#statusText");
 let state = MemePop.normalizeState(undefined);
 let statusTimer;
 let focusTickTimer;
+let modeRotationExpanded = false;
+const MODE_DURATION_OPTIONS = [1, 2, 3, 5, 10, 15, 20, 30, 45, 60, 90, 120, 180, 240, 300];
+function formatDurationOption(minutes) {
+    if (minutes < 60) {
+        return `${minutes} min`;
+    }
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    if (remainingMinutes === 0) {
+        return `${hours} hr${hours === 1 ? "" : "s"}`;
+    }
+    return `${hours} hr ${remainingMinutes} min`;
+}
+function getDurationOptions(selectedMinutes) {
+    return Array.from(new Set([...MODE_DURATION_OPTIONS, selectedMinutes]))
+        .filter((minutes) => minutes >= MemePop.MIN_SETTING_MINUTES && minutes <= MemePop.MAX_SETTING_MINUTES)
+        .sort((first, second) => first - second);
+}
 function setStatus(message) {
     if (!statusText) {
         return;
@@ -297,13 +315,17 @@ function renderModeRotation() {
         return;
     }
     modeRotationList.textContent = "";
+    modeRotationList.classList.toggle("is-expanded", modeRotationExpanded);
+    modeRotationList.classList.toggle("is-collapsed", !modeRotationExpanded);
     const savedModes = new Map(MemePop.normalizeModeRotation(state.settings.modeRotation).map((item) => [item.theme, item]));
-    for (const theme of MemePop.ROTATION_THEMES) {
+    MemePop.ROTATION_THEMES.forEach((theme, index) => {
         const savedMode = savedModes.get(theme);
         const enabled = savedMode?.enabled ?? false;
         const row = document.createElement("label");
         row.className = "mode-duration-chip";
         row.classList.toggle("is-active", enabled);
+        row.classList.toggle("is-primary-mode", index === 0);
+        row.classList.toggle("is-collapsible-mode", index > 0);
         row.dataset.modeTheme = theme;
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
@@ -319,22 +341,38 @@ function renderModeRotation() {
         name.textContent = MemePop.THEME_LABELS[theme].replace(" Mode", "").replace(" Deadline", "");
         const durationGroup = document.createElement("span");
         durationGroup.className = "mode-duration-control";
-        const input = document.createElement("input");
-        input.type = "number";
-        input.className = "mode-duration-input";
-        input.min = String(MemePop.MIN_SETTING_MINUTES);
-        input.max = String(MemePop.MAX_SETTING_MINUTES);
-        input.step = "1";
-        input.inputMode = "numeric";
-        input.value = String(savedMode?.durationMinutes ?? state.settings.appearanceMinutes);
-        input.dataset.modeDuration = "true";
-        input.addEventListener("change", () => void saveSettings());
-        const unit = document.createElement("span");
-        unit.textContent = "min";
-        durationGroup.append(input, unit);
+        const selectedDuration = MemePop.clampSettingMinutes(savedMode?.durationMinutes ?? state.settings.appearanceMinutes, state.settings.appearanceMinutes);
+        const select = document.createElement("select");
+        select.className = "mode-duration-select";
+        select.dataset.modeDuration = "true";
+        select.setAttribute("aria-label", `${MemePop.THEME_LABELS[theme]} duration`);
+        for (const minutes of getDurationOptions(selectedDuration)) {
+            const option = document.createElement("option");
+            option.value = String(minutes);
+            option.textContent = `Duration: ${formatDurationOption(minutes)}`;
+            option.selected = minutes === selectedDuration;
+            select.append(option);
+        }
+        select.addEventListener("change", () => void saveSettings());
+        durationGroup.append(select);
         row.append(checkbox, name, durationGroup);
+        if (index === 0) {
+            const toggleButton = document.createElement("button");
+            toggleButton.type = "button";
+            toggleButton.className = "mode-rotation-toggle";
+            toggleButton.textContent = "⌄";
+            toggleButton.setAttribute("aria-label", modeRotationExpanded ? "Hide other modes" : "Show other modes");
+            toggleButton.setAttribute("aria-expanded", String(modeRotationExpanded));
+            toggleButton.addEventListener("click", (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                modeRotationExpanded = !modeRotationExpanded;
+                renderModeRotation();
+            });
+            row.append(toggleButton);
+        }
         modeRotationList.append(row);
-    }
+    });
 }
 function render() {
     if (startScreen) {

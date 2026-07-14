@@ -7,6 +7,7 @@ var MemePop;
     MemePop.AUTO_HIDE_MAX_MS = 10000;
     MemePop.MIN_SETTING_MINUTES = 1;
     MemePop.MAX_SETTING_MINUTES = 300;
+    MemePop.ACCESSORY_PRICING_VERSION = 2;
     MemePop.MAX_TARGET_SITES = 10;
     MemePop.COMPLETION_COIN_REWARD = 15;
     MemePop.THEMES = [
@@ -81,9 +82,9 @@ var MemePop;
     };
     MemePop.ACCESSORIES = [
         { id: "none", name: "No accessory", price: 0, description: "Classic MemePop energy." },
-        { id: "partyHat", name: "Party mode", price: 0, description: "Confetti, poppers, and balloons." },
-        { id: "sunglasses", name: "Chill mode", price: 40, description: "Beach background, sunshine, and relaxed vibes." },
-        { id: "crown", name: "Believe mode", price: 60, description: "Warm motivation, stars, and self-belief." }
+        { id: "sunglasses", name: "Chill mode", price: 20, description: "Beach background, sunshine, and relaxed vibes." },
+        { id: "crown", name: "Believe mode", price: 40, description: "Warm motivation, stars, and self-belief." },
+        { id: "partyHat", name: "Party mode", price: 60, description: "Confetti, poppers, and balloons." }
     ];
     MemePop.DEFAULT_STATE = {
         settings: {
@@ -119,7 +120,8 @@ var MemePop;
             x: null,
             y: null
         },
-        unlockedAccessories: ["none", "partyHat"],
+        unlockedAccessories: ["none"],
+        accessoryPricingVersion: MemePop.ACCESSORY_PRICING_VERSION,
         startScreenLastSeenDate: "",
         deadlines: []
     };
@@ -339,8 +341,12 @@ var MemePop;
         const unlockedAccessories = Array.isArray(raw?.unlockedAccessories)
             ? raw.unlockedAccessories.filter((item) => MemePop.ACCESSORIES.some((accessoryItem) => accessoryItem.id === item))
             : MemePop.DEFAULT_STATE.unlockedAccessories;
+        const accessoryPricingVersion = typeof raw?.accessoryPricingVersion === "number" ? raw.accessoryPricingVersion : 1;
+        const migratedUnlockedAccessories = accessoryPricingVersion < MemePop.ACCESSORY_PRICING_VERSION
+            ? unlockedAccessories.filter((item) => item !== "partyHat")
+            : unlockedAccessories;
         const freeAccessories = MemePop.ACCESSORIES.filter((accessoryItem) => accessoryItem.price === 0).map((accessoryItem) => accessoryItem.id);
-        const normalizedUnlocked = Array.from(new Set([...freeAccessories, ...unlockedAccessories]));
+        const normalizedUnlocked = Array.from(new Set([...freeAccessories, ...migratedUnlockedAccessories]));
         const requestedAccessory = settings.accessory && MemePop.ACCESSORIES.some((item) => item.id === settings.accessory) ? settings.accessory : "none";
         const accessory = normalizedUnlocked.includes(requestedAccessory) ? requestedAccessory : "none";
         const frequency = ["off", "rare", "normal", "frequent"].includes(settings.frequency)
@@ -384,6 +390,7 @@ var MemePop;
                 y: typeof position.y === "number" ? position.y : null
             },
             unlockedAccessories: normalizedUnlocked,
+            accessoryPricingVersion: MemePop.ACCESSORY_PRICING_VERSION,
             startScreenLastSeenDate: typeof raw?.startScreenLastSeenDate === "string" ? raw.startScreenLastSeenDate : "",
             deadlines
         };

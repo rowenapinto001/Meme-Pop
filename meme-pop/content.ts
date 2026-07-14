@@ -9,6 +9,7 @@ let rootElement: HTMLElement | null = null;
 let cardElement: HTMLElement | null = null;
 let messageElement: HTMLElement | null = null;
 let countdownElement: HTMLElement | null = null;
+let modeLabelElement: HTMLElement | null = null;
 let nextAppearTimer: number | undefined;
 let autoHideTimer: number | undefined;
 let countdownTimer: number | undefined;
@@ -304,6 +305,10 @@ function getCharacterTheme(): MemePop.CharacterTheme {
   return MemePop.characterThemeForSettings(getConfiguredTheme(), activeMessageCategory ?? getActiveMessageCategory());
 }
 
+function getCurrentModeLabel(): string {
+  return MemePop.THEME_LABELS[getCharacterTheme()];
+}
+
 function getCharacterAssetPath(): string {
   return MemePop.THEME_CHARACTER_ASSETS[getCharacterTheme()];
 }
@@ -372,6 +377,15 @@ function updateCharacterImage(): void {
   characterImageElement.alt = `MemePop ${getCharacterTheme()} character`;
 }
 
+function updateModeLabel(): void {
+  if (!modeLabelElement) {
+    return;
+  }
+
+  modeLabelElement.textContent = getCurrentModeLabel();
+  modeLabelElement.setAttribute("aria-label", `Current MemePop mode: ${getCurrentModeLabel()}`);
+}
+
 function updateThemeClass(): void {
   if (!rootElement) {
     return;
@@ -397,6 +411,7 @@ function updateThemeClass(): void {
   );
   rootElement.classList.add(`memepop-theme-${getCharacterTheme()}`);
   updateCharacterImage();
+  updateModeLabel();
 
   if (isHydrationTheme()) {
     restartHydrationOffer();
@@ -482,6 +497,7 @@ function hideMemePop(animated: boolean): void {
       cardElement = null;
       messageElement = null;
       countdownElement = null;
+      modeLabelElement = null;
       characterImageElement = null;
     }
   };
@@ -890,13 +906,18 @@ function createMemePop(message?: string): HTMLElement | null {
   countdown.textContent = formatCountdown(getVisibleDurationMs());
   countdown.setAttribute("aria-label", `MemePop closes in ${formatCountdown(getVisibleDurationMs())}`);
 
-  card.append(shell, cardConfetti, controls, countdown, characterButton, bubble, reward);
+  const modeLabel = document.createElement("span");
+  modeLabel.className = "memepop-mode-label";
+  modeLabel.textContent = getCurrentModeLabel();
+
+  card.append(shell, cardConfetti, controls, countdown, characterButton, bubble, modeLabel, reward);
   root.append(chillStage, believeStage, partyStage, splash, partyEffects, card);
 
   rootElement = root;
   cardElement = card;
   messageElement = messageText;
   countdownElement = countdown;
+  modeLabelElement = modeLabel;
   updateAccessoryClass();
   updateThemeClass();
   setMessage(message);

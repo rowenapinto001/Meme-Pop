@@ -4,6 +4,7 @@ let rootElement = null;
 let cardElement = null;
 let messageElement = null;
 let countdownElement = null;
+let modeLabelElement = null;
 let nextAppearTimer;
 let autoHideTimer;
 let countdownTimer;
@@ -252,6 +253,9 @@ function getCategoryForText(text) {
 function getCharacterTheme() {
     return MemePop.characterThemeForSettings(getConfiguredTheme(), activeMessageCategory ?? getActiveMessageCategory());
 }
+function getCurrentModeLabel() {
+    return MemePop.THEME_LABELS[getCharacterTheme()];
+}
 function getCharacterAssetPath() {
     return MemePop.THEME_CHARACTER_ASSETS[getCharacterTheme()];
 }
@@ -304,6 +308,13 @@ function updateCharacterImage() {
     characterImageElement.src = imageUrl;
     characterImageElement.alt = `MemePop ${getCharacterTheme()} character`;
 }
+function updateModeLabel() {
+    if (!modeLabelElement) {
+        return;
+    }
+    modeLabelElement.textContent = getCurrentModeLabel();
+    modeLabelElement.setAttribute("aria-label", `Current MemePop mode: ${getCurrentModeLabel()}`);
+}
 function updateThemeClass() {
     if (!rootElement) {
         return;
@@ -311,6 +322,7 @@ function updateThemeClass() {
     rootElement.classList.remove("memepop-theme-random", "memepop-theme-focus", "memepop-theme-break", "memepop-theme-motivation", "memepop-theme-procrastination", "memepop-theme-lateNight", "memepop-theme-social", "memepop-theme-deadline", "memepop-theme-movement", "memepop-theme-office", "memepop-theme-studying", "memepop-theme-gaming", "memepop-theme-coding", "memepop-theme-hydration", "memepop-offering", "memepop-splashing");
     rootElement.classList.add(`memepop-theme-${getCharacterTheme()}`);
     updateCharacterImage();
+    updateModeLabel();
     if (isHydrationTheme()) {
         restartHydrationOffer();
     }
@@ -379,6 +391,7 @@ function hideMemePop(animated) {
             cardElement = null;
             messageElement = null;
             countdownElement = null;
+            modeLabelElement = null;
             characterImageElement = null;
         }
     };
@@ -689,12 +702,16 @@ function createMemePop(message) {
     countdown.className = "memepop-timer";
     countdown.textContent = formatCountdown(getVisibleDurationMs());
     countdown.setAttribute("aria-label", `MemePop closes in ${formatCountdown(getVisibleDurationMs())}`);
-    card.append(shell, cardConfetti, controls, countdown, characterButton, bubble, reward);
+    const modeLabel = document.createElement("span");
+    modeLabel.className = "memepop-mode-label";
+    modeLabel.textContent = getCurrentModeLabel();
+    card.append(shell, cardConfetti, controls, countdown, characterButton, bubble, modeLabel, reward);
     root.append(chillStage, believeStage, partyStage, splash, partyEffects, card);
     rootElement = root;
     cardElement = card;
     messageElement = messageText;
     countdownElement = countdown;
+    modeLabelElement = modeLabel;
     updateAccessoryClass();
     updateThemeClass();
     setMessage(message);
