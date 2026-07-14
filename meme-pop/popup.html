@@ -14,14 +14,18 @@
           <h1>MemePop</h1>
           <p>Cute reactions for your browser.</p>
         </div>
-        <button id="settingsButton" class="icon-button" type="button" title="Settings" aria-label="Open settings">set</button>
+        <button id="settingsButton" class="icon-button" type="button" title="Settings" aria-label="Open settings">
+          <span class="gear-mark" aria-hidden="true"></span>
+          <span>Set</span>
+        </button>
       </header>
 
       <section id="startScreen" class="start-screen" aria-label="Daily start">
-        <div>
+        <div class="start-copy">
           <h2>MemePop is ready for today. Are you?</h2>
           <p>Let’s finish your tasks, beat your deadlines, and earn some Meme Coins.</p>
         </div>
+        <img src="assets/character/memepop-study.png" alt="" class="start-character">
         <div class="start-actions">
           <button id="readyButton" class="primary-button" type="button">Ready to Begin</button>
           <button id="planDayButton" class="secondary-button" type="button">Plan My Day</button>
@@ -29,17 +33,21 @@
       </section>
 
       <section class="stats-grid" aria-label="MemePop stats">
-        <article class="stat-card">
-          <span>Meme Coins</span>
+        <article class="stat-card coin-card">
+          <span class="stat-icon coin-icon" aria-hidden="true"></span>
+          <span class="stat-label">Meme Coins</span>
           <strong id="coinCount">0</strong>
+          <small>Keep going!</small>
         </article>
-        <article class="stat-card">
-          <span>Current streak</span>
+        <article class="stat-card streak-card">
+          <span class="stat-icon fire-icon" aria-hidden="true"></span>
+          <span class="stat-label">Current streak</span>
           <strong id="streakCount">0</strong>
+          <small>Great consistency!</small>
         </article>
       </section>
 
-      <section class="panel">
+      <section class="panel settings-panel">
         <label class="switch-row">
           <span>
             <strong>Show MemePop</strong>
@@ -48,7 +56,7 @@
           <input id="enabledInput" type="checkbox" role="switch">
         </label>
 
-        <label class="field">
+        <label class="field theme-field">
           <span>Theme</span>
           <select id="themeSelect">
             <option value="random">Random</option>
@@ -68,17 +76,19 @@
           </select>
         </label>
 
-        <label class="field">
-          <span>Minutes before MemePop appears</span>
-          <input id="appearanceMinutesInput" type="number" min="1" max="300" step="1" inputmode="numeric">
-        </label>
+        <div class="number-grid">
+          <label class="field appearance-field">
+            <span>Minutes before MemePop appears</span>
+            <input id="appearanceMinutesInput" type="number" min="1" max="300" step="1" inputmode="numeric">
+          </label>
 
-        <label class="field">
-          <span>Break time (minutes)</span>
-          <input id="breakMinutesInput" type="number" min="1" max="300" step="1" inputmode="numeric">
-        </label>
+          <label class="field break-field">
+            <span>Break time (minutes)</span>
+            <input id="breakMinutesInput" type="number" min="1" max="300" step="1" inputmode="numeric">
+          </label>
+        </div>
 
-        <label class="field">
+        <label class="field target-sites-field">
           <span>Target sites</span>
           <textarea id="targetSitesInput" rows="5" spellcheck="false" placeholder="x.com&#10;youtube.com&#10;google.com"></textarea>
           <small>Up to 10 sites. Leave blank for every normal webpage.</small>
@@ -94,6 +104,11 @@
             <input id="dndInput" type="checkbox" role="switch">
           </label>
         </div>
+      </section>
+
+      <section class="daily-note" aria-label="Daily encouragement">
+        <span class="note-star" aria-hidden="true"></span>
+        <p>Little steps every day lead to big achievements!</p>
       </section>
 
       <section class="panel">

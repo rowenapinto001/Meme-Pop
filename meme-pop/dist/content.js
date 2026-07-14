@@ -44,6 +44,18 @@ const DROP_SEQUENCE_MODES = new Set([
     "assignment/project",
     "coding"
 ]);
+const DROP_SEQUENCE_CATEGORIES = new Set([
+    "focusMode",
+    "motivationMode",
+    "motivation",
+    "procrastinationMode",
+    "procrastination",
+    "deadlineMode",
+    "deadline",
+    "office",
+    "studying",
+    "coding"
+]);
 function clearTimer(timer) {
     if (timer) {
         window.clearTimeout(timer);
@@ -249,16 +261,27 @@ function normalizeDropSequenceMode(theme) {
     return theme;
 }
 function shouldUseDropSequence() {
+    if (appState.settings.theme === "random") {
+        return DROP_SEQUENCE_CATEGORIES.has(activeMessageCategory ?? getActiveMessageCategory());
+    }
     return DROP_SEQUENCE_MODES.has(normalizeDropSequenceMode(getCharacterTheme()));
 }
-function reconcileCompletedDropSequence() {
-    if (!rootElement?.classList.contains("memepop-sequence-complete") || shouldUseDropSequence()) {
+function applyEntranceModeClass(root) {
+    const usesDrop = shouldUseDropSequence();
+    root.classList.add("memepop-entrance-sequenced");
+    root.classList.toggle("memepop-drop-supported", usesDrop);
+    root.classList.toggle("memepop-walk-supported", !usesDrop);
+}
+function reconcileCompletedEntranceSequence() {
+    if (!rootElement?.classList.contains("memepop-sequence-complete")) {
         return;
     }
-    rootElement.classList.remove("memepop-drop-supported", "memepop-shell-visible");
+    rootElement.classList.remove("memepop-drop-supported", "memepop-walk-supported");
+    applyEntranceModeClass(rootElement);
+    rootElement.classList.add("memepop-shell-visible");
 }
 function isInteractionReady() {
-    return !rootElement?.classList.contains("memepop-drop-supported") || rootElement.classList.contains("memepop-sequence-complete");
+    return !rootElement?.classList.contains("memepop-entrance-sequenced") || rootElement.classList.contains("memepop-sequence-complete");
 }
 function updateCharacterImage() {
     if (!characterImageElement) {
@@ -355,7 +378,7 @@ function hideMemePop(animated) {
         return;
     }
     currentRoot.classList.add("memepop-leaving");
-    if (currentRoot.classList.contains("memepop-drop-supported")) {
+    if (currentRoot.classList.contains("memepop-entrance-sequenced")) {
         const character = currentRoot.querySelector(".memepop-character");
         const removeSupportedRoot = () => {
             clearTimer(removeTimer);
@@ -385,7 +408,7 @@ function setMessage(text) {
     activeMessageCategory = category;
     lastMessageText = nextMessage;
     updateThemeClass();
-    reconcileCompletedDropSequence();
+    reconcileCompletedEntranceSequence();
     if (messageElement) {
         messageElement.textContent = nextMessage;
     }
@@ -426,12 +449,9 @@ function createHydrationSplash() {
 function configureEntranceSequence(root, character, shell) {
     clearTimer(entranceTimer);
     clearTimer(shellTimer);
-    root.classList.remove("memepop-drop-supported", "memepop-shell-visible", "memepop-sequence-complete");
-    if (!shouldUseDropSequence()) {
-        root.classList.add("memepop-sequence-complete");
-        return;
-    }
-    let dropFinished = false;
+    root.classList.remove("memepop-entrance-sequenced", "memepop-drop-supported", "memepop-walk-supported", "memepop-shell-visible", "memepop-sequence-complete");
+    const usesDrop = shouldUseDropSequence();
+    let entranceFinished = false;
     let shellFinished = false;
     const finishShell = () => {
         if (shellFinished || !root.isConnected || root.classList.contains("memepop-leaving")) {
@@ -441,19 +461,20 @@ function configureEntranceSequence(root, character, shell) {
         clearTimer(shellTimer);
         root.classList.add("memepop-sequence-complete");
     };
-    const finishDrop = () => {
-        if (dropFinished || !root.isConnected || root.classList.contains("memepop-leaving")) {
+    const finishEntrance = () => {
+        if (entranceFinished || !root.isConnected || root.classList.contains("memepop-leaving")) {
             return;
         }
-        dropFinished = true;
+        entranceFinished = true;
         clearTimer(entranceTimer);
         root.classList.add("memepop-shell-visible");
         shellTimer = window.setTimeout(finishShell, 700);
     };
-    root.classList.add("memepop-drop-supported");
+    applyEntranceModeClass(root);
     character.addEventListener("animationend", (event) => {
-        if (event.target === character && (event.animationName === "memeDropIn" || event.animationName === "memeReducedFadeIn")) {
-            finishDrop();
+        if (event.target === character &&
+            (event.animationName === "memeDropIn" || event.animationName === "memeWalkIn" || event.animationName === "memeReducedFadeIn")) {
+            finishEntrance();
         }
     });
     shell.addEventListener("animationend", (event) => {
@@ -461,7 +482,7 @@ function configureEntranceSequence(root, character, shell) {
             finishShell();
         }
     });
-    entranceTimer = window.setTimeout(finishDrop, 1400);
+    entranceTimer = window.setTimeout(finishEntrance, usesDrop ? 1400 : 2600);
 }
 function startEntranceSequence(root) {
     const character = root.querySelector(".memepop-character");

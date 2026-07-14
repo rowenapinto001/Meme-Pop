@@ -441,65 +441,65 @@
   animation: memepop-movement-stretch 1800ms ease-in-out 650ms infinite !important;
 }
 
-#memepop-root.memepop-drop-supported::before {
+#memepop-root.memepop-entrance-sequenced::before {
   opacity: 0 !important;
   transition: opacity 320ms ease !important;
 }
 
-#memepop-root.memepop-drop-supported.memepop-shell-visible::before {
+#memepop-root.memepop-entrance-sequenced.memepop-shell-visible::before {
   opacity: 1 !important;
 }
 
-#memepop-root.memepop-drop-supported .memepop-card {
+#memepop-root.memepop-entrance-sequenced .memepop-card {
   border-color: transparent !important;
   background: transparent !important;
   box-shadow: none !important;
   animation: none !important;
 }
 
-#memepop-root.memepop-drop-supported:not(.memepop-sequence-complete) .memepop-card {
+#memepop-root.memepop-entrance-sequenced:not(.memepop-sequence-complete) .memepop-card {
   pointer-events: none !important;
 }
 
-#memepop-root.memepop-drop-supported .memepop-card-shell {
+#memepop-root.memepop-entrance-sequenced .memepop-card-shell {
   display: block !important;
 }
 
-#memepop-root.memepop-drop-supported.memepop-shell-visible .memepop-card-shell {
+#memepop-root.memepop-entrance-sequenced.memepop-shell-visible .memepop-card-shell {
   animation: cardShellAppear 320ms ease-out both !important;
 }
 
-#memepop-root.memepop-drop-supported.memepop-sequence-complete .memepop-card-shell {
+#memepop-root.memepop-entrance-sequenced.memepop-sequence-complete .memepop-card-shell {
   opacity: 1;
   transform: scale(1);
 }
 
-#memepop-root.memepop-drop-supported .memepop-card::before,
-#memepop-root.memepop-drop-supported .memepop-card::after,
-#memepop-root.memepop-drop-supported .memepop-controls,
-#memepop-root.memepop-drop-supported .memepop-timer,
-#memepop-root.memepop-drop-supported .memepop-bubble,
-#memepop-root.memepop-drop-supported .memepop-accessory {
+#memepop-root.memepop-entrance-sequenced .memepop-card::before,
+#memepop-root.memepop-entrance-sequenced .memepop-card::after,
+#memepop-root.memepop-entrance-sequenced .memepop-controls,
+#memepop-root.memepop-entrance-sequenced .memepop-timer,
+#memepop-root.memepop-entrance-sequenced .memepop-bubble,
+#memepop-root.memepop-entrance-sequenced .memepop-accessory {
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
   transition: opacity 280ms ease, visibility 0s linear 280ms !important;
 }
 
-#memepop-root.memepop-drop-supported.memepop-shell-visible .memepop-card::before,
-#memepop-root.memepop-drop-supported.memepop-shell-visible .memepop-card::after,
-#memepop-root.memepop-drop-supported.memepop-shell-visible .memepop-controls,
-#memepop-root.memepop-drop-supported.memepop-shell-visible .memepop-timer,
-#memepop-root.memepop-drop-supported.memepop-shell-visible .memepop-bubble,
-#memepop-root.memepop-drop-supported.memepop-shell-visible .memepop-accessory {
+#memepop-root.memepop-entrance-sequenced.memepop-shell-visible .memepop-card::before,
+#memepop-root.memepop-entrance-sequenced.memepop-shell-visible .memepop-card::after,
+#memepop-root.memepop-entrance-sequenced.memepop-shell-visible .memepop-controls,
+#memepop-root.memepop-entrance-sequenced.memepop-shell-visible .memepop-timer,
+#memepop-root.memepop-entrance-sequenced.memepop-shell-visible .memepop-bubble,
+#memepop-root.memepop-entrance-sequenced.memepop-shell-visible .memepop-accessory {
   opacity: 1 !important;
   visibility: visible !important;
   transition-delay: 0s !important;
 }
 
-#memepop-root.memepop-drop-supported.memepop-sequence-complete .memepop-controls,
-#memepop-root.memepop-drop-supported.memepop-sequence-complete .memepop-control,
-#memepop-root.memepop-drop-supported.memepop-sequence-complete .memepop-character {
+#memepop-root.memepop-entrance-sequenced.memepop-sequence-complete .memepop-controls,
+#memepop-root.memepop-entrance-sequenced.memepop-sequence-complete .memepop-control,
+#memepop-root.memepop-entrance-sequenced.memepop-sequence-complete .memepop-character {
   pointer-events: auto !important;
 }
 
@@ -509,7 +509,13 @@
   animation: memeDropIn 820ms cubic-bezier(0.18, 0.92, 0.22, 1) both !important;
 }
 
-#memepop-root.memepop-drop-supported.memepop-shell-visible:not(.memepop-sequence-complete) .memepop-character {
+#memepop-root.memepop-walk-supported:not(.memepop-shell-visible) .memepop-character {
+  z-index: 6 !important;
+  opacity: 0;
+  animation: memeWalkIn 1850ms cubic-bezier(0.22, 0.86, 0.22, 1) both !important;
+}
+
+#memepop-root.memepop-entrance-sequenced.memepop-shell-visible:not(.memepop-sequence-complete) .memepop-character {
   z-index: 6 !important;
   opacity: 1 !important;
   transform: translateY(0) !important;
@@ -814,26 +820,26 @@
   animation: memepop-exit 420ms ease forwards !important;
 }
 
-#memepop-root.memepop-drop-supported.memepop-leaving::before {
+#memepop-root.memepop-entrance-sequenced.memepop-leaving::before {
   opacity: 0 !important;
 }
 
-#memepop-root.memepop-drop-supported.memepop-leaving .memepop-card {
+#memepop-root.memepop-entrance-sequenced.memepop-leaving .memepop-card {
   pointer-events: none !important;
   animation: none !important;
 }
 
-#memepop-root.memepop-drop-supported.memepop-leaving .memepop-card-shell {
+#memepop-root.memepop-entrance-sequenced.memepop-leaving .memepop-card-shell {
   display: block !important;
   animation: memepop-shell-exit 260ms ease both !important;
 }
 
-#memepop-root.memepop-drop-supported.memepop-leaving .memepop-card::before,
-#memepop-root.memepop-drop-supported.memepop-leaving .memepop-card::after,
-#memepop-root.memepop-drop-supported.memepop-leaving .memepop-controls,
-#memepop-root.memepop-drop-supported.memepop-leaving .memepop-timer,
-#memepop-root.memepop-drop-supported.memepop-leaving .memepop-bubble,
-#memepop-root.memepop-drop-supported.memepop-leaving .memepop-accessory {
+#memepop-root.memepop-entrance-sequenced.memepop-leaving .memepop-card::before,
+#memepop-root.memepop-entrance-sequenced.memepop-leaving .memepop-card::after,
+#memepop-root.memepop-entrance-sequenced.memepop-leaving .memepop-controls,
+#memepop-root.memepop-entrance-sequenced.memepop-leaving .memepop-timer,
+#memepop-root.memepop-entrance-sequenced.memepop-leaving .memepop-bubble,
+#memepop-root.memepop-entrance-sequenced.memepop-leaving .memepop-accessory {
   opacity: 0 !important;
   visibility: visible !important;
   pointer-events: none !important;
@@ -841,7 +847,7 @@
   transition: opacity 220ms ease !important;
 }
 
-#memepop-root.memepop-drop-supported.memepop-leaving .memepop-character {
+#memepop-root.memepop-entrance-sequenced.memepop-leaving .memepop-character {
   z-index: 6 !important;
   pointer-events: none !important;
   animation: memeExitUp 560ms cubic-bezier(0.58, 0, 1, 0.32) 280ms both !important;
@@ -861,6 +867,44 @@
   }
   100% {
     transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes memeWalkIn {
+  0% {
+    transform: translateX(calc(-100vw - 250px)) translateY(0) rotate(-4deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  18% {
+    transform: translateX(calc(-82vw - 210px)) translateY(-15px) rotate(5deg);
+  }
+  30% {
+    transform: translateX(calc(-64vw - 180px)) translateY(4px) rotate(-4deg);
+  }
+  42% {
+    transform: translateX(calc(-48vw - 140px)) translateY(-13px) rotate(4deg);
+  }
+  54% {
+    transform: translateX(calc(-32vw - 98px)) translateY(3px) rotate(-3deg);
+  }
+  66% {
+    transform: translateX(calc(-18vw - 54px)) translateY(-10px) rotate(3deg);
+  }
+  78% {
+    transform: translateX(-18px) translateY(3px) rotate(-2deg);
+  }
+  88% {
+    transform: translateX(10px) translateY(-6px) rotate(2deg);
+  }
+  94% {
+    transform: translateX(-4px) translateY(0) rotate(-1deg);
+  }
+  100% {
+    transform: translateX(0) translateY(0) rotate(0);
     opacity: 1;
   }
 }
@@ -1143,21 +1187,21 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #memepop-root.memepop-drop-supported:not(.memepop-shell-visible) .memepop-character {
+  #memepop-root.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-character {
     animation: memeReducedFadeIn 220ms ease both !important;
   }
 
-  #memepop-root.memepop-drop-supported.memepop-shell-visible .memepop-card-shell {
+  #memepop-root.memepop-entrance-sequenced.memepop-shell-visible .memepop-card-shell {
     animation: cardShellReducedAppear 260ms ease both !important;
   }
 
-  #memepop-root.memepop-drop-supported.memepop-shell-visible:not(.memepop-sequence-complete) .memepop-character,
-  #memepop-root.memepop-drop-supported.memepop-sequence-complete .memepop-character,
-  #memepop-root.memepop-drop-supported.memepop-sequence-complete .memepop-bubble {
+  #memepop-root.memepop-entrance-sequenced.memepop-shell-visible:not(.memepop-sequence-complete) .memepop-character,
+  #memepop-root.memepop-entrance-sequenced.memepop-sequence-complete .memepop-character,
+  #memepop-root.memepop-entrance-sequenced.memepop-sequence-complete .memepop-bubble {
     animation: none !important;
   }
 
-  #memepop-root.memepop-drop-supported.memepop-leaving .memepop-character {
+  #memepop-root.memepop-entrance-sequenced.memepop-leaving .memepop-character {
     animation: memeReducedExitUp 320ms ease 280ms both !important;
   }
 }
