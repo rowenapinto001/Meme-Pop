@@ -488,6 +488,31 @@ function createPartyStage() {
     stage.append(discoWrap, confettiLayer);
     return stage;
 }
+function createChillStage() {
+    const stage = document.createElement("div");
+    stage.className = "memepop-chill-stage";
+    stage.setAttribute("aria-hidden", "true");
+    const title = document.createElement("div");
+    title.className = "memepop-chill-title";
+    title.textContent = "Chill Mode";
+    const sun = document.createElement("span");
+    sun.className = "memepop-chill-sun";
+    const leftPalm = document.createElement("span");
+    leftPalm.className = "memepop-chill-palm memepop-chill-palm-left";
+    const rightPalm = document.createElement("span");
+    rightPalm.className = "memepop-chill-palm memepop-chill-palm-right";
+    const surfboard = document.createElement("span");
+    surfboard.className = "memepop-chill-surfboard";
+    const boat = document.createElement("span");
+    boat.className = "memepop-chill-boat";
+    const flowers = document.createElement("span");
+    flowers.className = "memepop-chill-flowers";
+    const quest = document.createElement("span");
+    quest.className = "memepop-chill-quest";
+    quest.textContent = "Today's Quest: Relax & Recharge";
+    stage.append(title, sun, leftPalm, rightPalm, surfboard, boat, flowers, quest);
+    return stage;
+}
 function createPartyEffects() {
     const effects = document.createElement("div");
     effects.className = "memepop-party-effects";
@@ -571,6 +596,7 @@ function createMemePop(message) {
     root.id = "memepop-root";
     root.setAttribute("aria-live", "polite");
     root.className = "memepop-accessory-none";
+    const chillStage = createChillStage();
     const partyStage = createPartyStage();
     const splash = createHydrationSplash();
     const partyEffects = createPartyEffects();
@@ -606,10 +632,10 @@ function createMemePop(message) {
     const hydrationCup = document.createElement("span");
     hydrationCup.className = "memepop-hydration-cup";
     hydrationCup.setAttribute("aria-hidden", "true");
-    characterButton.append(image, hydrationArm, hydrationCup);
     const accessory = document.createElement("span");
     accessory.className = "memepop-accessory";
     accessory.setAttribute("aria-hidden", "true");
+    characterButton.append(image, hydrationArm, hydrationCup, accessory);
     const bubble = document.createElement("div");
     bubble.className = "memepop-bubble";
     const messageText = document.createElement("p");
@@ -622,8 +648,8 @@ function createMemePop(message) {
     countdown.className = "memepop-timer";
     countdown.textContent = formatCountdown(getVisibleDurationMs());
     countdown.setAttribute("aria-label", `MemePop closes in ${formatCountdown(getVisibleDurationMs())}`);
-    card.append(shell, cardConfetti, controls, countdown, characterButton, accessory, bubble, reward);
-    root.append(partyStage, splash, partyEffects, card);
+    card.append(shell, cardConfetti, controls, countdown, characterButton, bubble, reward);
+    root.append(chillStage, partyStage, splash, partyEffects, card);
     rootElement = root;
     cardElement = card;
     messageElement = messageText;

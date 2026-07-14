@@ -50,6 +50,310 @@
     radial-gradient(circle at 50% 52%, rgba(58, 43, 42, 0.08), transparent 48%) !important;
 }
 
+#memepop-root .memepop-chill-stage {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  display: none !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  opacity: 0;
+  background:
+    linear-gradient(176deg, transparent 0 53%, rgba(255, 255, 255, 0.9) 54% 55%, transparent 56%),
+    linear-gradient(182deg, transparent 0 59%, rgba(255, 255, 255, 0.72) 60% 61%, transparent 62%),
+    linear-gradient(180deg, #2fc7ff 0%, #76dcff 37%, #25bfe8 38%, #11aed0 55%, #ffffff 56%, #fce2a3 63%, #ffd58a 100%) !important;
+}
+
+#memepop-root .memepop-chill-stage::before,
+#memepop-root .memepop-chill-stage::after {
+  content: "" !important;
+  position: absolute !important;
+  pointer-events: none !important;
+}
+
+#memepop-root .memepop-chill-stage::before {
+  inset: 0 !important;
+  background:
+    linear-gradient(178deg, transparent 0 48%, rgba(255, 255, 255, 0.24) 49% 49.4%, transparent 50%),
+    linear-gradient(181deg, transparent 0 55%, rgba(255, 255, 255, 0.24) 56% 56.4%, transparent 57%),
+    linear-gradient(184deg, transparent 0 62%, rgba(255, 255, 255, 0.2) 63% 63.4%, transparent 64%),
+    radial-gradient(ellipse at 20% 86%, rgba(255, 122, 150, 0.36), transparent 14%),
+    radial-gradient(ellipse at 84% 86%, rgba(255, 122, 150, 0.32), transparent 13%) !important;
+  opacity: 0.72 !important;
+  animation: memepop-chill-waves 6200ms ease-in-out infinite alternate !important;
+}
+
+#memepop-root .memepop-chill-stage::after {
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 34% !important;
+  background:
+    radial-gradient(circle at 12% 78%, #ff8fac 0 34px, transparent 35px),
+    radial-gradient(circle at 14% 74%, #ffd0da 0 10px, transparent 11px),
+    radial-gradient(circle at 84% 82%, #ff8fac 0 32px, transparent 33px),
+    radial-gradient(circle at 87% 78%, #ffd0da 0 9px, transparent 10px),
+    radial-gradient(circle at 68% 74%, #ffb36b 0 9px, transparent 10px),
+    radial-gradient(circle at 70% 77%, #fff1cf 0 11px, transparent 12px),
+    radial-gradient(circle at 30% 78%, #f8b7a7 0 12px, transparent 13px),
+    radial-gradient(circle at 33% 82%, #fff1cf 0 9px, transparent 10px),
+    repeating-linear-gradient(8deg, transparent 0 22px, rgba(184, 119, 61, 0.08) 23px 24px) !important;
+  opacity: 0.96 !important;
+}
+
+#memepop-root.memepop-accessory-sunglasses.memepop-shell-visible .memepop-chill-stage,
+#memepop-root.memepop-accessory-sunglasses:not(.memepop-entrance-sequenced) .memepop-chill-stage {
+  display: block !important;
+  animation: memepop-chill-stage-in 460ms ease-out both !important;
+}
+
+#memepop-root.memepop-accessory-sunglasses.memepop-leaving .memepop-chill-stage {
+  opacity: 0 !important;
+  transition: opacity 220ms ease !important;
+}
+
+#memepop-root .memepop-chill-title {
+  position: absolute !important;
+  top: max(30px, 4.5vh) !important;
+  left: 50% !important;
+  z-index: 2 !important;
+  color: #ffffff !important;
+  text-shadow:
+    0 4px 0 rgba(31, 160, 213, 0.82),
+    0 8px 18px rgba(20, 97, 150, 0.28) !important;
+  font: 1000 clamp(38px, 7vw, 86px)/1.02 Inter, ui-sans-serif, system-ui, sans-serif !important;
+  letter-spacing: 0 !important;
+  white-space: nowrap !important;
+  opacity: 0;
+  transform: translateX(-50%) translateY(-18px) scale(0.92);
+}
+
+#memepop-root .memepop-chill-title::before,
+#memepop-root .memepop-chill-title::after {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  color: #fff1a8 !important;
+  font-size: 0.48em !important;
+  text-shadow: 0 4px 10px rgba(20, 97, 150, 0.22) !important;
+}
+
+#memepop-root .memepop-chill-title::before {
+  content: "★" !important;
+  left: -0.88em !important;
+}
+
+#memepop-root .memepop-chill-title::after {
+  content: "☼" !important;
+  right: -0.92em !important;
+}
+
+#memepop-root.memepop-accessory-sunglasses.memepop-shell-visible .memepop-chill-title,
+#memepop-root.memepop-accessory-sunglasses:not(.memepop-entrance-sequenced) .memepop-chill-title {
+  animation: memepop-chill-title-in 620ms cubic-bezier(0.16, 1.2, 0.26, 1) 140ms both !important;
+}
+
+#memepop-root .memepop-chill-sun {
+  position: absolute !important;
+  top: 12.5% !important;
+  left: 16.5% !important;
+  z-index: 2 !important;
+  width: clamp(82px, 8.5vw, 124px) !important;
+  height: clamp(82px, 8.5vw, 124px) !important;
+  border-radius: 50% !important;
+  background: repeating-conic-gradient(from -8deg, #ffe16b 0deg 10deg, rgba(255, 193, 51, 0.18) 10deg 20deg) !important;
+  box-shadow:
+    0 0 36px rgba(255, 225, 107, 0.52),
+    0 16px 26px rgba(224, 150, 38, 0.12) !important;
+  opacity: 0.98 !important;
+  animation: memepop-chill-sun-float 4200ms ease-in-out infinite alternate !important;
+}
+
+#memepop-root .memepop-chill-sun::before,
+#memepop-root .memepop-chill-sun::after {
+  content: "" !important;
+  position: absolute !important;
+  border-radius: 50% !important;
+}
+
+#memepop-root .memepop-chill-sun::before {
+  inset: 17% !important;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.74) 0 10%, transparent 11%),
+    radial-gradient(circle, #fff6ad 0 58%, #ffd24f 59% 100%) !important;
+  box-shadow:
+    inset -8px -10px 0 rgba(224, 150, 38, 0.12),
+    inset 6px 7px 0 rgba(255, 255, 255, 0.18) !important;
+}
+
+#memepop-root .memepop-chill-sun::after {
+  inset: 32% !important;
+  background:
+    radial-gradient(circle at 34% 42%, #7a512d 0 3px, transparent 4px),
+    radial-gradient(circle at 66% 42%, #7a512d 0 3px, transparent 4px),
+    radial-gradient(ellipse at 50% 68%, #ff9b78 0 7px, transparent 8px) !important;
+}
+
+#memepop-root .memepop-chill-palm {
+  position: absolute !important;
+  top: -32px !important;
+  z-index: 2 !important;
+  width: clamp(190px, 21vw, 330px) !important;
+  height: clamp(160px, 19vw, 280px) !important;
+  opacity: 0.94 !important;
+  filter: drop-shadow(0 16px 18px rgba(24, 91, 83, 0.2)) !important;
+  animation: memepop-chill-palm-sway 4200ms ease-in-out infinite alternate !important;
+}
+
+#memepop-root .memepop-chill-palm::before,
+#memepop-root .memepop-chill-palm::after {
+  content: "" !important;
+  position: absolute !important;
+  border-radius: 100% 0 100% 0 !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.28), transparent 28%),
+    linear-gradient(135deg, #9bd968 0%, #25a35f 78%) !important;
+  transform-origin: 0 100% !important;
+}
+
+#memepop-root .memepop-chill-palm::before {
+  left: 30% !important;
+  top: 16% !important;
+  width: 76% !important;
+  height: 28% !important;
+  box-shadow:
+    -36px 36px 0 -2px #45b968,
+    -72px 72px 0 -6px #2aa85f,
+    20px 42px 0 -8px #6fc865 !important;
+  transform: rotate(-34deg) !important;
+}
+
+#memepop-root .memepop-chill-palm::after {
+  left: 48% !important;
+  top: 12% !important;
+  width: 76% !important;
+  height: 28% !important;
+  box-shadow:
+    32px 38px 0 -4px #43b767,
+    66px 70px 0 -8px #229a5b,
+    -18px 42px 0 -10px #76cc67 !important;
+  transform: scaleX(-1) rotate(-34deg) !important;
+}
+
+#memepop-root .memepop-chill-palm-left {
+  left: -46px !important;
+  transform: rotate(-16deg) !important;
+}
+
+#memepop-root .memepop-chill-palm-right {
+  right: -38px !important;
+  transform: scaleX(-1) rotate(-15deg) !important;
+  animation-name: memepop-chill-palm-sway-right !important;
+  animation-delay: -1200ms !important;
+}
+
+#memepop-root .memepop-chill-surfboard {
+  position: absolute !important;
+  right: max(28px, 5vw) !important;
+  bottom: max(60px, 8vh) !important;
+  z-index: 2 !important;
+  width: clamp(72px, 8vw, 118px) !important;
+  height: clamp(210px, 24vw, 360px) !important;
+  border-radius: 50% 50% 46% 46% / 42% 42% 58% 58% !important;
+  background:
+    linear-gradient(90deg, transparent 0 42%, rgba(255, 255, 255, 0.68) 43% 48%, transparent 49%),
+    linear-gradient(160deg, transparent 0 24%, rgba(255, 126, 179, 0.78) 25% 37%, transparent 38%),
+    linear-gradient(145deg, #ffd38c, #ff9678 54%, #83ddff) !important;
+  border: 3px solid rgba(255, 255, 255, 0.72) !important;
+  box-shadow: 0 20px 28px rgba(38, 89, 107, 0.2) !important;
+  opacity: 0.96 !important;
+  transform: rotate(12deg) !important;
+}
+
+#memepop-root .memepop-chill-boat {
+  position: absolute !important;
+  right: 24% !important;
+  top: 43% !important;
+  z-index: 2 !important;
+  width: 82px !important;
+  height: 48px !important;
+  opacity: 0.72 !important;
+  animation: memepop-chill-boat 5200ms ease-in-out infinite alternate !important;
+}
+
+#memepop-root .memepop-chill-boat::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 24px !important;
+  top: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  border-left: 22px solid transparent !important;
+  border-right: 10px solid transparent !important;
+  border-bottom: 36px solid rgba(255, 255, 255, 0.84) !important;
+}
+
+#memepop-root .memepop-chill-boat::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  width: 72px !important;
+  height: 18px !important;
+  border-radius: 0 0 999px 999px !important;
+  background: #ffb35c !important;
+}
+
+#memepop-root .memepop-chill-flowers {
+  position: absolute !important;
+  left: max(24px, 4vw) !important;
+  bottom: max(42px, 5vh) !important;
+  z-index: 2 !important;
+  width: clamp(120px, 13vw, 210px) !important;
+  height: clamp(100px, 11vw, 180px) !important;
+  opacity: 0.98 !important;
+  background:
+    radial-gradient(circle at 18% 58%, #ff8fac 0 16px, transparent 17px),
+    radial-gradient(circle at 32% 42%, #ffb3c7 0 15px, transparent 16px),
+    radial-gradient(circle at 41% 62%, #ff8fac 0 18px, transparent 19px),
+    radial-gradient(circle at 30% 58%, #ffd466 0 12px, transparent 13px),
+    radial-gradient(ellipse at 62% 72%, #5fcf87 0 18px, transparent 19px),
+    radial-gradient(ellipse at 72% 60%, #3eb66e 0 16px, transparent 17px) !important;
+  filter: drop-shadow(0 14px 16px rgba(96, 73, 39, 0.18)) !important;
+}
+
+#memepop-root .memepop-chill-quest {
+  position: absolute !important;
+  left: 50% !important;
+  bottom: max(28px, 4vh) !important;
+  z-index: 2 !important;
+  min-width: min(520px, calc(100vw - 64px)) !important;
+  padding: 14px 26px !important;
+  border-radius: 999px !important;
+  color: #ffffff !important;
+  background: linear-gradient(145deg, rgba(27, 189, 221, 0.96), rgba(35, 141, 225, 0.96)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.44),
+    0 16px 28px rgba(13, 99, 139, 0.28) !important;
+  font: 1000 clamp(15px, 2vw, 24px)/1 Inter, ui-sans-serif, system-ui, sans-serif !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+  text-shadow: 0 2px 0 rgba(17, 89, 138, 0.24) !important;
+  opacity: 0;
+  transform: translateX(-50%) translateY(18px) scale(0.96);
+}
+
+#memepop-root .memepop-chill-quest::before {
+  content: "★" !important;
+  margin-right: 12px !important;
+  color: #fff8a6 !important;
+}
+
+#memepop-root.memepop-accessory-sunglasses.memepop-shell-visible .memepop-chill-quest,
+#memepop-root.memepop-accessory-sunglasses:not(.memepop-entrance-sequenced) .memepop-chill-quest {
+  animation: memepop-chill-quest-in 540ms ease-out 260ms both !important;
+}
+
 #memepop-root .memepop-party-stage {
   position: absolute !important;
   inset: 0 !important;
@@ -1030,6 +1334,12 @@
   transition-delay: 0s !important;
 }
 
+#memepop-root.memepop-accessory-sunglasses.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-accessory {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transition-delay: 0s !important;
+}
+
 #memepop-root.memepop-entrance-sequenced.memepop-sequence-complete .memepop-controls,
 #memepop-root.memepop-entrance-sequenced.memepop-sequence-complete .memepop-control,
 #memepop-root.memepop-entrance-sequenced.memepop-sequence-complete .memepop-character {
@@ -1274,43 +1584,52 @@
 
 #memepop-root .memepop-accessory {
   position: absolute !important;
-  z-index: 3 !important;
+  z-index: 4 !important;
   pointer-events: none !important;
 }
 
 #memepop-root.memepop-accessory-sunglasses .memepop-accessory {
-  top: 152px !important;
-  left: 116px !important;
-  width: 126px !important;
-  height: 45px !important;
+  top: 46% !important;
+  left: 35% !important;
+  width: 42% !important;
+  height: 15% !important;
+  background: linear-gradient(90deg, transparent 0 42%, #3a2b2a 43% 57%, transparent 58%) center 42% / 100% 16% no-repeat !important;
+  transform: rotate(-2deg) !important;
 }
 
 #memepop-root.memepop-accessory-sunglasses .memepop-accessory::before,
 #memepop-root.memepop-accessory-sunglasses .memepop-accessory::after {
   content: "" !important;
   position: absolute !important;
-  top: 0 !important;
-  width: 50px !important;
-  height: 39px !important;
-  border: 6px solid #3a2b2a !important;
-  border-radius: 8px 8px 12px 12px !important;
-  background: #1d273b !important;
+  top: 4% !important;
+  width: 39% !important;
+  height: 88% !important;
+  border: clamp(3px, 0.7vw, 6px) solid #3a2b2a !important;
+  border-radius: 54% 54% 48% 48% / 58% 58% 46% 46% !important;
+  background:
+    radial-gradient(circle at 32% 30%, rgba(255, 255, 255, 0.72) 0 5px, transparent 6px),
+    linear-gradient(145deg, #ff8cab, #ff5b91 46%, #4cc9f0 100%) !important;
+  box-shadow:
+    inset -5px -6px 0 rgba(71, 41, 84, 0.13),
+    0 4px 8px rgba(58, 43, 42, 0.16) !important;
 }
 
 #memepop-root.memepop-accessory-sunglasses .memepop-accessory::before {
   left: 0 !important;
+  transform: rotate(5deg) !important;
 }
 
 #memepop-root.memepop-accessory-sunglasses .memepop-accessory::after {
   right: 0 !important;
+  transform: rotate(-5deg) !important;
 }
 
 #memepop-root.memepop-accessory-crown .memepop-accessory {
-  top: 44px !important;
-  left: 126px !important;
-  width: 104px !important;
-  height: 72px !important;
-  border: 6px solid #3a2b2a !important;
+  top: 14% !important;
+  left: 39% !important;
+  width: 32% !important;
+  height: 22% !important;
+  border: clamp(3px, 0.7vw, 6px) solid #3a2b2a !important;
   border-radius: 8px !important;
   background:
     linear-gradient(135deg, transparent 0 18%, #ffd34d 18% 35%, transparent 35% 48%, #ffd34d 48% 65%, transparent 65% 78%, #ffd34d 78%),
@@ -1617,6 +1936,88 @@
   100% {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes memepop-chill-stage-in {
+  0% {
+    opacity: 0;
+    transform: scale(1.015);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes memepop-chill-title-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-18px) scale(0.92);
+  }
+  72% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(4px) scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+@keyframes memepop-chill-quest-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(18px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+@keyframes memepop-chill-waves {
+  0% {
+    transform: translate3d(-22px, 0, 0) scale(1.01);
+  }
+  100% {
+    transform: translate3d(24px, -4px, 0) scale(1.03);
+  }
+}
+
+@keyframes memepop-chill-sun-float {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(-3deg) scale(1);
+  }
+  100% {
+    transform: translate3d(8px, -10px, 0) rotate(4deg) scale(1.04);
+  }
+}
+
+@keyframes memepop-chill-palm-sway {
+  0% {
+    transform: rotate(-16deg) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: rotate(-12deg) translate3d(6px, -4px, 0);
+  }
+}
+
+@keyframes memepop-chill-palm-sway-right {
+  0% {
+    transform: scaleX(-1) rotate(-15deg) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: scaleX(-1) rotate(-11deg) translate3d(-6px, -4px, 0);
+  }
+}
+
+@keyframes memepop-chill-boat {
+  0% {
+    transform: translate3d(-10px, 0, 0) rotate(-2deg);
+  }
+  100% {
+    transform: translate3d(16px, -4px, 0) rotate(3deg);
   }
 }
 
@@ -1939,6 +2340,33 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  #memepop-root.memepop-accessory-sunglasses.memepop-shell-visible .memepop-chill-stage,
+  #memepop-root.memepop-accessory-sunglasses:not(.memepop-entrance-sequenced) .memepop-chill-stage {
+    display: block !important;
+    opacity: 1 !important;
+    animation: none !important;
+  }
+
+  #memepop-root.memepop-accessory-sunglasses .memepop-chill-stage::before,
+  #memepop-root.memepop-accessory-sunglasses .memepop-chill-sun,
+  #memepop-root.memepop-accessory-sunglasses .memepop-chill-palm,
+  #memepop-root.memepop-accessory-sunglasses .memepop-chill-boat {
+    animation: none !important;
+  }
+
+  #memepop-root.memepop-accessory-sunglasses .memepop-chill-title,
+  #memepop-root.memepop-accessory-sunglasses .memepop-chill-quest {
+    opacity: 1 !important;
+  }
+
+  #memepop-root.memepop-accessory-sunglasses .memepop-chill-title {
+    transform: translateX(-50%) translateY(0) scale(1) !important;
+  }
+
+  #memepop-root.memepop-accessory-sunglasses .memepop-chill-quest {
+    transform: translateX(-50%) translateY(0) scale(1) !important;
+  }
+
   #memepop-root.memepop-accessory-partyHat.memepop-shell-visible .memepop-party-stage,
   #memepop-root.memepop-accessory-partyHat:not(.memepop-entrance-sequenced) .memepop-party-stage {
     display: block !important;

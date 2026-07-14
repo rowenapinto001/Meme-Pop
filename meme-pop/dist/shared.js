@@ -82,7 +82,7 @@ var MemePop;
     MemePop.ACCESSORIES = [
         { id: "none", name: "No accessory", price: 0, description: "Classic MemePop energy." },
         { id: "partyHat", name: "Party mode", price: 0, description: "Confetti, poppers, and balloons." },
-        { id: "sunglasses", name: "Sunglasses", price: 40, description: "Maximum cool, minimum effort." },
+        { id: "sunglasses", name: "Chill mode", price: 40, description: "Beach background, sunshine, and relaxed vibes." },
         { id: "crown", name: "Tiny crown", price: 60, description: "A royal amount of silliness." }
     ];
     MemePop.DEFAULT_STATE = {

@@ -18,7 +18,7 @@
 
 html {
   min-height: 100%;
-  background: #fffaf4;
+  background: #fff7f1;
   overflow-x: hidden;
 }
 
@@ -27,16 +27,39 @@ html {
 }
 
 body {
+  position: relative;
   width: 100%;
   max-width: none;
   min-height: 100vh;
   margin: 0;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at 10% 4%, rgba(255, 190, 205, 0.35), transparent 22%),
-    radial-gradient(circle at 93% 4%, rgba(177, 143, 255, 0.32), transparent 26%),
-    radial-gradient(circle at 72% 18%, rgba(255, 220, 102, 0.28), transparent 28%),
-    linear-gradient(180deg, #fffaf4 0%, #fff8ef 42%, #ffffff 100%);
+    radial-gradient(circle at 10% 2%, rgba(255, 188, 196, 0.34), transparent 20%),
+    radial-gradient(circle at 92% 3%, rgba(255, 211, 184, 0.36), transparent 24%),
+    radial-gradient(circle at 50% 100%, rgba(255, 206, 184, 0.34), transparent 32%),
+    linear-gradient(180deg, #fff8f3 0%, #fff7ef 48%, #fffdf9 100%);
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+body::before {
+  opacity: 0.98;
+  background: url("assets/decor/floral-frame.svg") center top / 100% 100vh no-repeat fixed;
+}
+
+body::after {
+  opacity: 0.58;
+  background:
+    linear-gradient(90deg, rgba(255, 231, 221, 0.9), transparent 16%, transparent 84%, rgba(255, 231, 221, 0.9)),
+    radial-gradient(circle at 50% 0%, rgba(255, 207, 191, 0.24), transparent 34%),
+    radial-gradient(circle at 50% 100%, rgba(255, 207, 191, 0.28), transparent 38%);
 }
 
 button,
@@ -52,14 +75,65 @@ button {
 }
 
 .popup-shell {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: 20px;
   align-content: start;
   width: 100%;
   max-width: 100%;
   min-height: 100vh;
-  padding: clamp(18px, 4vw, 30px);
+  padding: clamp(24px, 5vw, 44px);
   overflow-x: hidden;
+}
+
+.popup-shell::before,
+.popup-shell::after {
+  content: none;
+  position: fixed;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.popup-shell > * {
+  position: relative;
+  z-index: 1;
+}
+
+.popup-shell::before {
+  left: -54px;
+  top: -24px;
+  width: 210px;
+  height: 310px;
+  border-radius: 999px;
+  background:
+    radial-gradient(ellipse at 46% 18%, rgba(113, 151, 96, 0.3) 0 16px, transparent 17px),
+    radial-gradient(ellipse at 60% 25%, rgba(129, 166, 105, 0.24) 0 20px, transparent 21px),
+    radial-gradient(ellipse at 34% 35%, rgba(113, 151, 96, 0.2) 0 18px, transparent 19px),
+    radial-gradient(circle at 54% 62%, #ffe5db 0 15px, transparent 16px),
+    radial-gradient(circle at 42% 70%, #ffc9bc 0 23px, transparent 24px),
+    radial-gradient(circle at 66% 72%, #fff1e9 0 15px, transparent 16px),
+    radial-gradient(circle at 53% 78%, #ffb09f 0 20px, transparent 21px),
+    radial-gradient(circle at 53% 70%, #ff957f 0 9px, transparent 10px);
+  filter: blur(0.1px);
+}
+
+.popup-shell::after {
+  right: -42px;
+  bottom: -30px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 28% 60%, rgba(113, 151, 96, 0.26) 0 24px, transparent 25px),
+    radial-gradient(ellipse at 48% 44%, rgba(129, 166, 105, 0.2) 0 22px, transparent 23px),
+    radial-gradient(circle at 54% 56%, #ffe5dc 0 18px, transparent 19px),
+    radial-gradient(circle at 42% 66%, #ffc7b9 0 28px, transparent 29px),
+    radial-gradient(circle at 68% 70%, #fff0e8 0 18px, transparent 19px),
+    radial-gradient(circle at 54% 78%, #ffac9b 0 24px, transparent 25px),
+    radial-gradient(circle at 54% 68%, #ff907b 0 11px, transparent 12px);
+  filter: blur(0.1px);
 }
 
 .hero {
@@ -1581,22 +1655,36 @@ textarea:focus {
   transform: rotate(-8deg);
 }
 
+.accessory-sunglasses .accessory-preview {
+  background:
+    linear-gradient(180deg, #3bc9ff 0 48%, #21b8da 49% 62%, #ffe29a 63% 100%);
+}
+
 .accessory-sunglasses .accessory-preview::before {
-  left: 10px;
-  top: 22px;
-  width: 17px;
-  height: 14px;
-  border-radius: 6px 6px 9px 9px;
-  background: #111827;
-  box-shadow: 21px 0 0 #111827;
+  left: 8px;
+  top: 8px;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 36% 34%, rgba(255, 255, 255, 0.82) 0 3px, transparent 4px),
+    #ffd85a;
+  box-shadow:
+    0 0 0 7px rgba(255, 216, 90, 0.26),
+    28px 30px 0 -4px #ff8fac,
+    34px 24px 0 -6px #fff3d1;
 }
 
 .accessory-sunglasses .accessory-preview::after {
-  left: 26px;
-  top: 27px;
-  width: 10px;
-  height: 4px;
-  background: #111827;
+  left: 7px;
+  right: 7px;
+  bottom: 12px;
+  height: 14px;
+  border-radius: 999px;
+  background:
+    radial-gradient(ellipse at 18% 50%, rgba(255, 255, 255, 0.9) 0 7px, transparent 8px),
+    radial-gradient(ellipse at 48% 52%, rgba(255, 255, 255, 0.86) 0 8px, transparent 9px),
+    radial-gradient(ellipse at 78% 50%, rgba(255, 255, 255, 0.82) 0 7px, transparent 8px);
 }
 
 .accessory-crown .accessory-preview::before {

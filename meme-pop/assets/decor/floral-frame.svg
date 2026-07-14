@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 1600" preserveAspectRatio="none" aria-hidden="true">
+  <defs>
+    <radialGradient id="petal" cx="44%" cy="35%" r="70%">
+      <stop offset="0" stop-color="#fff5ee"/>
+      <stop offset="0.42" stop-color="#ffd5c8"/>
+      <stop offset="1" stop-color="#f29b8b"/>
+    </radialGradient>
+    <radialGradient id="petalLight" cx="38%" cy="26%" r="74%">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.46" stop-color="#ffe8df"/>
+      <stop offset="1" stop-color="#ffc0b2"/>
+    </radialGradient>
+    <radialGradient id="center" cx="48%" cy="42%" r="62%">
+      <stop offset="0" stop-color="#fff7a8"/>
+      <stop offset="1" stop-color="#f5a64a"/>
+    </radialGradient>
+    <linearGradient id="leaf" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#d9b28f"/>
+      <stop offset="1" stop-color="#b7775d"/>
+    </linearGradient>
+    <linearGradient id="stem" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#e7bda3" stop-opacity="0.72"/>
+      <stop offset="1" stop-color="#b87960" stop-opacity="0.48"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#a76756" flood-opacity="0.16"/>
+    </filter>
+    <g id="leafPair">
+      <ellipse cx="0" cy="0" rx="13" ry="34" fill="url(#leaf)" opacity="0.42" transform="rotate(-36)"/>
+      <ellipse cx="30" cy="9" rx="11" ry="30" fill="url(#leaf)" opacity="0.34" transform="rotate(42 30 9)"/>
+    </g>
+    <g id="smallBlossom">
+      <ellipse cx="0" cy="-16" rx="13" ry="21" fill="url(#petalLight)" transform="rotate(0)"/>
+      <ellipse cx="15" cy="-4" rx="12" ry="20" fill="url(#petalLight)" transform="rotate(72 15 -4)"/>
+      <ellipse cx="10" cy="14" rx="12" ry="20" fill="url(#petalLight)" transform="rotate(144 10 14)"/>
+      <ellipse cx="-10" cy="14" rx="12" ry="20" fill="url(#petalLight)" transform="rotate(216 -10 14)"/>
+      <ellipse cx="-15" cy="-4" rx="12" ry="20" fill="url(#petalLight)" transform="rotate(288 -15 -4)"/>
+      <circle cx="0" cy="0" r="8" fill="url(#center)"/>
+    </g>
+    <g id="largeFlower" filter="url(#soft)">
+      <g opacity="0.96">
+        <ellipse cx="0" cy="-48" rx="32" ry="62" fill="url(#petal)" transform="rotate(0)"/>
+        <ellipse cx="36" cy="-34" rx="31" ry="58" fill="url(#petal)" transform="rotate(42 36 -34)"/>
+        <ellipse cx="53" cy="4" rx="31" ry="58" fill="url(#petal)" transform="rotate(84 53 4)"/>
+        <ellipse cx="32" cy="40" rx="31" ry="58" fill="url(#petal)" transform="rotate(132 32 40)"/>
+        <ellipse cx="-10" cy="52" rx="31" ry="58" fill="url(#petal)" transform="rotate(180 -10 52)"/>
+        <ellipse cx="-46" cy="28" rx="31" ry="58" fill="url(#petal)" transform="rotate(228 -46 28)"/>
+        <ellipse cx="-52" cy="-14" rx="31" ry="58" fill="url(#petal)" transform="rotate(276 -52 -14)"/>
+        <ellipse cx="-28" cy="-44" rx="31" ry="58" fill="url(#petal)" transform="rotate(318 -28 -44)"/>
+      </g>
+      <g opacity="0.9">
+        <ellipse cx="0" cy="-28" rx="22" ry="44" fill="url(#petalLight)" transform="rotate(12)"/>
+        <ellipse cx="29" cy="-10" rx="21" ry="42" fill="url(#petalLight)" transform="rotate(70 29 -10)"/>
+        <ellipse cx="18" cy="25" rx="21" ry="42" fill="url(#petalLight)" transform="rotate(146 18 25)"/>
+        <ellipse cx="-20" cy="22" rx="21" ry="42" fill="url(#petalLight)" transform="rotate(218 -20 22)"/>
+        <ellipse cx="-27" cy="-12" rx="21" ry="42" fill="url(#petalLight)" transform="rotate(292 -27 -12)"/>
+      </g>
+      <circle cx="0" cy="0" r="22" fill="url(#center)"/>
+      <circle cx="-7" cy="-5" r="4" fill="#fff7c4" opacity="0.92"/>
+      <circle cx="7" cy="6" r="3.5" fill="#d98235" opacity="0.48"/>
+    </g>
+    <g id="branch">
+      <path d="M0 0 C52 42 98 86 140 150" fill="none" stroke="url(#stem)" stroke-width="5" stroke-linecap="round"/>
+      <use href="#leafPair" transform="translate(38 38) rotate(-15) scale(0.86)"/>
+      <use href="#leafPair" transform="translate(80 82) rotate(14) scale(0.72)"/>
+      <use href="#leafPair" transform="translate(116 126) rotate(-18) scale(0.66)"/>
+    </g>
+  </defs>
+  <rect width="760" height="1600" fill="none"/>
+  <g opacity="0.95">
+    <use href="#branch" transform="translate(-18 18) rotate(-7) scale(1.12)"/>
+    <use href="#branch" transform="translate(778 16) scale(-1.1 1.1) rotate(-7)"/>
+    <use href="#branch" transform="translate(-18 1160) rotate(-42) scale(1.24)"/>
+    <use href="#branch" transform="translate(790 1170) scale(-1.25 1.25) rotate(-42)"/>
+  </g>
+  <g opacity="0.98">
+    <use href="#largeFlower" transform="translate(48 102) rotate(-18) scale(1.05)"/>
+    <use href="#smallBlossom" transform="translate(126 52) rotate(18) scale(0.8)"/>
+    <use href="#smallBlossom" transform="translate(22 194) rotate(-28) scale(0.64)"/>
+    <use href="#smallBlossom" transform="translate(178 132) rotate(24) scale(0.58)"/>
+  </g>
+  <g opacity="0.96">
+    <use href="#largeFlower" transform="translate(708 86) rotate(22) scale(0.92)"/>
+    <use href="#smallBlossom" transform="translate(632 42) rotate(-14) scale(0.68)"/>
+    <use href="#smallBlossom" transform="translate(742 188) rotate(20) scale(0.62)"/>
+    <use href="#smallBlossom" transform="translate(584 124) rotate(-24) scale(0.56)"/>
+  </g>
+  <g opacity="0.9">
+    <use href="#smallBlossom" transform="translate(20 510) rotate(22) scale(0.52)"/>
+    <use href="#smallBlossom" transform="translate(736 438) rotate(-18) scale(0.5)"/>
+    <use href="#smallBlossom" transform="translate(28 790) rotate(-8) scale(0.48)"/>
+    <use href="#smallBlossom" transform="translate(728 760) rotate(18) scale(0.52)"/>
+    <use href="#smallBlossom" transform="translate(18 1048) rotate(14) scale(0.5)"/>
+    <use href="#smallBlossom" transform="translate(744 1054) rotate(-16) scale(0.48)"/>
+  </g>
+  <g opacity="0.98">
+    <use href="#largeFlower" transform="translate(80 1470) rotate(-12) scale(1.32)"/>
+    <use href="#largeFlower" transform="translate(244 1516) rotate(18) scale(1.06)"/>
+    <use href="#smallBlossom" transform="translate(26 1342) rotate(18) scale(0.7)"/>
+    <use href="#smallBlossom" transform="translate(172 1382) rotate(-24) scale(0.72)"/>
+    <use href="#smallBlossom" transform="translate(308 1432) rotate(16) scale(0.58)"/>
+  </g>
+  <g opacity="0.98">
+    <use href="#largeFlower" transform="translate(682 1468) rotate(18) scale(1.22)"/>
+    <use href="#largeFlower" transform="translate(512 1530) rotate(-18) scale(0.92)"/>
+    <use href="#smallBlossom" transform="translate(732 1328) rotate(-12) scale(0.66)"/>
+    <use href="#smallBlossom" transform="translate(606 1394) rotate(24) scale(0.7)"/>
+    <use href="#smallBlossom" transform="translate(452 1450) rotate(-18) scale(0.55)"/>
+  </g>
+</svg>
