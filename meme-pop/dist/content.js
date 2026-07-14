@@ -456,6 +456,38 @@ function createHydrationSplash() {
     splash.append(puddle);
     return splash;
 }
+function createPartyStage() {
+    const stage = document.createElement("div");
+    stage.className = "memepop-party-stage";
+    stage.setAttribute("aria-hidden", "true");
+    const discoWrap = document.createElement("div");
+    discoWrap.className = "memepop-disco-ball-wrap";
+    const discoBallUrl = getExtensionUrl("assets/party/disco-ball.svg");
+    if (discoBallUrl) {
+        const discoBall = document.createElement("img");
+        discoBall.className = "memepop-disco-ball";
+        discoBall.src = discoBallUrl;
+        discoBall.alt = "";
+        discoBall.decoding = "async";
+        discoBall.addEventListener("error", () => {
+            discoWrap.classList.add("memepop-disco-fallback");
+            discoBall.remove();
+        });
+        discoWrap.append(discoBall);
+    }
+    else {
+        discoWrap.classList.add("memepop-disco-fallback");
+    }
+    const confettiLayer = document.createElement("div");
+    confettiLayer.className = "memepop-party-sky-confetti";
+    for (let index = 1; index <= 42; index += 1) {
+        const confetti = document.createElement("span");
+        confetti.className = `memepop-party-sky-confetti-piece memepop-party-sky-confetti-${index}`;
+        confettiLayer.append(confetti);
+    }
+    stage.append(discoWrap, confettiLayer);
+    return stage;
+}
 function createPartyEffects() {
     const effects = document.createElement("div");
     effects.className = "memepop-party-effects";
@@ -539,6 +571,7 @@ function createMemePop(message) {
     root.id = "memepop-root";
     root.setAttribute("aria-live", "polite");
     root.className = "memepop-accessory-none";
+    const partyStage = createPartyStage();
     const splash = createHydrationSplash();
     const partyEffects = createPartyEffects();
     const card = document.createElement("div");
@@ -590,7 +623,7 @@ function createMemePop(message) {
     countdown.textContent = formatCountdown(getVisibleDurationMs());
     countdown.setAttribute("aria-label", `MemePop closes in ${formatCountdown(getVisibleDurationMs())}`);
     card.append(shell, cardConfetti, controls, countdown, characterButton, accessory, bubble, reward);
-    root.append(splash, partyEffects, card);
+    root.append(partyStage, splash, partyEffects, card);
     rootElement = root;
     cardElement = card;
     messageElement = messageText;

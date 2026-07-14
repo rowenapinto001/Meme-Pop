@@ -22,6 +22,7 @@
   content: "" !important;
   position: absolute !important;
   inset: 0 !important;
+  z-index: 0 !important;
   background:
     radial-gradient(circle at 50% 52%, rgba(255, 213, 112, 0.18), transparent 36%),
     radial-gradient(circle at 50% 52%, rgba(58, 43, 42, 0.08), transparent 48%) !important;
@@ -49,10 +50,220 @@
     radial-gradient(circle at 50% 52%, rgba(58, 43, 42, 0.08), transparent 48%) !important;
 }
 
+#memepop-root .memepop-party-stage {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  display: none !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 50% 22%, rgba(255, 255, 255, 0.46), transparent 16%),
+    radial-gradient(circle at 52% 34%, rgba(255, 255, 255, 0.22), transparent 28%),
+    linear-gradient(120deg, #ff7eb3 0%, #8b5cf6 52%, #4f8cff 100%) !important;
+  background-size: 180% 180% !important;
+}
+
+#memepop-root .memepop-party-stage::before,
+#memepop-root .memepop-party-stage::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: -18% !important;
+  pointer-events: none !important;
+}
+
+#memepop-root .memepop-party-stage::before {
+  background:
+    repeating-conic-gradient(from 0deg at 50% 22%, rgba(255, 255, 255, 0.2) 0deg 5deg, transparent 5deg 18deg),
+    radial-gradient(circle at 50% 22%, rgba(255, 245, 189, 0.46), transparent 5%),
+    radial-gradient(circle at 18% 72%, rgba(255, 126, 179, 0.28), transparent 20%),
+    radial-gradient(circle at 84% 76%, rgba(79, 140, 255, 0.28), transparent 20%) !important;
+  opacity: 0.62 !important;
+  animation: memepop-party-rays 7200ms linear infinite !important;
+}
+
+#memepop-root .memepop-party-stage::after {
+  background:
+    radial-gradient(circle at 12% 26%, rgba(255, 255, 255, 0.92) 0 2px, transparent 3px),
+    radial-gradient(circle at 22% 72%, rgba(255, 244, 161, 0.95) 0 3px, transparent 4px),
+    radial-gradient(circle at 38% 18%, rgba(255, 255, 255, 0.82) 0 2px, transparent 3px),
+    radial-gradient(circle at 63% 78%, rgba(255, 244, 161, 0.95) 0 3px, transparent 4px),
+    radial-gradient(circle at 78% 24%, rgba(255, 255, 255, 0.86) 0 2px, transparent 3px),
+    radial-gradient(circle at 92% 58%, rgba(255, 244, 161, 0.95) 0 3px, transparent 4px) !important;
+  opacity: 0.9 !important;
+  animation: memepop-party-sparkle-drift 5200ms ease-in-out infinite alternate !important;
+}
+
+#memepop-root.memepop-accessory-partyHat.memepop-shell-visible .memepop-party-stage,
+#memepop-root.memepop-accessory-partyHat:not(.memepop-entrance-sequenced) .memepop-party-stage {
+  display: block !important;
+  animation:
+    memepop-party-gradient-in 420ms ease-out both,
+    memepop-party-gradient-shift 7600ms ease-in-out 420ms infinite alternate !important;
+}
+
+#memepop-root.memepop-accessory-partyHat.memepop-leaving .memepop-party-stage {
+  opacity: 0 !important;
+  transition: opacity 220ms ease !important;
+}
+
+#memepop-root .memepop-disco-ball-wrap {
+  position: absolute !important;
+  top: max(26px, 4vh) !important;
+  left: 50% !important;
+  width: clamp(118px, 15vw, 190px) !important;
+  height: clamp(118px, 15vw, 190px) !important;
+  transform: translateX(-50%) rotate(-4deg);
+  transform-origin: 50% -32px !important;
+  opacity: 0;
+  filter:
+    drop-shadow(0 18px 24px rgba(79, 29, 150, 0.28))
+    drop-shadow(0 0 34px rgba(255, 255, 255, 0.44)) !important;
+  pointer-events: none !important;
+}
+
+#memepop-root .memepop-disco-ball-wrap::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: -34px !important;
+  width: 3px !important;
+  height: 42px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  transform: translateX(-50%) !important;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.72) !important;
+}
+
+#memepop-root .memepop-disco-ball {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+}
+
+#memepop-root .memepop-disco-fallback::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: 50% !important;
+  background:
+    radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.96) 0 9%, transparent 10%),
+    repeating-linear-gradient(0deg, transparent 0 17%, rgba(255, 255, 255, 0.54) 18% 20%),
+    repeating-linear-gradient(90deg, transparent 0 17%, rgba(255, 255, 255, 0.48) 18% 20%),
+    radial-gradient(circle at 50% 50%, #f9e8ff 0 12%, #ec9cff 13% 32%, #8b5cf6 33% 56%, #4f8cff 57% 100%) !important;
+  border: 2px solid rgba(255, 255, 255, 0.78) !important;
+  box-shadow:
+    inset -14px -16px 24px rgba(64, 38, 139, 0.24),
+    inset 12px 12px 18px rgba(255, 255, 255, 0.34) !important;
+}
+
+#memepop-root.memepop-accessory-partyHat.memepop-shell-visible .memepop-disco-ball-wrap,
+#memepop-root.memepop-accessory-partyHat:not(.memepop-entrance-sequenced) .memepop-disco-ball-wrap {
+  animation:
+    memepop-disco-fade-in 520ms ease-out 120ms both,
+    memepop-disco-swing 2600ms ease-in-out 650ms infinite alternate !important;
+}
+
+#memepop-root .memepop-party-sky-confetti {
+  position: absolute !important;
+  inset: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+#memepop-root .memepop-party-sky-confetti-piece {
+  --sky-x: 50%;
+  --sky-y: 18%;
+  --sky-drift-x: 0px;
+  --sky-drift-y: 380px;
+  --sky-delay: 0ms;
+  --sky-rotate: 480deg;
+  position: absolute !important;
+  left: var(--sky-x) !important;
+  top: var(--sky-y) !important;
+  width: 18px !important;
+  height: 28px !important;
+  border-radius: 4px !important;
+  background: #ffdb4f !important;
+  opacity: 0;
+  transform: translate3d(0, -18px, 0) scale(0.72) rotate(0deg);
+  filter:
+    drop-shadow(0 8px 8px rgba(42, 22, 96, 0.18))
+    drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)) !important;
+}
+
+#memepop-root .memepop-party-sky-confetti-piece:nth-child(3n) {
+  width: 16px !important;
+  height: 16px !important;
+  border-radius: 50% !important;
+  background: #52e0ff !important;
+}
+
+#memepop-root .memepop-party-sky-confetti-piece:nth-child(3n + 1) {
+  background: #ff5fa2 !important;
+}
+
+#memepop-root .memepop-party-sky-confetti-piece:nth-child(4n) {
+  width: 30px !important;
+  height: 12px !important;
+  border-radius: 999px !important;
+  background: #fff06a !important;
+}
+
+#memepop-root.memepop-accessory-partyHat.memepop-shell-visible .memepop-party-sky-confetti-piece,
+#memepop-root.memepop-accessory-partyHat:not(.memepop-entrance-sequenced) .memepop-party-sky-confetti-piece {
+  animation: memepop-party-sky-confetti-open 3600ms cubic-bezier(0.12, 0.84, 0.22, 1) var(--sky-delay) both !important;
+}
+
+#memepop-root .memepop-party-sky-confetti-1 { --sky-x: 11%; --sky-y: 18%; --sky-drift-x: -34px; --sky-drift-y: 420px; --sky-delay: 120ms; --sky-rotate: 620deg; }
+#memepop-root .memepop-party-sky-confetti-2 { --sky-x: 19%; --sky-y: 23%; --sky-drift-x: 44px; --sky-drift-y: 500px; --sky-delay: 180ms; --sky-rotate: -560deg; }
+#memepop-root .memepop-party-sky-confetti-3 { --sky-x: 28%; --sky-y: 14%; --sky-drift-x: -22px; --sky-drift-y: 450px; --sky-delay: 60ms; --sky-rotate: 700deg; }
+#memepop-root .memepop-party-sky-confetti-4 { --sky-x: 36%; --sky-y: 20%; --sky-drift-x: 58px; --sky-drift-y: 520px; --sky-delay: 260ms; --sky-rotate: -660deg; }
+#memepop-root .memepop-party-sky-confetti-5 { --sky-x: 46%; --sky-y: 12%; --sky-drift-x: -48px; --sky-drift-y: 460px; --sky-delay: 90ms; --sky-rotate: 520deg; }
+#memepop-root .memepop-party-sky-confetti-6 { --sky-x: 55%; --sky-y: 17%; --sky-drift-x: 34px; --sky-drift-y: 560px; --sky-delay: 210ms; --sky-rotate: -720deg; }
+#memepop-root .memepop-party-sky-confetti-7 { --sky-x: 64%; --sky-y: 13%; --sky-drift-x: -42px; --sky-drift-y: 500px; --sky-delay: 150ms; --sky-rotate: 630deg; }
+#memepop-root .memepop-party-sky-confetti-8 { --sky-x: 73%; --sky-y: 22%; --sky-drift-x: 48px; --sky-drift-y: 470px; --sky-delay: 300ms; --sky-rotate: -540deg; }
+#memepop-root .memepop-party-sky-confetti-9 { --sky-x: 84%; --sky-y: 18%; --sky-drift-x: -28px; --sky-drift-y: 530px; --sky-delay: 110ms; --sky-rotate: 760deg; }
+#memepop-root .memepop-party-sky-confetti-10 { --sky-x: 91%; --sky-y: 30%; --sky-drift-x: 36px; --sky-drift-y: 440px; --sky-delay: 240ms; --sky-rotate: -620deg; }
+#memepop-root .memepop-party-sky-confetti-11 { --sky-x: 6%; --sky-y: 42%; --sky-drift-x: 52px; --sky-drift-y: 390px; --sky-delay: 420ms; --sky-rotate: 580deg; }
+#memepop-root .memepop-party-sky-confetti-12 { --sky-x: 16%; --sky-y: 38%; --sky-drift-x: -38px; --sky-drift-y: 430px; --sky-delay: 480ms; --sky-rotate: -520deg; }
+#memepop-root .memepop-party-sky-confetti-13 { --sky-x: 27%; --sky-y: 34%; --sky-drift-x: 40px; --sky-drift-y: 455px; --sky-delay: 350ms; --sky-rotate: 680deg; }
+#memepop-root .memepop-party-sky-confetti-14 { --sky-x: 39%; --sky-y: 36%; --sky-drift-x: -32px; --sky-drift-y: 485px; --sky-delay: 530ms; --sky-rotate: -690deg; }
+#memepop-root .memepop-party-sky-confetti-15 { --sky-x: 61%; --sky-y: 33%; --sky-drift-x: 44px; --sky-drift-y: 510px; --sky-delay: 390ms; --sky-rotate: 620deg; }
+#memepop-root .memepop-party-sky-confetti-16 { --sky-x: 71%; --sky-y: 39%; --sky-drift-x: -52px; --sky-drift-y: 420px; --sky-delay: 510ms; --sky-rotate: -580deg; }
+#memepop-root .memepop-party-sky-confetti-17 { --sky-x: 82%; --sky-y: 37%; --sky-drift-x: 32px; --sky-drift-y: 475px; --sky-delay: 450ms; --sky-rotate: 740deg; }
+#memepop-root .memepop-party-sky-confetti-18 { --sky-x: 94%; --sky-y: 46%; --sky-drift-x: -44px; --sky-drift-y: 380px; --sky-delay: 560ms; --sky-rotate: -640deg; }
+#memepop-root .memepop-party-sky-confetti-19 { --sky-x: 10%; --sky-y: 58%; --sky-drift-x: -34px; --sky-drift-y: 320px; --sky-delay: 650ms; --sky-rotate: 540deg; }
+#memepop-root .memepop-party-sky-confetti-20 { --sky-x: 20%; --sky-y: 62%; --sky-drift-x: 42px; --sky-drift-y: 300px; --sky-delay: 710ms; --sky-rotate: -600deg; }
+#memepop-root .memepop-party-sky-confetti-21 { --sky-x: 31%; --sky-y: 54%; --sky-drift-x: -48px; --sky-drift-y: 360px; --sky-delay: 600ms; --sky-rotate: 650deg; }
+#memepop-root .memepop-party-sky-confetti-22 { --sky-x: 44%; --sky-y: 60%; --sky-drift-x: 36px; --sky-drift-y: 335px; --sky-delay: 790ms; --sky-rotate: -700deg; }
+#memepop-root .memepop-party-sky-confetti-23 { --sky-x: 57%; --sky-y: 55%; --sky-drift-x: -34px; --sky-drift-y: 350px; --sky-delay: 620ms; --sky-rotate: 560deg; }
+#memepop-root .memepop-party-sky-confetti-24 { --sky-x: 69%; --sky-y: 61%; --sky-drift-x: 46px; --sky-drift-y: 310px; --sky-delay: 760ms; --sky-rotate: -520deg; }
+#memepop-root .memepop-party-sky-confetti-25 { --sky-x: 80%; --sky-y: 56%; --sky-drift-x: -40px; --sky-drift-y: 340px; --sky-delay: 680ms; --sky-rotate: 720deg; }
+#memepop-root .memepop-party-sky-confetti-26 { --sky-x: 90%; --sky-y: 64%; --sky-drift-x: 30px; --sky-drift-y: 290px; --sky-delay: 830ms; --sky-rotate: -570deg; }
+#memepop-root .memepop-party-sky-confetti-27 { --sky-x: 8%; --sky-y: 8%; --sky-drift-x: 62px; --sky-drift-y: 610px; --sky-delay: 20ms; --sky-rotate: 780deg; }
+#memepop-root .memepop-party-sky-confetti-28 { --sky-x: 24%; --sky-y: 7%; --sky-drift-x: -58px; --sky-drift-y: 590px; --sky-delay: 330ms; --sky-rotate: -760deg; }
+#memepop-root .memepop-party-sky-confetti-29 { --sky-x: 42%; --sky-y: 6%; --sky-drift-x: 48px; --sky-drift-y: 640px; --sky-delay: 170ms; --sky-rotate: 700deg; }
+#memepop-root .memepop-party-sky-confetti-30 { --sky-x: 58%; --sky-y: 8%; --sky-drift-x: -50px; --sky-drift-y: 615px; --sky-delay: 280ms; --sky-rotate: -680deg; }
+#memepop-root .memepop-party-sky-confetti-31 { --sky-x: 76%; --sky-y: 7%; --sky-drift-x: 56px; --sky-drift-y: 590px; --sky-delay: 40ms; --sky-rotate: 740deg; }
+#memepop-root .memepop-party-sky-confetti-32 { --sky-x: 95%; --sky-y: 10%; --sky-drift-x: -62px; --sky-drift-y: 570px; --sky-delay: 360ms; --sky-rotate: -720deg; }
+#memepop-root .memepop-party-sky-confetti-33 { --sky-x: 14%; --sky-y: 76%; --sky-drift-x: 32px; --sky-drift-y: 230px; --sky-delay: 880ms; --sky-rotate: 590deg; }
+#memepop-root .memepop-party-sky-confetti-34 { --sky-x: 29%; --sky-y: 82%; --sky-drift-x: -36px; --sky-drift-y: 190px; --sky-delay: 940ms; --sky-rotate: -640deg; }
+#memepop-root .memepop-party-sky-confetti-35 { --sky-x: 50%; --sky-y: 78%; --sky-drift-x: 40px; --sky-drift-y: 220px; --sky-delay: 900ms; --sky-rotate: 560deg; }
+#memepop-root .memepop-party-sky-confetti-36 { --sky-x: 66%; --sky-y: 80%; --sky-drift-x: -44px; --sky-drift-y: 200px; --sky-delay: 980ms; --sky-rotate: -580deg; }
+#memepop-root .memepop-party-sky-confetti-37 { --sky-x: 86%; --sky-y: 76%; --sky-drift-x: 38px; --sky-drift-y: 210px; --sky-delay: 920ms; --sky-rotate: 650deg; }
+#memepop-root .memepop-party-sky-confetti-38 { --sky-x: 5%; --sky-y: 88%; --sky-drift-x: 48px; --sky-drift-y: 130px; --sky-delay: 1080ms; --sky-rotate: -620deg; }
+#memepop-root .memepop-party-sky-confetti-39 { --sky-x: 21%; --sky-y: 90%; --sky-drift-x: -42px; --sky-drift-y: 120px; --sky-delay: 1120ms; --sky-rotate: 720deg; }
+#memepop-root .memepop-party-sky-confetti-40 { --sky-x: 74%; --sky-y: 89%; --sky-drift-x: 42px; --sky-drift-y: 130px; --sky-delay: 1060ms; --sky-rotate: -700deg; }
+#memepop-root .memepop-party-sky-confetti-41 { --sky-x: 88%; --sky-y: 88%; --sky-drift-x: -48px; --sky-drift-y: 125px; --sky-delay: 1140ms; --sky-rotate: 660deg; }
+#memepop-root .memepop-party-sky-confetti-42 { --sky-x: 97%; --sky-y: 84%; --sky-drift-x: -60px; --sky-drift-y: 150px; --sky-delay: 1020ms; --sky-rotate: -740deg; }
+
 #memepop-root .memepop-party-effects {
   position: absolute !important;
   inset: 0 !important;
-  z-index: 9 !important;
+  z-index: 3 !important;
   display: none !important;
   overflow: hidden !important;
   opacity: 0 !important;
@@ -1409,6 +1620,83 @@
   }
 }
 
+@keyframes memepop-party-gradient-in {
+  0% {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes memepop-party-gradient-shift {
+  0% {
+    background-position: 0% 48%;
+  }
+  100% {
+    background-position: 100% 52%;
+  }
+}
+
+@keyframes memepop-party-rays {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes memepop-party-sparkle-drift {
+  0% {
+    transform: translate3d(-10px, -8px, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(12px, 10px, 0) scale(1.04);
+  }
+}
+
+@keyframes memepop-disco-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-22px) rotate(-7deg) scale(0.86);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) rotate(-4deg) scale(1);
+  }
+}
+
+@keyframes memepop-disco-swing {
+  0% {
+    transform: translateX(-50%) translateY(0) rotate(-5deg) scale(1);
+  }
+  100% {
+    transform: translateX(-50%) translateY(4px) rotate(5deg) scale(1.015);
+  }
+}
+
+@keyframes memepop-party-sky-confetti-open {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -22px, 0) scale(0.58) rotate(0deg);
+  }
+  9% {
+    opacity: 1;
+    transform: translate3d(calc(var(--sky-drift-x) * -0.08), -38px, 0) scale(1.12) rotate(52deg);
+  }
+  62% {
+    opacity: 0.96;
+    transform: translate3d(calc(var(--sky-drift-x) * 0.72), calc(var(--sky-drift-y) * 0.6), 0) scale(1) rotate(calc(var(--sky-rotate) * 0.58));
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--sky-drift-x), var(--sky-drift-y), 0) scale(0.82) rotate(var(--sky-rotate));
+  }
+}
+
 @keyframes memepop-confetti-cloud {
   0% {
     opacity: 0;
@@ -1651,6 +1939,31 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  #memepop-root.memepop-accessory-partyHat.memepop-shell-visible .memepop-party-stage,
+  #memepop-root.memepop-accessory-partyHat:not(.memepop-entrance-sequenced) .memepop-party-stage {
+    display: block !important;
+    opacity: 1 !important;
+    animation: none !important;
+    background-position: 50% 50% !important;
+  }
+
+  #memepop-root.memepop-accessory-partyHat .memepop-party-stage::before,
+  #memepop-root.memepop-accessory-partyHat .memepop-party-stage::after,
+  #memepop-root.memepop-accessory-partyHat .memepop-disco-ball-wrap,
+  #memepop-root.memepop-accessory-partyHat .memepop-party-sky-confetti-piece {
+    animation: none !important;
+  }
+
+  #memepop-root.memepop-accessory-partyHat .memepop-disco-ball-wrap {
+    opacity: 1 !important;
+    transform: translateX(-50%) rotate(0deg) !important;
+  }
+
+  #memepop-root.memepop-accessory-partyHat .memepop-party-sky-confetti-piece {
+    opacity: 0.82 !important;
+    transform: translate3d(0, 0, 0) rotate(12deg) !important;
+  }
+
   #memepop-root.memepop-accessory-partyHat .memepop-confetti,
   #memepop-root.memepop-accessory-partyHat .memepop-balloon,
   #memepop-root.memepop-accessory-partyHat .memepop-party-effects,
