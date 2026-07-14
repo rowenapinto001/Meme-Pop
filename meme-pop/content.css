@@ -77,8 +77,8 @@
   position: absolute !important;
   top: -36px !important;
   left: var(--party-left) !important;
-  width: 16px !important;
-  height: 28px !important;
+  width: 20px !important;
+  height: 32px !important;
   border-radius: 4px !important;
   background: #ffcc4d !important;
   opacity: 0 !important;
@@ -88,8 +88,8 @@
 }
 
 #memepop-root .memepop-confetti:nth-of-type(3n) {
-  width: 10px !important;
-  height: 10px !important;
+  width: 16px !important;
+  height: 16px !important;
   border-radius: 50% !important;
   background: #6c63ff !important;
 }
@@ -99,8 +99,8 @@
 }
 
 #memepop-root .memepop-confetti:nth-of-type(4n) {
-  width: 18px !important;
-  height: 9px !important;
+  width: 26px !important;
+  height: 12px !important;
   border-radius: 999px !important;
   background: #ff7a90 !important;
 }
@@ -139,14 +139,14 @@
   --burst-delay: 0ms;
   top: auto !important;
   bottom: 18% !important;
-  left: 10% !important;
+  left: 9% !important;
   opacity: 0 !important;
   animation: memepop-confetti-pop 2400ms cubic-bezier(0.16, 0.78, 0.2, 1) var(--burst-delay) infinite !important;
 }
 
 #memepop-root .memepop-confetti-right {
   left: auto !important;
-  right: 10% !important;
+  right: 9% !important;
 }
 
 #memepop-root .memepop-confetti-1 { --burst-x: 230px; --burst-y: -430px; --burst-fall: 150px; --burst-delay: 0ms; }
@@ -184,11 +184,12 @@
 
 #memepop-root .memepop-balloon {
   --balloon-left: 12%;
+  --balloon-top: 20%;
   --balloon-delay: 0ms;
   --balloon-drift: 24px;
   position: absolute !important;
   left: var(--balloon-left) !important;
-  bottom: -110px !important;
+  top: var(--balloon-top) !important;
   width: 72px !important;
   height: 92px !important;
   border-radius: 50% 50% 45% 45% !important;
@@ -196,9 +197,9 @@
     radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%),
     linear-gradient(145deg, #ff7a90, #f43f5e) !important;
   box-shadow: inset -7px -10px 0 rgba(58, 43, 42, 0.08) !important;
-  opacity: 0 !important;
+  opacity: 0.96 !important;
   filter: drop-shadow(0 14px 14px rgba(58, 43, 42, 0.18)) !important;
-  animation: memepop-balloon-rise 4200ms ease-in var(--balloon-delay) infinite !important;
+  animation: memepop-balloon-float 3200ms ease-in-out var(--balloon-delay) infinite !important;
 }
 
 #memepop-root .memepop-balloon::before {
@@ -224,13 +225,16 @@
   transform: translateX(-50%) !important;
 }
 
-#memepop-root .memepop-balloon-1 { --balloon-left: 3%; --balloon-delay: 0ms; --balloon-drift: 28px; }
-#memepop-root .memepop-balloon-2 { --balloon-left: 14%; --balloon-delay: 1300ms; --balloon-drift: -32px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #7c5cff, #4f6bed) !important; }
-#memepop-root .memepop-balloon-3 { --balloon-left: 81%; --balloon-delay: 500ms; --balloon-drift: 26px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #34c6a9, #0ea5a3) !important; }
-#memepop-root .memepop-balloon-4 { --balloon-left: 93%; --balloon-delay: 1700ms; --balloon-drift: -28px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #ffcc4d, #f59e0b) !important; }
-#memepop-root .memepop-balloon-5 { --balloon-left: 7%; --balloon-delay: 2400ms; --balloon-drift: 36px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #60a5fa, #2563eb) !important; }
-#memepop-root .memepop-balloon-6 { --balloon-left: 88%; --balloon-delay: 2900ms; --balloon-drift: -42px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #fb7185, #e11d48) !important; }
-#memepop-root .memepop-balloon-7 { --balloon-left: 18%; --balloon-delay: 3400ms; --balloon-drift: 44px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #facc15, #f97316) !important; }
+#memepop-root .memepop-balloon-1 { --balloon-left: 3%; --balloon-top: 13%; --balloon-delay: 0ms; --balloon-drift: 26px; }
+#memepop-root .memepop-balloon-2 { --balloon-left: 13%; --balloon-top: 32%; --balloon-delay: 300ms; --balloon-drift: -24px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #7c5cff, #4f6bed) !important; }
+#memepop-root .memepop-balloon-3 { --balloon-left: 82%; --balloon-top: 13%; --balloon-delay: 560ms; --balloon-drift: 22px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #34c6a9, #0ea5a3) !important; }
+#memepop-root .memepop-balloon-4 { --balloon-left: 92%; --balloon-top: 34%; --balloon-delay: 860ms; --balloon-drift: -24px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #ffcc4d, #f59e0b) !important; }
+#memepop-root .memepop-balloon-5 { --balloon-left: 5%; --balloon-top: 57%; --balloon-delay: 1140ms; --balloon-drift: 34px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #60a5fa, #2563eb) !important; }
+#memepop-root .memepop-balloon-6 { --balloon-left: 88%; --balloon-top: 58%; --balloon-delay: 1450ms; --balloon-drift: -38px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #fb7185, #e11d48) !important; }
+#memepop-root .memepop-balloon-7 { --balloon-left: 16%; --balloon-top: 74%; --balloon-delay: 1720ms; --balloon-drift: 34px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #facc15, #f97316) !important; }
+#memepop-root .memepop-balloon-8 { --balloon-left: 80%; --balloon-top: 76%; --balloon-delay: 1980ms; --balloon-drift: -30px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #c084fc, #7c3aed) !important; }
+#memepop-root .memepop-balloon-9 { --balloon-left: 2%; --balloon-top: 40%; --balloon-delay: 2260ms; --balloon-drift: 22px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #2dd4bf, #0891b2) !important; }
+#memepop-root .memepop-balloon-10 { --balloon-left: 94%; --balloon-top: 18%; --balloon-delay: 2500ms; --balloon-drift: -28px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #fda4af, #f43f5e) !important; }
 
 #memepop-root .memepop-party-popper {
   position: absolute !important;
@@ -1312,7 +1316,7 @@
   }
   42% {
     opacity: 1;
-    transform: translate3d(calc(var(--burst-x) * 0.62), var(--burst-y), 0) scale(1.08) rotate(calc(var(--party-rotate) * 0.45));
+    transform: translate3d(var(--burst-x), var(--burst-y), 0) scale(1.08) rotate(380deg);
   }
   76% {
     opacity: 0.88;
@@ -1323,18 +1327,18 @@
   }
 }
 
-@keyframes memepop-balloon-rise {
+@keyframes memepop-balloon-float {
   0% {
-    opacity: 0;
-    transform: translate3d(0, 0, 0) scale(0.86) rotate(-2deg);
+    opacity: 0.92;
+    transform: translate3d(0, 0, 0) scale(0.96) rotate(-3deg);
   }
-  12%,
-  78% {
-    opacity: 0.9;
+  50% {
+    opacity: 1;
+    transform: translate3d(var(--balloon-drift), -34px, 0) scale(1.04) rotate(4deg);
   }
   100% {
-    opacity: 0;
-    transform: translate3d(var(--balloon-drift), calc(-100vh - 170px), 0) scale(1.04) rotate(4deg);
+    opacity: 0.92;
+    transform: translate3d(0, 0, 0) scale(0.96) rotate(-3deg);
   }
 }
 

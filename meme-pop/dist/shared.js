@@ -9,6 +9,53 @@ var MemePop;
     MemePop.MAX_SETTING_MINUTES = 300;
     MemePop.MAX_TARGET_SITES = 10;
     MemePop.COMPLETION_COIN_REWARD = 15;
+    MemePop.THEMES = [
+        "random",
+        "focus",
+        "break",
+        "motivation",
+        "procrastination",
+        "lateNight",
+        "social",
+        "deadline",
+        "movement",
+        "studying",
+        "gaming",
+        "office",
+        "coding",
+        "hydration"
+    ];
+    MemePop.ROTATION_THEMES = [
+        "focus",
+        "break",
+        "motivation",
+        "procrastination",
+        "lateNight",
+        "social",
+        "deadline",
+        "movement",
+        "hydration",
+        "studying",
+        "gaming",
+        "office",
+        "coding"
+    ];
+    MemePop.THEME_LABELS = {
+        random: "Random",
+        focus: "Focus Mode",
+        break: "Break Time",
+        motivation: "Motivation Mode",
+        procrastination: "Procrastination Mode",
+        lateNight: "Late-Night Mode",
+        social: "Social Media Mode",
+        deadline: "Assignment / Project Deadline Mode",
+        movement: "Exercise / Movement Break Mode",
+        studying: "Studying",
+        gaming: "Gaming",
+        office: "Office",
+        coding: "Coding",
+        hydration: "Hydration Break"
+    };
     MemePop.REMINDER_MINUTES = {
         week: 7 * 24 * 60,
         threeDays: 3 * 24 * 60,
@@ -45,6 +92,7 @@ var MemePop;
             frequency: "normal",
             appearanceMinutes: 15,
             breakMinutes: 1,
+            modeRotation: [],
             soundEnabled: false,
             doNotDisturb: false,
             mutedUntil: 0,
@@ -298,22 +346,7 @@ var MemePop;
         const frequency = ["off", "rare", "normal", "frequent"].includes(settings.frequency)
             ? settings.frequency
             : MemePop.DEFAULT_STATE.settings.frequency;
-        const theme = [
-            "random",
-            "focus",
-            "break",
-            "motivation",
-            "procrastination",
-            "lateNight",
-            "social",
-            "deadline",
-            "movement",
-            "studying",
-            "gaming",
-            "office",
-            "coding",
-            "hydration"
-        ].includes(settings.theme)
+        const theme = MemePop.THEMES.includes(settings.theme)
             ? settings.theme
             : MemePop.DEFAULT_STATE.settings.theme;
         return {
@@ -323,6 +356,7 @@ var MemePop;
                 frequency,
                 appearanceMinutes: clampSettingMinutes(settings.appearanceMinutes, MemePop.DEFAULT_STATE.settings.appearanceMinutes),
                 breakMinutes: clampSettingMinutes(settings.breakMinutes, MemePop.DEFAULT_STATE.settings.breakMinutes),
+                modeRotation: normalizeModeRotation(settings.modeRotation),
                 soundEnabled: typeof settings.soundEnabled === "boolean" ? settings.soundEnabled : MemePop.DEFAULT_STATE.settings.soundEnabled,
                 doNotDisturb: typeof settings.doNotDisturb === "boolean" ? settings.doNotDisturb : MemePop.DEFAULT_STATE.settings.doNotDisturb,
                 mutedUntil: typeof settings.mutedUntil === "number" ? Math.max(0, settings.mutedUntil) : MemePop.DEFAULT_STATE.settings.mutedUntil,
@@ -428,6 +462,60 @@ var MemePop;
         return Math.min(Math.max(minutes, MemePop.MIN_SETTING_MINUTES), MemePop.MAX_SETTING_MINUTES);
     }
     MemePop.clampSettingMinutes = clampSettingMinutes;
+    function normalizeModeRotation(value) {
+        if (!Array.isArray(value)) {
+            return [];
+        }
+        const seen = new Set();
+        const normalized = [];
+        for (const rawItem of value) {
+            const item = (rawItem ?? {});
+            const theme = item.theme;
+            if (!MemePop.ROTATION_THEMES.includes(theme) || seen.has(theme)) {
+                continue;
+            }
+            normalized.push({
+                theme,
+                durationMinutes: clampSettingMinutes(item.durationMinutes, MemePop.DEFAULT_STATE.settings.appearanceMinutes),
+                enabled: typeof item.enabled === "boolean" ? item.enabled : true
+            });
+            seen.add(theme);
+        }
+        return normalized;
+    }
+    MemePop.normalizeModeRotation = normalizeModeRotation;
+    function enabledModeRotation(settings) {
+        return normalizeModeRotation(settings.modeRotation).filter((item) => item.enabled);
+    }
+    MemePop.enabledModeRotation = enabledModeRotation;
+    function getActiveModeRotationEntry(settings, now = Date.now()) {
+        const enabledModes = enabledModeRotation(settings);
+        if (enabledModes.length === 0) {
+            return null;
+        }
+        const totalMinutes = enabledModes.reduce((total, item) => total + item.durationMinutes, 0);
+        if (totalMinutes <= 0) {
+            return null;
+        }
+        const minutePointer = Math.floor(now / 60000) % totalMinutes;
+        let elapsedMinutes = 0;
+        for (const item of enabledModes) {
+            elapsedMinutes += item.durationMinutes;
+            if (minutePointer < elapsedMinutes) {
+                return item;
+            }
+        }
+        return enabledModes[0];
+    }
+    MemePop.getActiveModeRotationEntry = getActiveModeRotationEntry;
+    function getRotatingTheme(settings, now = Date.now()) {
+        return getActiveModeRotationEntry(settings, now)?.theme ?? null;
+    }
+    MemePop.getRotatingTheme = getRotatingTheme;
+    function getAppearanceMinutesForSettings(settings, now = Date.now()) {
+        return getActiveModeRotationEntry(settings, now)?.durationMinutes ?? settings.appearanceMinutes;
+    }
+    MemePop.getAppearanceMinutesForSettings = getAppearanceMinutesForSettings;
     function minutesToMs(minutes) {
         return clampSettingMinutes(minutes, MemePop.DEFAULT_STATE.settings.appearanceMinutes) * 60000;
     }

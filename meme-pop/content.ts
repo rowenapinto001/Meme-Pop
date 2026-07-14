@@ -204,7 +204,7 @@ function scheduleNextAppearance(): void {
     return;
   }
 
-  const delay = MemePop.minutesToMs(appState.settings.appearanceMinutes);
+  const delay = MemePop.minutesToMs(MemePop.getAppearanceMinutesForSettings(appState.settings));
 
   if (!delay) {
     return;
@@ -260,12 +260,18 @@ function isHydrationTheme(): boolean {
   return getCharacterTheme() === "hydration";
 }
 
+function getConfiguredTheme(): MemePop.Theme {
+  return MemePop.getRotatingTheme(appState.settings) ?? appState.settings.theme;
+}
+
 function getActiveMessageCategory(): MemePop.MessageCategory {
-  if (appState.settings.theme === "random") {
+  const configuredTheme = getConfiguredTheme();
+
+  if (configuredTheme === "random") {
     return MemePop.categoryForUrl(window.location.href);
   }
 
-  return THEME_CATEGORIES[appState.settings.theme];
+  return THEME_CATEGORIES[configuredTheme];
 }
 
 function getCategoryForText(text?: string): MemePop.MessageCategory | null {
@@ -295,7 +301,7 @@ function getCategoryForText(text?: string): MemePop.MessageCategory | null {
 }
 
 function getCharacterTheme(): MemePop.CharacterTheme {
-  return MemePop.characterThemeForSettings(appState.settings.theme, activeMessageCategory ?? getActiveMessageCategory());
+  return MemePop.characterThemeForSettings(getConfiguredTheme(), activeMessageCategory ?? getActiveMessageCategory());
 }
 
 function getCharacterAssetPath(): string {
@@ -315,11 +321,18 @@ function normalizeDropSequenceMode(theme: MemePop.CharacterTheme): string {
 }
 
 function shouldUseDropSequence(): boolean {
-  if (appState.settings.theme === "random") {
+  if (getConfiguredTheme() === "random") {
     return DROP_SEQUENCE_CATEGORIES.has(activeMessageCategory ?? getActiveMessageCategory());
   }
 
   return DROP_SEQUENCE_MODES.has(normalizeDropSequenceMode(getCharacterTheme()));
+}
+
+function getModeSettingsKey(settings: MemePop.Settings): string {
+  const rotation = MemePop.normalizeModeRotation(settings.modeRotation)
+    .map((item) => `${item.theme}:${item.durationMinutes}:${item.enabled ? 1 : 0}`)
+    .join("|");
+  return `${settings.theme}::${MemePop.getRotatingTheme(settings) ?? "single"}::${rotation}`;
 }
 
 function applyEntranceModeClass(root: HTMLElement): void {
@@ -584,7 +597,7 @@ function createPartyEffects(): HTMLElement {
     effects.append(confetti);
   }
 
-  for (let index = 1; index <= 7; index += 1) {
+  for (let index = 1; index <= 10; index += 1) {
     const balloon = document.createElement("span");
     balloon.className = `memepop-balloon memepop-balloon-${index}`;
     effects.append(balloon);
@@ -900,12 +913,12 @@ try {
       return;
     }
 
-    const previousTheme = appState.settings.theme;
+    const previousModeKey = getModeSettingsKey(appState.settings);
     appState = MemePop.normalizeState(changes[MemePop.STATE_KEY].newValue);
     updateAccessoryClass();
     updateThemeClass();
 
-    if (rootElement && previousTheme !== appState.settings.theme) {
+    if (rootElement && previousModeKey !== getModeSettingsKey(appState.settings)) {
       setMessage();
       restartHydrationOffer();
     }

@@ -606,6 +606,126 @@ h2 {
     linear-gradient(145deg, #3b82f6, #2dd4bf);
 }
 
+.mode-rotation-field > span::before {
+  background:
+    radial-gradient(circle at 30% 34%, #ffffff 0 12%, transparent 13%),
+    radial-gradient(circle at 68% 64%, #ffffff 0 10%, transparent 11%),
+    linear-gradient(145deg, #7c3aed, #4f7cff);
+}
+
+.mode-rotation-field > small {
+  color: var(--muted);
+  font-size: clamp(12px, 2.6vw, 15px);
+  font-weight: 750;
+  line-height: 1.45;
+}
+
+.mode-rotation-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 10px;
+  min-width: 0;
+  overflow: hidden;
+  padding: 12px;
+  border: 1px solid rgba(124, 58, 237, 0.18);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 4% 0%, rgba(255, 191, 36, 0.2), transparent 28%),
+    radial-gradient(circle at 96% 100%, rgba(45, 212, 191, 0.18), transparent 30%),
+    rgba(255, 255, 255, 0.66);
+}
+
+.mode-duration-chip {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr) minmax(74px, 88px);
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid rgba(38, 49, 63, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 10px 22px rgba(38, 49, 63, 0.06);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.mode-duration-chip.is-active {
+  border-color: rgba(124, 58, 237, 0.58);
+  box-shadow: 0 12px 26px rgba(91, 111, 245, 0.14);
+  transform: translateY(-1px);
+}
+
+.mode-duration-name {
+  min-width: 0;
+  color: var(--ink);
+  font-size: clamp(13px, 2.6vw, 16px);
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+.mode-duration-control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(38, 49, 63, 0.14);
+  border-radius: 13px;
+  background: #ffffff;
+}
+
+.mode-duration-control span {
+  padding-right: 8px;
+  color: #68758d;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.mode-duration-chip input[type="checkbox"].mode-duration-toggle {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(124, 58, 237, 0.32);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.mode-duration-chip input[type="checkbox"].mode-duration-toggle::after {
+  top: 3px;
+  left: 7px;
+  width: 6px;
+  height: 12px;
+  border: solid #ffffff;
+  border-width: 0 3px 3px 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  opacity: 0;
+  transform: rotate(45deg);
+}
+
+.mode-duration-chip input[type="checkbox"].mode-duration-toggle:checked {
+  background: linear-gradient(145deg, #8b5cf6, #4f7cff);
+  border-color: transparent;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+}
+
+.mode-duration-chip input[type="checkbox"].mode-duration-toggle:checked::after {
+  opacity: 1;
+  transform: rotate(45deg);
+}
+
+.mode-duration-chip input[type="number"].mode-duration-input {
+  min-height: 38px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  font-size: 15px;
+  font-weight: 900;
+  text-align: center;
+}
+
 select,
 input[type="number"],
 input[type="text"],

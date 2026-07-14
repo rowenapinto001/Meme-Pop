@@ -1,6 +1,7 @@
 "use strict";
 const enabledInput = document.querySelector("#enabledInput");
 const themeSelect = document.querySelector("#themeSelect");
+const modeRotationList = document.querySelector("#modeRotationList");
 const appearanceMinutesInput = document.querySelector("#appearanceMinutesInput");
 const breakMinutesInput = document.querySelector("#breakMinutesInput");
 const targetSitesInput = document.querySelector("#targetSitesInput");
@@ -270,6 +271,71 @@ function renderAccessories() {
         accessoryStatus.textContent = `${MemePop.getAccessory(state.settings.accessory).name} selected.`;
     }
 }
+function readModeRotationFromDom() {
+    if (!modeRotationList) {
+        return state.settings.modeRotation;
+    }
+    const rows = Array.from(modeRotationList.querySelectorAll("[data-mode-theme]"));
+    const rotation = [];
+    for (const row of rows) {
+        const theme = row.dataset.modeTheme;
+        if (!MemePop.ROTATION_THEMES.includes(theme)) {
+            continue;
+        }
+        const enabled = row.querySelector("[data-mode-enabled]")?.checked ?? false;
+        const durationValue = row.querySelector("[data-mode-duration]")?.value;
+        rotation.push({
+            theme,
+            durationMinutes: MemePop.clampSettingMinutes(durationValue, state.settings.appearanceMinutes),
+            enabled
+        });
+    }
+    return rotation;
+}
+function renderModeRotation() {
+    if (!modeRotationList) {
+        return;
+    }
+    modeRotationList.textContent = "";
+    const savedModes = new Map(MemePop.normalizeModeRotation(state.settings.modeRotation).map((item) => [item.theme, item]));
+    for (const theme of MemePop.ROTATION_THEMES) {
+        const savedMode = savedModes.get(theme);
+        const enabled = savedMode?.enabled ?? false;
+        const row = document.createElement("label");
+        row.className = "mode-duration-chip";
+        row.classList.toggle("is-active", enabled);
+        row.dataset.modeTheme = theme;
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "mode-duration-toggle";
+        checkbox.checked = enabled;
+        checkbox.dataset.modeEnabled = "true";
+        checkbox.addEventListener("change", () => {
+            row.classList.toggle("is-active", checkbox.checked);
+            void saveSettings();
+        });
+        const name = document.createElement("span");
+        name.className = "mode-duration-name";
+        name.textContent = MemePop.THEME_LABELS[theme].replace(" Mode", "").replace(" Deadline", "");
+        const durationGroup = document.createElement("span");
+        durationGroup.className = "mode-duration-control";
+        const input = document.createElement("input");
+        input.type = "number";
+        input.className = "mode-duration-input";
+        input.min = String(MemePop.MIN_SETTING_MINUTES);
+        input.max = String(MemePop.MAX_SETTING_MINUTES);
+        input.step = "1";
+        input.inputMode = "numeric";
+        input.value = String(savedMode?.durationMinutes ?? state.settings.appearanceMinutes);
+        input.dataset.modeDuration = "true";
+        input.addEventListener("change", () => void saveSettings());
+        const unit = document.createElement("span");
+        unit.textContent = "min";
+        durationGroup.append(input, unit);
+        row.append(checkbox, name, durationGroup);
+        modeRotationList.append(row);
+    }
+}
 function render() {
     if (startScreen) {
         startScreen.classList.toggle("is-hidden", state.startScreenLastSeenDate === MemePop.todayKey());
@@ -310,6 +376,7 @@ function render() {
     renderFocus();
     renderDeadlines();
     renderAccessories();
+    renderModeRotation();
 }
 async function saveSettings() {
     state = await MemePop.updateState((nextState) => {
@@ -317,6 +384,7 @@ async function saveSettings() {
         nextState.settings.theme = themeSelect?.value ?? nextState.settings.theme;
         nextState.settings.appearanceMinutes = MemePop.clampSettingMinutes(appearanceMinutesInput?.value, nextState.settings.appearanceMinutes);
         nextState.settings.breakMinutes = MemePop.clampSettingMinutes(breakMinutesInput?.value, nextState.settings.breakMinutes);
+        nextState.settings.modeRotation = readModeRotationFromDom();
         nextState.settings.targetSites = MemePop.normalizeTargetSites(targetSitesInput?.value ?? nextState.settings.targetSites);
         nextState.settings.soundEnabled = soundInput?.checked ?? nextState.settings.soundEnabled;
         nextState.settings.doNotDisturb = dndInput?.checked ?? nextState.settings.doNotDisturb;

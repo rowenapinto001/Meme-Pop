@@ -176,7 +176,7 @@ function scheduleNextAppearance() {
     if (MemePop.isQuiet(appState)) {
         return;
     }
-    const delay = MemePop.minutesToMs(appState.settings.appearanceMinutes);
+    const delay = MemePop.minutesToMs(MemePop.getAppearanceMinutesForSettings(appState.settings));
     if (!delay) {
         return;
     }
@@ -220,11 +220,15 @@ function centerAndRememberPosition() {
 function isHydrationTheme() {
     return getCharacterTheme() === "hydration";
 }
+function getConfiguredTheme() {
+    return MemePop.getRotatingTheme(appState.settings) ?? appState.settings.theme;
+}
 function getActiveMessageCategory() {
-    if (appState.settings.theme === "random") {
+    const configuredTheme = getConfiguredTheme();
+    if (configuredTheme === "random") {
         return MemePop.categoryForUrl(window.location.href);
     }
-    return THEME_CATEGORIES[appState.settings.theme];
+    return THEME_CATEGORIES[configuredTheme];
 }
 function getCategoryForText(text) {
     if (!text) {
@@ -246,7 +250,7 @@ function getCategoryForText(text) {
     return null;
 }
 function getCharacterTheme() {
-    return MemePop.characterThemeForSettings(appState.settings.theme, activeMessageCategory ?? getActiveMessageCategory());
+    return MemePop.characterThemeForSettings(getConfiguredTheme(), activeMessageCategory ?? getActiveMessageCategory());
 }
 function getCharacterAssetPath() {
     return MemePop.THEME_CHARACTER_ASSETS[getCharacterTheme()];
@@ -261,10 +265,16 @@ function normalizeDropSequenceMode(theme) {
     return theme;
 }
 function shouldUseDropSequence() {
-    if (appState.settings.theme === "random") {
+    if (getConfiguredTheme() === "random") {
         return DROP_SEQUENCE_CATEGORIES.has(activeMessageCategory ?? getActiveMessageCategory());
     }
     return DROP_SEQUENCE_MODES.has(normalizeDropSequenceMode(getCharacterTheme()));
+}
+function getModeSettingsKey(settings) {
+    const rotation = MemePop.normalizeModeRotation(settings.modeRotation)
+        .map((item) => `${item.theme}:${item.durationMinutes}:${item.enabled ? 1 : 0}`)
+        .join("|");
+    return `${settings.theme}::${MemePop.getRotatingTheme(settings) ?? "single"}::${rotation}`;
 }
 function applyEntranceModeClass(root) {
     const usesDrop = shouldUseDropSequence();
@@ -461,7 +471,7 @@ function createPartyEffects() {
         confetti.className = `memepop-confetti memepop-confetti-burst memepop-confetti-${side} memepop-confetti-${index}`;
         effects.append(confetti);
     }
-    for (let index = 1; index <= 7; index += 1) {
+    for (let index = 1; index <= 10; index += 1) {
         const balloon = document.createElement("span");
         balloon.className = `memepop-balloon memepop-balloon-${index}`;
         effects.append(balloon);
@@ -709,11 +719,11 @@ try {
         if (!extensionContextAvailable || areaName !== "local" || !changes[MemePop.STATE_KEY]) {
             return;
         }
-        const previousTheme = appState.settings.theme;
+        const previousModeKey = getModeSettingsKey(appState.settings);
         appState = MemePop.normalizeState(changes[MemePop.STATE_KEY].newValue);
         updateAccessoryClass();
         updateThemeClass();
-        if (rootElement && previousTheme !== appState.settings.theme) {
+        if (rootElement && previousModeKey !== getModeSettingsKey(appState.settings)) {
             setMessage();
             restartHydrationOffer();
         }

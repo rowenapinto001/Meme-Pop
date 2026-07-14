@@ -82,11 +82,18 @@ namespace MemePop {
     frequency: Frequency;
     appearanceMinutes: number;
     breakMinutes: number;
+    modeRotation: ModeDuration[];
     soundEnabled: boolean;
     doNotDisturb: boolean;
     mutedUntil: number;
     accessory: AccessoryId;
     targetSites: string[];
+  };
+
+  export type ModeDuration = {
+    theme: CharacterTheme;
+    durationMinutes: number;
+    enabled: boolean;
   };
 
   export type Wallet = {
@@ -133,6 +140,53 @@ namespace MemePop {
   export const MAX_SETTING_MINUTES = 300;
   export const MAX_TARGET_SITES = 10;
   export const COMPLETION_COIN_REWARD = 15;
+  export const THEMES: Theme[] = [
+    "random",
+    "focus",
+    "break",
+    "motivation",
+    "procrastination",
+    "lateNight",
+    "social",
+    "deadline",
+    "movement",
+    "studying",
+    "gaming",
+    "office",
+    "coding",
+    "hydration"
+  ];
+  export const ROTATION_THEMES: CharacterTheme[] = [
+    "focus",
+    "break",
+    "motivation",
+    "procrastination",
+    "lateNight",
+    "social",
+    "deadline",
+    "movement",
+    "hydration",
+    "studying",
+    "gaming",
+    "office",
+    "coding"
+  ];
+  export const THEME_LABELS: Record<Theme, string> = {
+    random: "Random",
+    focus: "Focus Mode",
+    break: "Break Time",
+    motivation: "Motivation Mode",
+    procrastination: "Procrastination Mode",
+    lateNight: "Late-Night Mode",
+    social: "Social Media Mode",
+    deadline: "Assignment / Project Deadline Mode",
+    movement: "Exercise / Movement Break Mode",
+    studying: "Studying",
+    gaming: "Gaming",
+    office: "Office",
+    coding: "Coding",
+    hydration: "Hydration Break"
+  };
   export const REMINDER_MINUTES: Record<Exclude<DeadlineReminder, "custom" | "none">, number> = {
     week: 7 * 24 * 60,
     threeDays: 3 * 24 * 60,
@@ -172,6 +226,7 @@ namespace MemePop {
       frequency: "normal",
       appearanceMinutes: 15,
       breakMinutes: 1,
+      modeRotation: [],
       soundEnabled: false,
       doNotDisturb: false,
       mutedUntil: 0,
@@ -449,22 +504,7 @@ namespace MemePop {
     const frequency: Frequency = ["off", "rare", "normal", "frequent"].includes(settings.frequency as string)
       ? (settings.frequency as Frequency)
       : DEFAULT_STATE.settings.frequency;
-    const theme: Theme = [
-      "random",
-      "focus",
-      "break",
-      "motivation",
-      "procrastination",
-      "lateNight",
-      "social",
-      "deadline",
-      "movement",
-      "studying",
-      "gaming",
-      "office",
-      "coding",
-      "hydration"
-    ].includes(settings.theme as string)
+    const theme: Theme = THEMES.includes(settings.theme as Theme)
       ? (settings.theme as Theme)
       : DEFAULT_STATE.settings.theme;
 
@@ -475,6 +515,7 @@ namespace MemePop {
         frequency,
         appearanceMinutes: clampSettingMinutes(settings.appearanceMinutes, DEFAULT_STATE.settings.appearanceMinutes),
         breakMinutes: clampSettingMinutes(settings.breakMinutes, DEFAULT_STATE.settings.breakMinutes),
+        modeRotation: normalizeModeRotation(settings.modeRotation),
         soundEnabled: typeof settings.soundEnabled === "boolean" ? settings.soundEnabled : DEFAULT_STATE.settings.soundEnabled,
         doNotDisturb: typeof settings.doNotDisturb === "boolean" ? settings.doNotDisturb : DEFAULT_STATE.settings.doNotDisturb,
         mutedUntil: typeof settings.mutedUntil === "number" ? Math.max(0, settings.mutedUntil) : DEFAULT_STATE.settings.mutedUntil,
@@ -583,6 +624,72 @@ namespace MemePop {
     const numericValue = typeof value === "number" ? value : Number(value);
     const minutes = Number.isFinite(numericValue) ? Math.floor(numericValue) : fallback;
     return Math.min(Math.max(minutes, MIN_SETTING_MINUTES), MAX_SETTING_MINUTES);
+  }
+
+  export function normalizeModeRotation(value: unknown): ModeDuration[] {
+    if (!Array.isArray(value)) {
+      return [];
+    }
+
+    const seen = new Set<CharacterTheme>();
+    const normalized: ModeDuration[] = [];
+
+    for (const rawItem of value) {
+      const item = (rawItem ?? {}) as Partial<ModeDuration>;
+      const theme = item.theme as CharacterTheme;
+
+      if (!ROTATION_THEMES.includes(theme) || seen.has(theme)) {
+        continue;
+      }
+
+      normalized.push({
+        theme,
+        durationMinutes: clampSettingMinutes(item.durationMinutes, DEFAULT_STATE.settings.appearanceMinutes),
+        enabled: typeof item.enabled === "boolean" ? item.enabled : true
+      });
+      seen.add(theme);
+    }
+
+    return normalized;
+  }
+
+  export function enabledModeRotation(settings: Settings): ModeDuration[] {
+    return normalizeModeRotation(settings.modeRotation).filter((item) => item.enabled);
+  }
+
+  export function getActiveModeRotationEntry(settings: Settings, now = Date.now()): ModeDuration | null {
+    const enabledModes = enabledModeRotation(settings);
+
+    if (enabledModes.length === 0) {
+      return null;
+    }
+
+    const totalMinutes = enabledModes.reduce((total, item) => total + item.durationMinutes, 0);
+
+    if (totalMinutes <= 0) {
+      return null;
+    }
+
+    const minutePointer = Math.floor(now / 60000) % totalMinutes;
+    let elapsedMinutes = 0;
+
+    for (const item of enabledModes) {
+      elapsedMinutes += item.durationMinutes;
+
+      if (minutePointer < elapsedMinutes) {
+        return item;
+      }
+    }
+
+    return enabledModes[0];
+  }
+
+  export function getRotatingTheme(settings: Settings, now = Date.now()): CharacterTheme | null {
+    return getActiveModeRotationEntry(settings, now)?.theme ?? null;
+  }
+
+  export function getAppearanceMinutesForSettings(settings: Settings, now = Date.now()): number {
+    return getActiveModeRotationEntry(settings, now)?.durationMinutes ?? settings.appearanceMinutes;
   }
 
   export function minutesToMs(minutes: number): number {
