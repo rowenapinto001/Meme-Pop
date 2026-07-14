@@ -482,6 +482,20 @@ function createDefaultWebStage() {
     }
     const acrobat = document.createElement("span");
     acrobat.className = "memepop-default-web-acrobat";
+    const acrobatArtUrl = getExtensionUrl("assets/decor/web-acrobat.svg");
+    if (acrobatArtUrl) {
+        const acrobatArt = document.createElement("img");
+        acrobatArt.className = "memepop-default-web-acrobat-art";
+        acrobatArt.src = acrobatArtUrl;
+        acrobatArt.alt = "";
+        acrobatArt.decoding = "async";
+        acrobat.classList.add("memepop-default-web-acrobat-has-art");
+        acrobatArt.addEventListener("error", () => {
+            acrobat.classList.remove("memepop-default-web-acrobat-has-art");
+            acrobatArt.remove();
+        });
+        acrobat.append(acrobatArt);
+    }
     const rope = document.createElement("span");
     rope.className = "memepop-default-web-rope";
     const body = document.createElement("span");
