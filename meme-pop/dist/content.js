@@ -446,6 +446,27 @@ function createHydrationSplash() {
     splash.append(puddle);
     return splash;
 }
+function createPartyEffects() {
+    const effects = document.createElement("div");
+    effects.className = "memepop-party-effects";
+    effects.setAttribute("aria-hidden", "true");
+    const leftPopper = document.createElement("span");
+    leftPopper.className = "memepop-party-popper memepop-party-popper-left";
+    const rightPopper = document.createElement("span");
+    rightPopper.className = "memepop-party-popper memepop-party-popper-right";
+    effects.append(leftPopper, rightPopper);
+    for (let index = 1; index <= 26; index += 1) {
+        const confetti = document.createElement("span");
+        confetti.className = `memepop-confetti memepop-confetti-${index}`;
+        effects.append(confetti);
+    }
+    for (let index = 1; index <= 5; index += 1) {
+        const balloon = document.createElement("span");
+        balloon.className = `memepop-balloon memepop-balloon-${index}`;
+        effects.append(balloon);
+    }
+    return effects;
+}
 function configureEntranceSequence(root, character, shell) {
     clearTimer(entranceTimer);
     clearTimer(shellTimer);
@@ -502,6 +523,7 @@ function createMemePop(message) {
     root.setAttribute("aria-live", "polite");
     root.className = "memepop-accessory-none";
     const splash = createHydrationSplash();
+    const partyEffects = createPartyEffects();
     const card = document.createElement("div");
     card.className = "memepop-card";
     const shell = document.createElement("div");
@@ -550,7 +572,7 @@ function createMemePop(message) {
     countdown.textContent = formatCountdown(getVisibleDurationMs());
     countdown.setAttribute("aria-label", `MemePop closes in ${formatCountdown(getVisibleDurationMs())}`);
     card.append(shell, controls, countdown, characterButton, accessory, bubble, reward);
-    root.append(splash, card);
+    root.append(splash, partyEffects, card);
     rootElement = root;
     cardElement = card;
     messageElement = messageText;
