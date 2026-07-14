@@ -539,6 +539,8 @@ function createHydrationSplash(): HTMLElement {
 }
 
 function configureEntranceSequence(root: HTMLElement, character: HTMLElement, shell: HTMLElement): void {
+  clearTimer(entranceTimer);
+  clearTimer(shellTimer);
   root.classList.remove("memepop-drop-supported", "memepop-shell-visible", "memepop-sequence-complete");
 
   if (!shouldUseDropSequence()) {
@@ -585,6 +587,18 @@ function configureEntranceSequence(root: HTMLElement, character: HTMLElement, sh
   });
 
   entranceTimer = window.setTimeout(finishDrop, 1400);
+}
+
+function startEntranceSequence(root: HTMLElement): void {
+  const character = root.querySelector<HTMLElement>(".memepop-character");
+  const shell = root.querySelector<HTMLElement>(".memepop-card-shell");
+
+  if (!character || !shell) {
+    root.classList.add("memepop-sequence-complete");
+    return;
+  }
+
+  configureEntranceSequence(root, character, shell);
 }
 
 function createMemePop(message?: string): HTMLElement | null {
@@ -671,7 +685,6 @@ function createMemePop(message?: string): HTMLElement | null {
   updateAccessoryClass();
   updateThemeClass();
   setMessage(message);
-  configureEntranceSequence(root, characterButton, shell);
 
   closeButton.addEventListener("click", () => hideMemePop(true));
   muteButton.addEventListener("click", () => {
@@ -788,6 +801,7 @@ function showMemePop(force: boolean, message?: string): boolean {
   }
 
   target.append(memePop);
+  startEntranceSequence(memePop);
   centerAndRememberPosition();
   playTone(message && MemePop.FOCUS_DONE_MESSAGES.includes(message) ? "finish" : "appear");
   resetAutoHide();

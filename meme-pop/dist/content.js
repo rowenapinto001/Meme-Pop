@@ -424,6 +424,8 @@ function createHydrationSplash() {
     return splash;
 }
 function configureEntranceSequence(root, character, shell) {
+    clearTimer(entranceTimer);
+    clearTimer(shellTimer);
     root.classList.remove("memepop-drop-supported", "memepop-shell-visible", "memepop-sequence-complete");
     if (!shouldUseDropSequence()) {
         root.classList.add("memepop-sequence-complete");
@@ -460,6 +462,15 @@ function configureEntranceSequence(root, character, shell) {
         }
     });
     entranceTimer = window.setTimeout(finishDrop, 1400);
+}
+function startEntranceSequence(root) {
+    const character = root.querySelector(".memepop-character");
+    const shell = root.querySelector(".memepop-card-shell");
+    if (!character || !shell) {
+        root.classList.add("memepop-sequence-complete");
+        return;
+    }
+    configureEntranceSequence(root, character, shell);
 }
 function createMemePop(message) {
     if (!hasExtensionContext()) {
@@ -526,7 +537,6 @@ function createMemePop(message) {
     updateAccessoryClass();
     updateThemeClass();
     setMessage(message);
-    configureEntranceSequence(root, characterButton, shell);
     closeButton.addEventListener("click", () => hideMemePop(true));
     muteButton.addEventListener("click", () => {
         void MemePop.updateState((state) => {
@@ -623,6 +633,7 @@ function showMemePop(force, message) {
         return false;
     }
     target.append(memePop);
+    startEntranceSequence(memePop);
     centerAndRememberPosition();
     playTone(message && MemePop.FOCUS_DONE_MESSAGES.includes(message) ? "finish" : "appear");
     resetAutoHide();
