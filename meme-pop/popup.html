@@ -34,13 +34,36 @@
 
       <section class="stats-grid" aria-label="MemePop stats">
         <article class="stat-card coin-card">
-          <span class="stat-icon coin-icon" aria-hidden="true"></span>
+          <span class="stat-icon coin-icon" aria-hidden="true">
+            <svg viewBox="0 0 80 80" focusable="false">
+              <defs>
+                <radialGradient id="coinGradient" cx="30%" cy="24%" r="72%">
+                  <stop offset="0%" stop-color="#fff6a8"></stop>
+                  <stop offset="48%" stop-color="#ffca31"></stop>
+                  <stop offset="100%" stop-color="#f59e0b"></stop>
+                </radialGradient>
+              </defs>
+              <ellipse class="coin-back" cx="44" cy="40" rx="27" ry="29"></ellipse>
+              <circle class="coin-face" cx="38" cy="40" r="28"></circle>
+              <circle class="coin-inner" cx="38" cy="40" r="21"></circle>
+              <path class="coin-shine" d="M24 28c5-7 14-11 24-8"></path>
+              <circle class="coin-eye" cx="31" cy="37" r="3.2"></circle>
+              <circle class="coin-eye" cx="45" cy="37" r="3.2"></circle>
+              <path class="coin-smile" d="M30 47c4 5 12 5 16 0"></path>
+            </svg>
+          </span>
           <span class="stat-label">Meme Coins</span>
           <strong id="coinCount">0</strong>
           <small>Keep going!</small>
         </article>
         <article class="stat-card streak-card">
-          <span class="stat-icon fire-icon" aria-hidden="true"></span>
+          <span class="stat-icon fire-icon" aria-hidden="true">
+            <svg viewBox="0 0 80 80" focusable="false">
+              <path class="flame-outer" d="M43 6c6 12 3 18 14 29 8 8 13 16 13 27 0 15-13 24-30 24S10 77 10 62c0-12 7-21 15-29 6-6 10-14 9-23 9 5 8 17 9 25 8-7 10-17 0-29Z"></path>
+              <path class="flame-mid" d="M42 27c4 8 2 13 9 20 5 5 8 10 8 18 0 10-8 17-19 17S21 75 21 65c0-8 5-15 10-20 4-4 7-10 7-16 5 4 5 11 4 16 5-4 7-10 0-18Z"></path>
+              <path class="flame-core" d="M41 48c3 5 8 9 8 16 0 7-5 12-10 12s-10-5-10-12c0-6 5-11 8-15 1 4 1 8 0 11 4-3 5-7 4-12Z"></path>
+            </svg>
+          </span>
           <span class="stat-label">Current streak</span>
           <strong id="streakCount">0</strong>
           <small>Great consistency!</small>
@@ -111,8 +134,9 @@
         <p>Little steps every day lead to big achievements!</p>
       </section>
 
-      <section class="panel">
+      <section class="panel focus-panel">
         <div class="section-head">
+          <span class="section-icon focus-icon" aria-hidden="true"></span>
           <div>
             <h2>Focus mode</h2>
             <p id="focusStatus">No focus session running.</p>
@@ -131,6 +155,7 @@
 
       <section class="panel deadline-panel">
         <div class="section-head">
+          <span class="section-icon deadline-icon" aria-hidden="true"></span>
           <div>
             <h2>Deadline mode</h2>
             <p>Track assignments, projects, and submissions.</p>
@@ -138,16 +163,16 @@
         </div>
 
         <div class="deadline-form">
-          <label class="field">
+          <label class="field deadline-title-field">
             <span>Assignment or project title</span>
             <input id="deadlineTitleInput" type="text" maxlength="80" placeholder="Science Project">
           </label>
           <div class="deadline-grid">
-            <label class="field">
+            <label class="field deadline-date-field">
               <span>Deadline date and time</span>
               <input id="deadlineDueInput" type="datetime-local">
             </label>
-            <label class="field">
+            <label class="field deadline-priority-field">
               <span>Priority</span>
               <select id="deadlinePrioritySelect">
                 <option value="low">Low</option>
@@ -156,16 +181,16 @@
               </select>
             </label>
           </div>
-          <label class="field">
+          <label class="field deadline-subject-field">
             <span>Subject or category</span>
             <input id="deadlineSubjectInput" type="text" maxlength="50" placeholder="Science">
           </label>
-          <label class="field">
+          <label class="field deadline-tasks-field">
             <span>Task checklist</span>
             <textarea id="deadlineTasksInput" rows="3" spellcheck="true" placeholder="Research&#10;Make slides&#10;Practice presentation"></textarea>
           </label>
           <div class="deadline-grid">
-            <label class="field">
+            <label class="field deadline-reminder-field">
               <span>Reminder</span>
               <select id="deadlineReminderSelect">
                 <option value="week">One week before</option>
@@ -177,7 +202,7 @@
                 <option value="none">No reminder</option>
               </select>
             </label>
-            <label class="field">
+            <label class="field deadline-custom-field">
               <span>Custom minutes</span>
               <input id="deadlineCustomReminderInput" type="number" min="1" max="300" step="1" inputmode="numeric" value="60">
             </label>
@@ -189,8 +214,9 @@
         <div id="overdueDeadlineList" class="deadline-list overdue-list" aria-label="Overdue deadlines"></div>
       </section>
 
-      <section class="panel">
+      <section class="panel accessory-panel">
         <div class="section-head">
+          <span class="section-icon accessory-icon" aria-hidden="true"></span>
           <div>
             <h2>Change accessory</h2>
             <p id="accessoryStatus">No accessory selected.</p>
@@ -200,13 +226,19 @@
       </section>
 
       <section class="action-grid">
-        <button id="showNowButton" class="primary-button" type="button">Show MemePop Now</button>
-        <button id="momentButton" class="secondary-button" type="button">Create Meme Moment</button>
+        <button id="showNowButton" class="primary-button" type="button">
+          <span class="button-icon show-icon" aria-hidden="true"></span>
+          <span>Show MemePop Now</span>
+        </button>
+        <button id="momentButton" class="secondary-button" type="button">
+          <span class="button-icon moment-icon" aria-hidden="true"></span>
+          <span>Create Meme Moment</span>
+        </button>
       </section>
 
       <section class="meta-panel">
-        <span id="lastActive">Last active: never</span>
-        <span id="longestStreak">Longest streak: 0</span>
+        <span id="lastActive" class="meta-date">Last active: never</span>
+        <span id="longestStreak" class="meta-streak">Longest streak: 0</span>
       </section>
 
       <p id="statusText" class="status" role="status" aria-live="polite"></p>

@@ -34,7 +34,7 @@ var MemePop;
     };
     MemePop.ACCESSORIES = [
         { id: "none", name: "No accessory", price: 0, description: "Classic MemePop energy." },
-        { id: "partyHat", name: "Party hat", price: 20, description: "For tiny celebrations." },
+        { id: "partyHat", name: "Party mode", price: 0, description: "Confetti, poppers, and balloons." },
         { id: "sunglasses", name: "Sunglasses", price: 40, description: "Maximum cool, minimum effort." },
         { id: "crown", name: "Tiny crown", price: 60, description: "A royal amount of silliness." }
     ];
@@ -71,7 +71,7 @@ var MemePop;
             x: null,
             y: null
         },
-        unlockedAccessories: ["none"],
+        unlockedAccessories: ["none", "partyHat"],
         startScreenLastSeenDate: "",
         deadlines: []
     };
@@ -291,7 +291,8 @@ var MemePop;
         const unlockedAccessories = Array.isArray(raw?.unlockedAccessories)
             ? raw.unlockedAccessories.filter((item) => MemePop.ACCESSORIES.some((accessoryItem) => accessoryItem.id === item))
             : MemePop.DEFAULT_STATE.unlockedAccessories;
-        const normalizedUnlocked = Array.from(new Set(["none", ...unlockedAccessories]));
+        const freeAccessories = MemePop.ACCESSORIES.filter((accessoryItem) => accessoryItem.price === 0).map((accessoryItem) => accessoryItem.id);
+        const normalizedUnlocked = Array.from(new Set([...freeAccessories, ...unlockedAccessories]));
         const requestedAccessory = settings.accessory && MemePop.ACCESSORIES.some((item) => item.id === settings.accessory) ? settings.accessory : "none";
         const accessory = normalizedUnlocked.includes(requestedAccessory) ? requestedAccessory : "none";
         const frequency = ["off", "rare", "normal", "frequent"].includes(settings.frequency)

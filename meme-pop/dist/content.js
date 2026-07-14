@@ -455,12 +455,13 @@ function createPartyEffects() {
     const rightPopper = document.createElement("span");
     rightPopper.className = "memepop-party-popper memepop-party-popper-right";
     effects.append(leftPopper, rightPopper);
-    for (let index = 1; index <= 26; index += 1) {
+    for (let index = 1; index <= 32; index += 1) {
         const confetti = document.createElement("span");
-        confetti.className = `memepop-confetti memepop-confetti-${index}`;
+        const side = index % 2 === 0 ? "right" : "left";
+        confetti.className = `memepop-confetti memepop-confetti-burst memepop-confetti-${side} memepop-confetti-${index}`;
         effects.append(confetti);
     }
-    for (let index = 1; index <= 5; index += 1) {
+    for (let index = 1; index <= 7; index += 1) {
         const balloon = document.createElement("span");
         balloon.className = `memepop-balloon memepop-balloon-${index}`;
         effects.append(balloon);

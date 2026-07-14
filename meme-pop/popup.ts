@@ -247,18 +247,18 @@ function renderDeadlines(): void {
 
 function accessoryPreviewLabel(accessory: MemePop.Accessory): string {
   if (accessory.id === "partyHat") {
-    return "hat";
+    return "";
   }
 
   if (accessory.id === "sunglasses") {
-    return "cool";
+    return "";
   }
 
   if (accessory.id === "crown") {
-    return "king";
+    return "";
   }
 
-  return "pop";
+  return "";
 }
 
 function renderAccessories(): void {
@@ -272,11 +272,14 @@ function renderAccessories(): void {
     const unlocked = state.unlockedAccessories.includes(accessory.id);
     const selected = state.settings.accessory === accessory.id;
     const card = document.createElement("article");
-    card.className = "accessory-card";
+    card.className = `accessory-card accessory-${accessory.id}`;
+    card.classList.toggle("is-selected", selected);
+    card.classList.toggle("is-locked", !unlocked);
 
     const preview = document.createElement("div");
     preview.className = "accessory-preview";
     preview.textContent = accessoryPreviewLabel(accessory);
+    preview.setAttribute("aria-label", accessory.name);
 
     const body = document.createElement("div");
     const title = document.createElement("strong");
