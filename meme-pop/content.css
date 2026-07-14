@@ -50,6 +50,335 @@
     radial-gradient(circle at 50% 52%, rgba(58, 43, 42, 0.08), transparent 48%) !important;
 }
 
+#memepop-root .memepop-default-web-stage {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 2 !important;
+  display: none !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 26% 18%, rgba(255, 255, 255, 0.34), transparent 18%),
+    radial-gradient(circle at 84% 14%, rgba(255, 236, 146, 0.28), transparent 19%),
+    radial-gradient(circle at 50% 52%, rgba(255, 213, 112, 0.12), transparent 38%) !important;
+}
+
+#memepop-root.memepop-accessory-none.memepop-shell-visible .memepop-default-web-stage,
+#memepop-root.memepop-accessory-none:not(.memepop-entrance-sequenced) .memepop-default-web-stage {
+  display: block !important;
+  animation: memepop-default-stage-in 360ms ease-out both !important;
+}
+
+#memepop-root.memepop-accessory-none.memepop-leaving .memepop-default-web-stage {
+  opacity: 0 !important;
+  transition: opacity 220ms ease !important;
+}
+
+#memepop-root .memepop-default-web-layer,
+#memepop-root .memepop-default-web-strand {
+  position: absolute !important;
+  pointer-events: none !important;
+}
+
+#memepop-root .memepop-default-web-layer {
+  inset: 0 !important;
+}
+
+#memepop-root .memepop-default-web-layer::before,
+#memepop-root .memepop-default-web-layer::after {
+  content: "" !important;
+  position: absolute !important;
+  width: clamp(150px, 18vw, 290px) !important;
+  aspect-ratio: 1 !important;
+  border-radius: 50% !important;
+  opacity: 0.82 !important;
+  background:
+    repeating-conic-gradient(from 12deg, rgba(255, 255, 255, 0.84) 0 2deg, transparent 2deg 24deg),
+    repeating-radial-gradient(circle, transparent 0 24px, rgba(255, 255, 255, 0.82) 25px 28px, transparent 29px 46px) !important;
+  filter:
+    drop-shadow(0 2px 3px rgba(67, 44, 70, 0.16))
+    drop-shadow(0 0 8px rgba(255, 255, 255, 0.34)) !important;
+}
+
+#memepop-root .memepop-default-web-layer::before {
+  left: -74px !important;
+  top: -72px !important;
+  transform: rotate(10deg) !important;
+}
+
+#memepop-root .memepop-default-web-layer::after {
+  right: -76px !important;
+  top: -64px !important;
+  transform: rotate(-8deg) !important;
+}
+
+#memepop-root .memepop-default-web-strand {
+  height: 5px !important;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.94) 16%, rgba(255, 255, 255, 0.98) 80%, transparent) !important;
+  box-shadow:
+    0 2px 4px rgba(67, 44, 70, 0.16),
+    0 0 10px rgba(255, 255, 255, 0.32) !important;
+  transform-origin: 50% 50% !important;
+}
+
+#memepop-root .memepop-default-web-strand::before,
+#memepop-root .memepop-default-web-strand::after {
+  content: "" !important;
+  position: absolute !important;
+  top: -14px !important;
+  width: 34px !important;
+  height: 34px !important;
+  border-top: 4px solid rgba(255, 255, 255, 0.78) !important;
+  border-radius: 50% !important;
+  opacity: 0.82 !important;
+}
+
+#memepop-root .memepop-default-web-strand::before {
+  left: 22% !important;
+}
+
+#memepop-root .memepop-default-web-strand::after {
+  right: 22% !important;
+}
+
+#memepop-root .memepop-default-web-strand-1 {
+  left: -4vw !important;
+  top: 22vh !important;
+  width: min(380px, 36vw) !important;
+  transform: rotate(28deg) !important;
+}
+
+#memepop-root .memepop-default-web-strand-2 {
+  right: -5vw !important;
+  top: 18vh !important;
+  width: min(440px, 38vw) !important;
+  transform: rotate(-25deg) !important;
+}
+
+#memepop-root .memepop-default-web-strand-3 {
+  left: -6vw !important;
+  bottom: 18vh !important;
+  width: min(420px, 40vw) !important;
+  transform: rotate(-19deg) !important;
+}
+
+#memepop-root .memepop-default-web-strand-4 {
+  right: -3vw !important;
+  bottom: 14vh !important;
+  width: min(420px, 36vw) !important;
+  transform: rotate(22deg) !important;
+}
+
+#memepop-root .memepop-default-web-strand-5 {
+  left: max(18px, calc(50% - 555px)) !important;
+  top: max(44px, calc(50% - 340px)) !important;
+  width: clamp(170px, 18vw, 270px) !important;
+  transform: rotate(-42deg) !important;
+}
+
+#memepop-root .memepop-default-web-strand-6 {
+  left: max(96px, calc(50% - 505px)) !important;
+  top: max(92px, calc(50% - 308px)) !important;
+  width: clamp(140px, 15vw, 230px) !important;
+  transform: rotate(18deg) !important;
+}
+
+#memepop-root .memepop-default-web-strand-7 {
+  right: max(34px, calc(50% - 560px)) !important;
+  top: max(74px, calc(50% - 324px)) !important;
+  width: clamp(160px, 19vw, 300px) !important;
+  transform: rotate(36deg) !important;
+}
+
+#memepop-root .memepop-default-web-strand-8 {
+  left: 50% !important;
+  bottom: max(18px, calc(50% - 344px)) !important;
+  width: clamp(260px, 38vw, 560px) !important;
+  transform: translateX(-50%) rotate(-3deg) !important;
+  opacity: 0.76 !important;
+}
+
+#memepop-root .memepop-default-web-acrobat {
+  position: absolute !important;
+  left: max(22px, calc(50% - 568px)) !important;
+  top: max(36px, calc(50% - 382px)) !important;
+  z-index: 3 !important;
+  width: clamp(132px, 13vw, 190px) !important;
+  height: clamp(152px, 15vw, 222px) !important;
+  filter:
+    drop-shadow(0 15px 18px rgba(45, 31, 61, 0.22))
+    drop-shadow(0 0 14px rgba(255, 255, 255, 0.18)) !important;
+  transform-origin: 54% -28% !important;
+  animation: memepop-default-acrobat-swing 2500ms ease-in-out infinite alternate !important;
+}
+
+#memepop-root .memepop-default-web-rope {
+  position: absolute !important;
+  left: 48% !important;
+  top: -74% !important;
+  z-index: 1 !important;
+  width: 6px !important;
+  height: 95% !important;
+  border-radius: 999px !important;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0 10px, rgba(211, 224, 238, 0.96) 10px 18px) !important;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.34) !important;
+  transform: rotate(-8deg) !important;
+}
+
+#memepop-root .memepop-default-web-body,
+#memepop-root .memepop-default-web-head,
+#memepop-root .memepop-default-web-mask,
+#memepop-root .memepop-default-web-limb {
+  position: absolute !important;
+  pointer-events: none !important;
+}
+
+#memepop-root .memepop-default-web-body {
+  left: 34% !important;
+  top: 34% !important;
+  z-index: 4 !important;
+  width: 36% !important;
+  height: 38% !important;
+  border: 4px solid rgba(48, 38, 66, 0.85) !important;
+  border-radius: 42% 46% 48% 42% !important;
+  background:
+    linear-gradient(135deg, transparent 0 38%, rgba(255, 220, 75, 0.96) 39% 47%, transparent 48%),
+    radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.56) 0 8%, transparent 9%),
+    linear-gradient(160deg, #1ebbb8 0%, #168f99 50%, #5e35b1 51%, #43228f 100%) !important;
+  box-shadow:
+    inset 0 -8px 0 rgba(29, 17, 79, 0.16),
+    0 8px 12px rgba(48, 38, 66, 0.16) !important;
+  transform: rotate(-16deg) !important;
+}
+
+#memepop-root .memepop-default-web-head {
+  left: 38% !important;
+  top: 12% !important;
+  z-index: 5 !important;
+  width: 34% !important;
+  height: 30% !important;
+  border: 4px solid rgba(48, 38, 66, 0.85) !important;
+  border-radius: 48% 52% 50% 46% !important;
+  background:
+    radial-gradient(circle at 72% 22%, rgba(255, 255, 255, 0.58) 0 8%, transparent 9%),
+    linear-gradient(145deg, #24c6c3, #116f90) !important;
+  transform: rotate(-12deg) !important;
+}
+
+#memepop-root .memepop-default-web-mask {
+  left: 14% !important;
+  top: 34% !important;
+  width: 72% !important;
+  height: 30% !important;
+  background:
+    radial-gradient(ellipse at 26% 50%, #ffffff 0 18%, transparent 19%),
+    radial-gradient(ellipse at 74% 50%, #ffffff 0 18%, transparent 19%),
+    linear-gradient(90deg, transparent 0 6%, #5e35b1 7% 93%, transparent 94%) !important;
+  border-radius: 999px !important;
+  box-shadow: inset 0 -4px 0 rgba(35, 24, 75, 0.18) !important;
+}
+
+#memepop-root .memepop-default-web-limb {
+  z-index: 3 !important;
+  width: 18% !important;
+  height: 52% !important;
+  border: 4px solid rgba(48, 38, 66, 0.82) !important;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(180deg, #5e35b1 0 44%, #ffcf46 45% 54%, #1ebbb8 55% 100%) !important;
+  box-shadow: inset 0 -8px 0 rgba(29, 17, 79, 0.14) !important;
+  transform-origin: 50% 12% !important;
+}
+
+#memepop-root .memepop-default-web-limb::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 50% !important;
+  bottom: -10px !important;
+  width: 118% !important;
+  height: 22px !important;
+  border: 4px solid rgba(48, 38, 66, 0.82) !important;
+  border-radius: 999px !important;
+  background: #ffcf46 !important;
+  transform: translateX(-50%) !important;
+}
+
+#memepop-root .memepop-default-web-arm-left {
+  left: 18% !important;
+  top: 22% !important;
+  height: 48% !important;
+  transform: rotate(128deg) !important;
+}
+
+#memepop-root .memepop-default-web-arm-right {
+  right: 12% !important;
+  top: 32% !important;
+  height: 54% !important;
+  transform: rotate(-56deg) !important;
+}
+
+#memepop-root .memepop-default-web-leg-left {
+  left: 28% !important;
+  bottom: -4% !important;
+  height: 48% !important;
+  transform: rotate(42deg) !important;
+}
+
+#memepop-root .memepop-default-web-leg-right {
+  right: 24% !important;
+  bottom: -2% !important;
+  height: 52% !important;
+  transform: rotate(-82deg) !important;
+}
+
+#memepop-root .memepop-default-phew {
+  position: absolute !important;
+  left: max(170px, calc(50% - 360px)) !important;
+  top: max(42px, calc(50% - 358px)) !important;
+  z-index: 3 !important;
+  padding: 10px 18px 12px !important;
+  border: 4px solid #252033 !important;
+  border-radius: 26px 20px 28px 18px !important;
+  color: #111827 !important;
+  background:
+    radial-gradient(circle at 18% 18%, #ffffff 0 17%, transparent 18%),
+    linear-gradient(135deg, #fffef4 0%, #fff2a8 55%, #ffcc4d 100%) !important;
+  box-shadow:
+    6px 6px 0 #1ebbb8,
+    11px 11px 0 rgba(37, 32, 51, 0.84),
+    0 18px 26px rgba(45, 31, 61, 0.18) !important;
+  font: 1000 clamp(26px, 3.5vw, 52px)/0.9 Inter, ui-sans-serif, system-ui, sans-serif !important;
+  letter-spacing: 0 !important;
+  transform: rotate(-4deg) !important;
+  animation: memepop-default-phew-pop 1650ms ease-in-out infinite alternate !important;
+}
+
+#memepop-root .memepop-default-phew::before,
+#memepop-root .memepop-default-phew::after {
+  content: "" !important;
+  position: absolute !important;
+  width: 42px !important;
+  height: 4px !important;
+  border-radius: 999px !important;
+  background: #252033 !important;
+}
+
+#memepop-root .memepop-default-phew::before {
+  right: -52px !important;
+  top: 18px !important;
+  transform: rotate(18deg) !important;
+}
+
+#memepop-root .memepop-default-phew::after {
+  right: -42px !important;
+  bottom: 12px !important;
+  transform: rotate(-20deg) !important;
+}
+
 #memepop-root .memepop-chill-stage {
   position: absolute !important;
   inset: 0 !important;
@@ -900,48 +1229,238 @@
 
 #memepop-root .memepop-believe-corner-right {
   top: auto !important;
-  right: max(18px, 3vw) !important;
-  bottom: max(12px, 2vh) !important;
-  width: clamp(260px, 24vw, 390px) !important;
-  height: clamp(250px, 24vw, 372px) !important;
+  right: max(22px, 3.5vw) !important;
+  bottom: max(14px, 2.5vh) !important;
+  width: clamp(270px, 24vw, 390px) !important;
+  height: clamp(260px, 23vw, 370px) !important;
   transform: rotate(0deg) !important;
+  overflow: visible !important;
   background:
-    radial-gradient(circle at 70% 28%, rgba(255, 249, 204, 0.92) 0 34px, rgba(255, 226, 141, 0.46) 35px 82px, transparent 84px),
-    linear-gradient(180deg, #ad78e8 0 42%, #8249bd 43% 100%) 64% 50% / 18% 58% no-repeat,
-    radial-gradient(ellipse at 64% 82%, rgba(78, 27, 110, 0.28) 0 34%, transparent 36%),
-    linear-gradient(180deg, #ffd6e2, #f27ea7) 80% 73% / 24% 28% no-repeat,
-    radial-gradient(circle at 83% 68%, rgba(255, 255, 255, 0.75) 0 8px, transparent 9px),
-    linear-gradient(180deg, rgba(255, 245, 211, 0.86), rgba(255, 207, 226, 0.82)) 18% 18% / 46% 32% no-repeat,
-    linear-gradient(180deg, rgba(234, 205, 255, 0.9), rgba(255, 232, 180, 0.82)) 22% 56% / 42% 28% no-repeat,
-    linear-gradient(145deg, rgba(255, 226, 183, 0.54), rgba(255, 166, 197, 0.42)) !important;
-  border: 2px solid rgba(255, 255, 255, 0.5) !important;
+    radial-gradient(circle at 50% 22%, rgba(255, 247, 200, 0.86) 0 42px, rgba(255, 219, 133, 0.32) 43px 104px, transparent 106px),
+    radial-gradient(circle at 77% 80%, rgba(255, 126, 179, 0.3) 0 50px, transparent 84px),
+    radial-gradient(circle at 22% 72%, rgba(178, 127, 255, 0.22) 0 54px, transparent 88px),
+    linear-gradient(145deg, rgba(255, 231, 199, 0.42), rgba(255, 175, 210, 0.2), transparent 72%) !important;
+  border: 0 !important;
 }
 
 #memepop-root .memepop-believe-corner-right::before {
-  left: 6% !important;
-  top: 0 !important;
-  width: 82% !important;
-  height: 36% !important;
+  left: 14% !important;
+  top: 2% !important;
+  width: 74% !important;
+  height: 76% !important;
   background:
-    radial-gradient(circle at 10% 52%, #fff5ad 0 6px, transparent 7px),
-    radial-gradient(circle at 30% 38%, #ffd968 0 8px, transparent 9px),
-    radial-gradient(circle at 52% 60%, #fff5ad 0 6px, transparent 7px),
-    radial-gradient(circle at 72% 42%, #ffd968 0 8px, transparent 9px),
-    radial-gradient(circle at 92% 58%, #fff5ad 0 6px, transparent 7px),
-    linear-gradient(165deg, transparent 0 13%, rgba(255, 233, 154, 0.82) 14% 17%, transparent 18%) !important;
+    radial-gradient(circle at 18% 20%, #fff69a 0 6px, transparent 7px),
+    radial-gradient(circle at 82% 18%, #ffd66b 0 7px, transparent 8px),
+    radial-gradient(circle at 90% 58%, #ff8bbd 0 6px, transparent 7px),
+    linear-gradient(45deg, transparent 0 45%, #fff3a0 46% 54%, transparent 55%) 6% 48% / 34px 34px no-repeat,
+    linear-gradient(-45deg, transparent 0 45%, #c58cff 46% 54%, transparent 55%) 82% 74% / 30px 30px no-repeat,
+    radial-gradient(circle at 50% 46%, rgba(255, 248, 197, 0.44), transparent 64%) !important;
+  opacity: 0.88 !important;
+  filter: drop-shadow(0 0 18px rgba(255, 214, 91, 0.3)) !important;
+  animation: memepop-believe-time-spark 2600ms ease-in-out infinite alternate !important;
 }
 
 #memepop-root .memepop-believe-corner-right::after {
-  right: 14% !important;
-  bottom: 2% !important;
-  width: 28% !important;
-  height: 42% !important;
+  right: 13% !important;
+  bottom: 4% !important;
+  width: 66% !important;
+  height: 20% !important;
   background:
-    radial-gradient(circle at 33% 17%, rgba(255, 255, 255, 0.78) 0 10%, transparent 11%),
-    linear-gradient(180deg, #ff9bc0 0%, #d95f8f 100%) !important;
-  border-radius: 24% 24% 38% 38% !important;
-  transform: rotate(-3deg) !important;
-  filter: drop-shadow(0 14px 18px rgba(91, 36, 116, 0.18)) !important;
+    radial-gradient(ellipse at 50% 88%, rgba(88, 39, 102, 0.2) 0 48%, transparent 50%),
+    linear-gradient(90deg, rgba(255, 224, 154, 0.78), rgba(255, 151, 194, 0.7), rgba(184, 134, 255, 0.58)) 50% 50% / 90% 16% no-repeat !important;
+  border-radius: 50% !important;
+  transform: rotate(-2deg) !important;
+  filter: blur(0.2px) drop-shadow(0 16px 20px rgba(91, 36, 116, 0.16)) !important;
+}
+
+#memepop-root .memepop-believe-pendulum {
+  position: absolute !important;
+  left: 35% !important;
+  top: 5% !important;
+  z-index: 4 !important;
+  width: 34% !important;
+  height: 76% !important;
+  border: 3px solid rgba(99, 66, 79, 0.42) !important;
+  border-radius: 42px 42px 36px 36px !important;
+  background:
+    radial-gradient(circle at 28% 14%, rgba(255, 255, 255, 0.8) 0 7%, transparent 8%),
+    linear-gradient(180deg, rgba(255, 242, 198, 0.96), rgba(255, 198, 151, 0.94) 58%, rgba(217, 139, 173, 0.9)) !important;
+  box-shadow:
+    inset 0 4px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -12px 0 rgba(150, 87, 118, 0.12),
+    0 18px 26px rgba(96, 40, 71, 0.18),
+    0 0 26px rgba(255, 225, 137, 0.3) !important;
+}
+
+#memepop-root .memepop-believe-pendulum::before,
+#memepop-root .memepop-believe-pendulum::after {
+  content: "" !important;
+  position: absolute !important;
+  pointer-events: none !important;
+}
+
+#memepop-root .memepop-believe-pendulum::before {
+  left: 50% !important;
+  top: 53% !important;
+  width: 7px !important;
+  height: 34% !important;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(180deg, #7e5360, #563745) !important;
+  transform: translateX(-50%) !important;
+}
+
+#memepop-root .memepop-believe-pendulum::after {
+  left: 18% !important;
+  bottom: 10% !important;
+  width: 64% !important;
+  height: 6px !important;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(90deg, transparent, rgba(111, 69, 82, 0.46), transparent) !important;
+}
+
+#memepop-root .memepop-believe-pendulum-face {
+  position: absolute !important;
+  left: 50% !important;
+  top: 9% !important;
+  z-index: 5 !important;
+  width: 66% !important;
+  aspect-ratio: 1 !important;
+  border: 4px solid rgba(91, 61, 66, 0.7) !important;
+  border-radius: 50% !important;
+  background:
+    radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.92) 0 8%, transparent 9%),
+    conic-gradient(from 0deg, transparent 0 8deg, rgba(91, 61, 66, 0.26) 9deg 12deg, transparent 13deg 82deg, rgba(91, 61, 66, 0.26) 83deg 86deg, transparent 87deg 172deg, rgba(91, 61, 66, 0.26) 173deg 176deg, transparent 177deg 262deg, rgba(91, 61, 66, 0.26) 263deg 266deg, transparent 267deg 360deg),
+    linear-gradient(180deg, #fff8dc, #ffe0a8) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.7),
+    0 9px 14px rgba(96, 40, 71, 0.16) !important;
+  transform: translateX(-50%) !important;
+}
+
+#memepop-root .memepop-believe-pendulum-face::before,
+#memepop-root .memepop-believe-pendulum-face::after {
+  content: "" !important;
+  position: absolute !important;
+  pointer-events: none !important;
+}
+
+#memepop-root .memepop-believe-pendulum-face::before {
+  inset: 16% !important;
+  border-radius: 50% !important;
+  border: 1px dashed rgba(91, 61, 66, 0.22) !important;
+}
+
+#memepop-root .memepop-believe-pendulum-face::after {
+  left: 50% !important;
+  top: 50% !important;
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background: #6f4652 !important;
+  transform: translate(-50%, -50%) !important;
+  box-shadow: 0 0 0 4px rgba(255, 228, 164, 0.7) !important;
+}
+
+#memepop-root .memepop-believe-pendulum-hands {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  z-index: 6 !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+#memepop-root .memepop-believe-pendulum-hands::before,
+#memepop-root .memepop-believe-pendulum-hands::after {
+  content: "" !important;
+  position: absolute !important;
+  left: -2px !important;
+  bottom: 0 !important;
+  width: 4px !important;
+  border-radius: 999px !important;
+  background: #5d3948 !important;
+  transform-origin: 50% 100% !important;
+}
+
+#memepop-root .memepop-believe-pendulum-hands::before {
+  height: 26px !important;
+  transform: rotate(6deg) !important;
+}
+
+#memepop-root .memepop-believe-pendulum-hands::after {
+  height: 21px !important;
+  transform: rotate(88deg) !important;
+}
+
+#memepop-root .memepop-believe-pendulum-bob {
+  position: absolute !important;
+  left: 50% !important;
+  top: 52% !important;
+  z-index: 6 !important;
+  width: 6px !important;
+  height: 38% !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, #7e5360, #563745) !important;
+  transform-origin: 50% 0 !important;
+  animation: memepop-believe-pendulum-swing 1700ms ease-in-out infinite alternate !important;
+}
+
+#memepop-root .memepop-believe-pendulum-bob::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 50% !important;
+  bottom: -4px !important;
+  width: 38px !important;
+  height: 38px !important;
+  border: 3px solid rgba(91, 61, 66, 0.54) !important;
+  border-radius: 50% !important;
+  background:
+    radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 14%, transparent 15%),
+    linear-gradient(180deg, #ffd86f, #ff9f6e) !important;
+  box-shadow:
+    inset 0 -5px 0 rgba(156, 74, 78, 0.16),
+    0 10px 14px rgba(91, 36, 116, 0.16) !important;
+  transform: translateX(-50%) !important;
+}
+
+#memepop-root .memepop-believe-time-note {
+  position: absolute !important;
+  right: 2% !important;
+  bottom: 18% !important;
+  z-index: 5 !important;
+  display: grid !important;
+  place-items: center !important;
+  width: clamp(130px, 11vw, 178px) !important;
+  min-height: 58px !important;
+  padding: 10px 14px !important;
+  border: 2px solid rgba(255, 255, 255, 0.62) !important;
+  border-radius: 16px !important;
+  color: #6e2d57 !important;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.85), transparent 34%),
+    linear-gradient(135deg, rgba(255, 241, 190, 0.96), rgba(255, 174, 205, 0.92), rgba(216, 185, 255, 0.88)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.76),
+    0 14px 22px rgba(102, 45, 82, 0.16) !important;
+  font: 1000 clamp(12px, 1.2vw, 16px)/1.14 Inter, ui-sans-serif, system-ui, sans-serif !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+  transform: rotate(-4deg) !important;
+}
+
+#memepop-root .memepop-believe-time-note::before {
+  content: "" !important;
+  position: absolute !important;
+  top: -10px !important;
+  left: 50% !important;
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 50% !important;
+  background: #b984ff !important;
+  box-shadow: 0 5px 10px rgba(94, 49, 119, 0.2) !important;
+  transform: translateX(-50%) !important;
 }
 
 #memepop-root .memepop-party-stage {
@@ -2694,6 +3213,38 @@
   }
 }
 
+@keyframes memepop-default-stage-in {
+  0% {
+    opacity: 0;
+    transform: scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes memepop-default-acrobat-swing {
+  0% {
+    transform: rotate(-12deg) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: rotate(-18deg) translate3d(4px, -5px, 0);
+  }
+  100% {
+    transform: rotate(-7deg) translate3d(8px, 2px, 0);
+  }
+}
+
+@keyframes memepop-default-phew-pop {
+  0% {
+    transform: rotate(-4deg) scale(0.96);
+  }
+  100% {
+    transform: rotate(-2deg) scale(1.04);
+  }
+}
+
 @keyframes memepop-chill-stage-in {
   0% {
     opacity: 0;
@@ -2809,6 +3360,29 @@
     filter:
       drop-shadow(0 22px 30px rgba(108, 55, 78, 0.18))
       drop-shadow(0 0 24px rgba(255, 226, 126, 0.32));
+  }
+}
+
+@keyframes memepop-believe-pendulum-swing {
+  0% {
+    transform: rotate(-13deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(13deg);
+  }
+}
+
+@keyframes memepop-believe-time-spark {
+  0% {
+    opacity: 0.7;
+    transform: translate3d(-4px, 2px, 0) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(5px, -5px, 0) scale(1.04);
   }
 }
 
@@ -3176,6 +3750,18 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  #memepop-root.memepop-accessory-none.memepop-shell-visible .memepop-default-web-stage,
+  #memepop-root.memepop-accessory-none:not(.memepop-entrance-sequenced) .memepop-default-web-stage {
+    display: block !important;
+    opacity: 1 !important;
+    animation: none !important;
+  }
+
+  #memepop-root.memepop-accessory-none .memepop-default-web-acrobat,
+  #memepop-root.memepop-accessory-none .memepop-default-phew {
+    animation: none !important;
+  }
+
   #memepop-root.memepop-accessory-sunglasses.memepop-shell-visible .memepop-chill-stage,
   #memepop-root.memepop-accessory-sunglasses:not(.memepop-entrance-sequenced) .memepop-chill-stage {
     display: block !important;
@@ -3214,6 +3800,8 @@
   #memepop-root.memepop-accessory-crown .memepop-believe-neon,
   #memepop-root.memepop-accessory-crown .memepop-believe-heart-light,
   #memepop-root.memepop-accessory-crown .memepop-believe-corner,
+  #memepop-root.memepop-accessory-crown .memepop-believe-corner-right::before,
+  #memepop-root.memepop-accessory-crown .memepop-believe-pendulum-bob,
   #memepop-root.memepop-accessory-crown .memepop-believe-string-lights::before {
     animation: none !important;
   }

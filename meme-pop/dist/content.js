@@ -469,6 +469,43 @@ function createHydrationSplash() {
     splash.append(puddle);
     return splash;
 }
+function createDefaultWebStage() {
+    const stage = document.createElement("div");
+    stage.className = "memepop-default-web-stage";
+    stage.setAttribute("aria-hidden", "true");
+    const webLayer = document.createElement("div");
+    webLayer.className = "memepop-default-web-layer";
+    for (let index = 1; index <= 8; index += 1) {
+        const strand = document.createElement("span");
+        strand.className = `memepop-default-web-strand memepop-default-web-strand-${index}`;
+        webLayer.append(strand);
+    }
+    const acrobat = document.createElement("span");
+    acrobat.className = "memepop-default-web-acrobat";
+    const rope = document.createElement("span");
+    rope.className = "memepop-default-web-rope";
+    const body = document.createElement("span");
+    body.className = "memepop-default-web-body";
+    const head = document.createElement("span");
+    head.className = "memepop-default-web-head";
+    const mask = document.createElement("span");
+    mask.className = "memepop-default-web-mask";
+    const leftArm = document.createElement("span");
+    leftArm.className = "memepop-default-web-limb memepop-default-web-arm-left";
+    const rightArm = document.createElement("span");
+    rightArm.className = "memepop-default-web-limb memepop-default-web-arm-right";
+    const leftLeg = document.createElement("span");
+    leftLeg.className = "memepop-default-web-limb memepop-default-web-leg-left";
+    const rightLeg = document.createElement("span");
+    rightLeg.className = "memepop-default-web-limb memepop-default-web-leg-right";
+    head.append(mask);
+    acrobat.append(rope, leftArm, rightArm, leftLeg, rightLeg, body, head);
+    const phew = document.createElement("span");
+    phew.className = "memepop-default-phew";
+    phew.textContent = "PHEW!";
+    stage.append(webLayer, acrobat, phew);
+    return stage;
+}
 function createPartyStage() {
     const stage = document.createElement("div");
     stage.className = "memepop-party-stage";
@@ -553,6 +590,20 @@ function createBelieveStage() {
     leftCorner.className = "memepop-believe-corner memepop-believe-corner-left";
     const rightCorner = document.createElement("span");
     rightCorner.className = "memepop-believe-corner memepop-believe-corner-right";
+    const pendulum = document.createElement("span");
+    pendulum.className = "memepop-believe-pendulum";
+    const clockFace = document.createElement("span");
+    clockFace.className = "memepop-believe-pendulum-face";
+    const clockHands = document.createElement("span");
+    clockHands.className = "memepop-believe-pendulum-hands";
+    const clockBob = document.createElement("span");
+    clockBob.className = "memepop-believe-pendulum-bob";
+    const timeNote = document.createElement("span");
+    timeNote.className = "memepop-believe-time-note";
+    timeNote.textContent = "One moment at a time";
+    clockFace.append(clockHands);
+    pendulum.append(clockFace, clockBob);
+    rightCorner.append(pendulum, timeNote);
     const notes = document.createElement("div");
     notes.className = "memepop-believe-notes";
     for (const noteText of ["Dream Big", "Progress Over Perfection", "Be You", "Small steps every day", "Trust your journey", "Keep going!"]) {
@@ -649,6 +700,7 @@ function createMemePop(message) {
     root.id = "memepop-root";
     root.setAttribute("aria-live", "polite");
     root.className = "memepop-accessory-none";
+    const defaultWebStage = createDefaultWebStage();
     const chillStage = createChillStage();
     const believeStage = createBelieveStage();
     const partyStage = createPartyStage();
@@ -706,7 +758,7 @@ function createMemePop(message) {
     modeLabel.className = "memepop-mode-label";
     modeLabel.textContent = getCurrentModeLabel();
     card.append(shell, cardConfetti, controls, countdown, characterButton, bubble, modeLabel, reward);
-    root.append(chillStage, believeStage, partyStage, splash, partyEffects, card);
+    root.append(defaultWebStage, chillStage, believeStage, partyStage, splash, partyEffects, card);
     rootElement = root;
     cardElement = card;
     messageElement = messageText;
