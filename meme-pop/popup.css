@@ -1687,13 +1687,35 @@ textarea:focus {
     radial-gradient(ellipse at 78% 50%, rgba(255, 255, 255, 0.82) 0 7px, transparent 8px);
 }
 
+.accessory-crown .accessory-preview {
+  background:
+    radial-gradient(circle at 28% 26%, rgba(255, 255, 255, 0.82) 0 6px, transparent 7px),
+    radial-gradient(circle at 74% 70%, rgba(255, 218, 92, 0.72) 0 7px, transparent 8px),
+    linear-gradient(145deg, #ffd7df, #b98cff 58%, #ffe3a3);
+}
+
 .accessory-crown .accessory-preview::before {
-  left: 11px;
-  top: 18px;
-  width: 36px;
-  height: 28px;
-  background: linear-gradient(145deg, #ffe889, #f59e0b);
-  clip-path: polygon(0 100%, 0 38%, 20% 62%, 34% 8%, 50% 58%, 66% 8%, 80% 62%, 100% 38%, 100% 100%);
+  left: 13px;
+  top: 8px;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(145deg, #fff3a6, #ffd447 54%, #ff9f45);
+  clip-path: polygon(50% 0, 62% 32%, 96% 35%, 69% 55%, 79% 90%, 50% 70%, 21% 90%, 31% 55%, 4% 35%, 38% 32%);
+  filter: drop-shadow(0 4px 5px rgba(76, 35, 107, 0.2));
+}
+
+.accessory-crown .accessory-preview::after {
+  left: 9px;
+  bottom: 11px;
+  width: 31px;
+  height: 12px;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, #7c3aed 0 28%, #fff5cb 29% 40%, #ff6fae 41% 70%, #fff5cb 71% 80%, #7c3aed 81%);
+  box-shadow:
+    18px -6px 0 -5px #fff2a5,
+    23px -18px 0 -8px #ff79b8;
+  transform: rotate(23deg);
 }
 
 .accessory-card strong {

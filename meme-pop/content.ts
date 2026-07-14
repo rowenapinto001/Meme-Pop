@@ -650,6 +650,61 @@ function createChillStage(): HTMLElement {
   return stage;
 }
 
+function createBelieveStage(): HTMLElement {
+  const stage = document.createElement("div");
+  stage.className = "memepop-believe-stage";
+  stage.setAttribute("aria-hidden", "true");
+
+  const title = document.createElement("div");
+  title.className = "memepop-believe-title";
+  title.textContent = "Believe Mode";
+
+  const subtitle = document.createElement("div");
+  subtitle.className = "memepop-believe-subtitle";
+  subtitle.textContent = "You're stronger than you think. Keep believing in yourself!";
+
+  const neon = document.createElement("span");
+  neon.className = "memepop-believe-neon";
+  neon.textContent = "You've Got This!";
+
+  const heartLight = document.createElement("span");
+  heartLight.className = "memepop-believe-heart-light";
+
+  const shelf = document.createElement("span");
+  shelf.className = "memepop-believe-shelf";
+
+  const lamp = document.createElement("span");
+  lamp.className = "memepop-believe-lamp";
+
+  const cup = document.createElement("span");
+  cup.className = "memepop-believe-cup";
+
+  const stringLights = document.createElement("span");
+  stringLights.className = "memepop-believe-string-lights";
+
+  const leftCorner = document.createElement("span");
+  leftCorner.className = "memepop-believe-corner memepop-believe-corner-left";
+
+  const rightCorner = document.createElement("span");
+  rightCorner.className = "memepop-believe-corner memepop-believe-corner-right";
+
+  const notes = document.createElement("div");
+  notes.className = "memepop-believe-notes";
+
+  for (const noteText of ["Dream Big", "Progress Over Perfection", "Be You", "Small steps every day", "Trust your journey", "Keep going!"]) {
+    const note = document.createElement("span");
+    note.textContent = noteText;
+    notes.append(note);
+  }
+
+  const quest = document.createElement("span");
+  quest.className = "memepop-believe-quest";
+  quest.textContent = "Today's Quest: Believe & Begin";
+
+  stage.append(title, subtitle, neon, heartLight, shelf, lamp, cup, stringLights, leftCorner, rightCorner, notes, quest);
+  return stage;
+}
+
 function createPartyEffects(): HTMLElement {
   const effects = document.createElement("div");
   effects.className = "memepop-party-effects";
@@ -766,6 +821,7 @@ function createMemePop(message?: string): HTMLElement | null {
   root.className = "memepop-accessory-none";
 
   const chillStage = createChillStage();
+  const believeStage = createBelieveStage();
   const partyStage = createPartyStage();
   const splash = createHydrationSplash();
   const partyEffects = createPartyEffects();
@@ -835,7 +891,7 @@ function createMemePop(message?: string): HTMLElement | null {
   countdown.setAttribute("aria-label", `MemePop closes in ${formatCountdown(getVisibleDurationMs())}`);
 
   card.append(shell, cardConfetti, controls, countdown, characterButton, bubble, reward);
-  root.append(chillStage, partyStage, splash, partyEffects, card);
+  root.append(chillStage, believeStage, partyStage, splash, partyEffects, card);
 
   rootElement = root;
   cardElement = card;
