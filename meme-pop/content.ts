@@ -598,6 +598,22 @@ function createDefaultWebStage(): HTMLElement {
   stage.className = "memepop-default-web-stage";
   stage.setAttribute("aria-hidden", "true");
 
+  const city = document.createElement("div");
+  city.className = "memepop-default-city";
+
+  for (const cluster of ["left", "right"]) {
+    const clusterElement = document.createElement("div");
+    clusterElement.className = `memepop-default-city-cluster memepop-default-city-${cluster}`;
+
+    for (let index = 1; index <= 11; index += 1) {
+      const building = document.createElement("span");
+      building.className = `memepop-default-building memepop-default-building-${index} memepop-default-building-${cluster}-${index}`;
+      clusterElement.append(building);
+    }
+
+    city.append(clusterElement);
+  }
+
   const webLayer = document.createElement("div");
   webLayer.className = "memepop-default-web-layer";
 
@@ -657,7 +673,7 @@ function createDefaultWebStage(): HTMLElement {
   phew.className = "memepop-default-phew";
   phew.textContent = "PHEW!";
 
-  stage.append(webLayer, acrobat, phew);
+  stage.append(city, webLayer, acrobat, phew);
   return stage;
 }
 

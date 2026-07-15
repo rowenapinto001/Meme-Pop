@@ -1,65 +1,99 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" role="img" aria-label="Original teal and purple web acrobat">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" role="img" aria-label="Original teal purple and gold comic web acrobat">
   <defs>
-    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="170%">
-      <feDropShadow dx="0" dy="12" stdDeviation="9" flood-color="#2d1f3d" flood-opacity="0.28"/>
+    <filter id="heroShadow" x="-28%" y="-28%" width="170%" height="175%">
+      <feDropShadow dx="0" dy="13" stdDeviation="8" flood-color="#1a1530" flood-opacity="0.3"/>
     </filter>
-    <linearGradient id="tealSuit" x1="35" y1="20" x2="300" y2="260" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#35d8cf"/>
-      <stop offset="0.52" stop-color="#0d9ba8"/>
-      <stop offset="1" stop-color="#0d6f8f"/>
+    <linearGradient id="tealSuit" x1="30" y1="20" x2="270" y2="250" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5af7ed"/>
+      <stop offset="0.48" stop-color="#16b8c9"/>
+      <stop offset="1" stop-color="#08758d"/>
     </linearGradient>
-    <linearGradient id="purpleSuit" x1="50" y1="20" x2="250" y2="240" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#7445d5"/>
-      <stop offset="1" stop-color="#3f228c"/>
+    <linearGradient id="purpleSuit" x1="40" y1="0" x2="320" y2="270" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7a55e5"/>
+      <stop offset="0.5" stop-color="#4e2aa9"/>
+      <stop offset="1" stop-color="#28125e"/>
     </linearGradient>
-    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ffe45f"/>
-      <stop offset="1" stop-color="#ffb735"/>
+    <linearGradient id="goldTrim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffe979"/>
+      <stop offset="0.52" stop-color="#ffc842"/>
+      <stop offset="1" stop-color="#e99621"/>
+    </linearGradient>
+    <linearGradient id="lens" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.58" stop-color="#e8fbff"/>
+      <stop offset="1" stop-color="#aaf0ff"/>
+    </linearGradient>
+    <linearGradient id="hoodShade" x1="150" y1="0" x2="265" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#2b135f"/>
     </linearGradient>
   </defs>
 
-  <g filter="url(#softShadow)" stroke="#2b203b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M151 2 C145 40 144 66 147 96" fill="none" stroke="#ffffff" stroke-width="8"/>
-    <path d="M151 2 C160 39 159 68 147 96" fill="none" stroke="#bfd3e5" stroke-width="3"/>
-
-    <path d="M151 93 C117 105 85 96 60 74 C39 56 24 47 13 48 C-2 49 -8 66 5 77 C33 102 65 143 104 154 C139 164 165 139 151 93 Z" fill="url(#tealSuit)"/>
-    <path d="M55 74 C44 58 32 39 17 27" fill="none" stroke="url(#purpleSuit)" stroke-width="32"/>
-    <path d="M43 60 L60 50" fill="none" stroke="url(#gold)" stroke-width="10"/>
-    <path d="M18 27 C11 22 2 25 -2 32 C-7 41 -2 51 8 54" fill="url(#gold)"/>
-
-    <path d="M128 88 C129 61 144 42 168 36 C192 31 212 45 218 67 C225 93 209 116 184 121 C157 126 130 113 128 88 Z" fill="url(#tealSuit)"/>
-    <path d="M153 82 C163 68 177 63 194 66" fill="none" stroke="#ffffff" stroke-width="11"/>
-    <path d="M153 82 C163 69 177 65 193 67" fill="none" stroke="#7450e8" stroke-width="4"/>
-    <circle cx="166" cy="51" r="9" fill="#9df4ef" stroke="none"/>
-
-    <path d="M142 121 C171 114 200 121 216 145 C232 168 229 195 206 212 C178 233 138 220 126 187 C116 159 119 132 142 121 Z" fill="url(#purpleSuit)"/>
-    <path d="M154 124 L195 210" fill="none" stroke="url(#gold)" stroke-width="10"/>
-    <path d="M129 169 L222 158" fill="none" stroke="url(#gold)" stroke-width="8"/>
-
-    <path d="M206 139 C236 128 267 116 299 102" fill="none" stroke="url(#purpleSuit)" stroke-width="31"/>
-    <path d="M251 121 L267 111" fill="none" stroke="url(#gold)" stroke-width="9"/>
-    <path d="M299 102 C313 93 331 97 337 109 C342 120 334 132 320 134" fill="url(#gold)"/>
-
-    <path d="M210 158 C247 166 280 184 310 213" fill="none" stroke="url(#tealSuit)" stroke-width="28"/>
-    <path d="M263 185 L278 199" fill="none" stroke="url(#gold)" stroke-width="9"/>
-    <path d="M310 213 C322 220 326 234 318 244 C309 255 294 252 285 240" fill="url(#gold)"/>
-
-    <path d="M139 185 C114 207 88 226 56 241" fill="none" stroke="url(#purpleSuit)" stroke-width="31"/>
-    <path d="M93 215 L78 225" fill="none" stroke="url(#gold)" stroke-width="9"/>
-    <path d="M56 241 C45 248 31 246 24 236 C17 226 23 212 36 207" fill="url(#gold)"/>
-
-    <path d="M176 209 C154 239 133 264 103 284" fill="none" stroke="url(#tealSuit)" stroke-width="29"/>
-    <path d="M137 253 L123 267" fill="none" stroke="url(#gold)" stroke-width="9"/>
-    <path d="M103 284 C92 292 76 289 70 278 C64 267 71 254 85 251" fill="url(#gold)"/>
-
-    <path d="M147 96 C142 76 139 53 151 31" fill="none" stroke="url(#tealSuit)" stroke-width="25"/>
-    <path d="M146 58 L156 43" fill="none" stroke="url(#gold)" stroke-width="7"/>
-    <path d="M151 31 C156 19 170 13 181 20 C191 27 190 42 179 50" fill="url(#gold)"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M150 -12 C142 27 144 59 156 86" stroke="#ffffff" stroke-width="8"/>
+    <path d="M150 -12 C158 25 158 58 156 86" stroke="#bad5e9" stroke-width="3"/>
+    <path d="M302 91 C333 84 363 68 392 42" stroke="#162033" stroke-width="5" opacity="0.72"/>
+    <path d="M305 107 C340 111 370 108 404 96" stroke="#162033" stroke-width="5" opacity="0.68"/>
+    <path d="M298 123 C328 139 358 151 392 157" stroke="#162033" stroke-width="5" opacity="0.64"/>
+    <path d="M36 58 C69 70 98 88 126 117" stroke="#ffffff" stroke-width="4" opacity="0.6"/>
+    <path d="M52 240 C82 219 111 211 143 214" stroke="#ffffff" stroke-width="4" opacity="0.5"/>
   </g>
 
-  <g fill="none" stroke="#2b203b" stroke-width="5" stroke-linecap="round">
-    <path d="M323 130 C346 129 363 120 377 103"/>
-    <path d="M321 138 C348 147 371 148 397 141"/>
-    <path d="M314 146 C334 163 353 174 377 182"/>
+  <g filter="url(#heroShadow)" stroke="#211832" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M158 82 C123 94 94 82 66 58 C47 42 29 32 15 34 C1 36 -5 52 8 63 C39 89 69 131 108 139 C142 146 168 126 158 82 Z" fill="url(#tealSuit)"/>
+    <path d="M64 58 C54 40 41 22 26 9" fill="none" stroke="url(#purpleSuit)" stroke-width="32"/>
+    <path d="M47 43 L64 34" stroke="url(#goldTrim)" stroke-width="10"/>
+    <path d="M26 9 C17 2 5 6 1 17 C-4 28 4 39 17 40" fill="url(#goldTrim)"/>
+
+    <path d="M153 82 C149 59 161 37 182 28 C206 18 231 29 239 53 C248 80 231 108 203 116 C174 124 158 108 153 82 Z" fill="url(#tealSuit)"/>
+    <path d="M169 68 C178 50 193 43 209 47 C205 66 190 77 169 68 Z" fill="url(#lens)"/>
+    <path d="M169 68 C178 50 193 43 209 47 C205 66 190 77 169 68 Z" fill="none" stroke="#211832" stroke-width="5"/>
+    <path d="M213 70 C221 54 232 50 243 54 C240 71 229 81 213 70 Z" fill="url(#lens)"/>
+    <path d="M213 70 C221 54 232 50 243 54 C240 71 229 81 213 70 Z" fill="none" stroke="#211832" stroke-width="5"/>
+    <path d="M158 61 C177 75 203 82 232 86" fill="none" stroke="#125e72" stroke-width="2.8" opacity="0.72"/>
+    <path d="M178 31 C175 57 176 84 183 114" fill="none" stroke="#125e72" stroke-width="2.5" opacity="0.72"/>
+    <path d="M205 25 C198 53 196 84 200 116" fill="none" stroke="#125e72" stroke-width="2.5" opacity="0.68"/>
+    <path d="M229 37 C218 56 212 82 213 114" fill="none" stroke="#125e72" stroke-width="2.5" opacity="0.66"/>
+
+    <path d="M199 38 C222 24 249 21 275 37 C260 41 248 49 242 63 C234 51 220 41 199 38 Z" fill="url(#hoodShade)"/>
+    <path d="M233 43 C256 38 280 43 305 58 C283 61 263 68 248 82" fill="none" stroke="url(#purpleSuit)" stroke-width="18"/>
+
+    <path d="M151 116 C179 101 211 109 227 134 C245 162 232 195 200 207 C165 221 129 201 124 168 C120 145 130 127 151 116 Z" fill="url(#tealSuit)"/>
+    <path d="M148 117 C166 128 184 146 198 170 C207 148 218 135 231 127 C209 106 175 103 148 117 Z" fill="url(#purpleSuit)"/>
+    <path d="M153 117 L196 205" stroke="url(#goldTrim)" stroke-width="10"/>
+    <path d="M126 165 L231 153" stroke="url(#goldTrim)" stroke-width="8"/>
+    <path d="M161 111 C160 139 162 169 158 202" fill="none" stroke="#125e72" stroke-width="2.5" opacity="0.62"/>
+    <path d="M187 106 C184 138 185 171 191 207" fill="none" stroke="#125e72" stroke-width="2.5" opacity="0.58"/>
+    <path d="M129 143 C155 153 187 157 226 154" fill="none" stroke="#125e72" stroke-width="2.2" opacity="0.56"/>
+    <path d="M128 174 C157 181 188 183 219 178" fill="none" stroke="#125e72" stroke-width="2.2" opacity="0.56"/>
+
+    <path d="M218 132 C246 120 275 108 310 94" fill="none" stroke="url(#purpleSuit)" stroke-width="30"/>
+    <path d="M260 113 L276 104" stroke="url(#goldTrim)" stroke-width="9"/>
+    <path d="M310 94 C326 85 342 90 348 103 C354 116 342 129 326 128" fill="url(#goldTrim)"/>
+    <path d="M326 112 C331 101 339 98 351 101" fill="none" stroke="#211832" stroke-width="4"/>
+
+    <path d="M218 155 C250 163 279 184 310 214" fill="none" stroke="url(#tealSuit)" stroke-width="29"/>
+    <path d="M267 184 L283 199" stroke="url(#goldTrim)" stroke-width="9"/>
+    <path d="M310 214 C323 221 327 236 318 247 C308 259 291 254 283 241" fill="url(#goldTrim)"/>
+
+    <path d="M138 181 C112 204 86 221 54 236" fill="none" stroke="url(#purpleSuit)" stroke-width="31"/>
+    <path d="M95 211 L79 221" stroke="url(#goldTrim)" stroke-width="9"/>
+    <path d="M54 236 C42 243 28 240 22 229 C16 218 23 205 38 201" fill="url(#goldTrim)"/>
+
+    <path d="M176 204 C154 232 132 257 100 276" fill="none" stroke="url(#tealSuit)" stroke-width="29"/>
+    <path d="M137 248 L123 262" stroke="url(#goldTrim)" stroke-width="9"/>
+    <path d="M100 276 C88 284 73 281 68 269 C63 258 72 246 86 244" fill="url(#goldTrim)"/>
+
+    <path d="M156 84 C148 58 143 35 155 15" fill="none" stroke="url(#tealSuit)" stroke-width="25"/>
+    <path d="M153 48 L162 32" stroke="url(#goldTrim)" stroke-width="7"/>
+    <path d="M155 15 C161 2 176 -3 187 5 C198 14 194 31 181 38" fill="url(#goldTrim)"/>
+  </g>
+
+  <g fill="none" stroke="#211832" stroke-linecap="round" stroke-linejoin="round" opacity="0.72">
+    <path d="M76 67 C101 78 124 96 149 119" stroke-width="2.2"/>
+    <path d="M89 95 C108 104 128 112 152 117" stroke-width="2.2"/>
+    <path d="M239 119 C260 118 281 111 305 101" stroke-width="2.2"/>
+    <path d="M238 170 C265 176 286 193 305 213" stroke-width="2.2"/>
+    <path d="M115 200 C103 216 84 229 61 237" stroke-width="2.2"/>
   </g>
 </svg>
