@@ -127,214 +127,71 @@
     linear-gradient(180deg, transparent 0%, rgba(143, 184, 180, 0.22) 44%, rgba(31, 79, 91, 0.2) 100%) !important;
 }
 
-#memepop-root .memepop-default-city-cluster {
+#memepop-root .memepop-default-city-art {
   position: absolute !important;
-  bottom: 0 !important;
-  width: min(48vw, 660px) !important;
-  height: 100% !important;
-}
-
-#memepop-root .memepop-default-city-left {
   left: 0 !important;
-}
-
-#memepop-root .memepop-default-city-right {
   right: 0 !important;
-  transform: scaleX(-1) !important;
-}
-
-#memepop-root .memepop-default-building {
-  position: absolute !important;
-  bottom: 0 !important;
+  bottom: -1px !important;
+  z-index: 1 !important;
   display: block !important;
-  border: 3px solid rgba(18, 45, 54, 0.72) !important;
-  border-bottom: 0 !important;
-  border-radius: 4px 4px 0 0 !important;
-  background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.1), transparent 22%, rgba(0, 0, 0, 0.12) 100%),
-    repeating-linear-gradient(90deg, transparent 0 13px, var(--window-color, rgba(228, 210, 122, 0.72)) 14px 19px, transparent 20px 33px),
-    repeating-linear-gradient(180deg, transparent 0 18px, rgba(10, 42, 50, 0.26) 19px 21px, transparent 22px 38px),
-    var(--building-color, #214b57) !important;
-  box-shadow:
-    inset -10px 0 0 rgba(7, 32, 39, 0.16),
-    inset 6px 0 0 rgba(255, 255, 255, 0.07),
-    0 -7px 12px rgba(24, 60, 69, 0.13) !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: visible !important;
+  filter: drop-shadow(0 -8px 12px rgba(24, 60, 69, 0.15)) !important;
 }
 
-#memepop-root .memepop-default-building::before,
-#memepop-root .memepop-default-building::after {
-  content: "" !important;
-  position: absolute !important;
-  pointer-events: none !important;
+#memepop-root .memepop-city-clouds path {
+  fill: #b8d5d4 !important;
+  opacity: 0.72 !important;
 }
 
-#memepop-root .memepop-default-building::before {
-  left: -4px !important;
-  right: -4px !important;
-  top: -10px !important;
-  height: 10px !important;
-  border: 3px solid rgba(18, 45, 54, 0.72) !important;
-  border-bottom: 0 !important;
-  border-radius: 5px 5px 0 0 !important;
-  background: #183c45 !important;
+#memepop-root .memepop-city-far path {
+  fill: #79a9ad !important;
+  opacity: 0.64 !important;
 }
 
-#memepop-root .memepop-default-building::after {
-  left: 50% !important;
-  bottom: 0 !important;
-  width: 30% !important;
-  height: 16% !important;
-  border: 3px solid rgba(13, 38, 46, 0.42) !important;
-  border-bottom: 0 !important;
-  border-radius: 5px 5px 0 0 !important;
-  background: rgba(14, 48, 57, 0.34) !important;
-  transform: translateX(-50%) !important;
+#memepop-root .memepop-city-mid path {
+  fill: #3b7682 !important;
+  stroke: rgba(24, 60, 69, 0.5) !important;
+  stroke-width: 3 !important;
+  opacity: 0.86 !important;
 }
 
-#memepop-root .memepop-default-building-1 {
-  left: 1% !important;
-  width: 15% !important;
-  height: 70% !important;
-  z-index: 5 !important;
-  --building-color: #1b414c;
-  --window-color: rgba(228, 210, 122, 0.78);
+#memepop-root .memepop-city-front path {
+  fill: #214b57 !important;
+  stroke: #183c45 !important;
+  stroke-width: 5 !important;
 }
 
-#memepop-root .memepop-default-building-1::before {
-  left: 23% !important;
-  right: auto !important;
-  top: -52px !important;
-  width: 76% !important;
-  height: 38px !important;
-  border: 4px solid rgba(18, 45, 54, 0.82) !important;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 52%),
-    #2d6270 !important;
-  box-shadow:
-    -15px 39px 0 -12px #183c45,
-    15px 39px 0 -12px #183c45 !important;
+#memepop-root .memepop-city-front path:nth-child(1),
+#memepop-root .memepop-city-front path:nth-child(7),
+#memepop-root .memepop-city-front path:nth-child(8) {
+  fill: #1b414c !important;
 }
 
-#memepop-root .memepop-default-building-2 {
-  left: 13% !important;
-  width: 12% !important;
-  height: 52% !important;
-  z-index: 5 !important;
-  --building-color: #214b57;
-  --window-color: rgba(216, 196, 106, 0.76);
+#memepop-root .memepop-city-roofs path {
+  fill: #2d6270 !important;
+  stroke: #183c45 !important;
+  stroke-width: 5 !important;
 }
 
-#memepop-root .memepop-default-building-3 {
-  left: 23% !important;
-  width: 12% !important;
-  height: 42% !important;
-  z-index: 4 !important;
-  --building-color: #2d6270;
-  --window-color: rgba(228, 210, 122, 0.68);
+#memepop-root .memepop-city-lines path {
+  fill: none !important;
+  stroke: rgba(13, 39, 48, 0.45) !important;
+  stroke-width: 4 !important;
 }
 
-#memepop-root .memepop-default-building-3::before {
-  left: 20% !important;
-  right: auto !important;
-  top: -48px !important;
-  width: 58% !important;
-  height: 30px !important;
-  border-radius: 50% 50% 8px 8px !important;
-  background: #214b57 !important;
-  box-shadow:
-    -13px 30px 0 -12px #183c45,
-    13px 30px 0 -12px #183c45,
-    0 43px 0 -13px #183c45 !important;
+#memepop-root .memepop-city-windows path {
+  fill: #e4d27a !important;
+  opacity: 0.86 !important;
 }
 
-#memepop-root .memepop-default-building-4 {
-  left: 33% !important;
-  width: 13% !important;
-  height: 31% !important;
-  z-index: 4 !important;
-  --building-color: #214b57;
-  --window-color: rgba(228, 210, 122, 0.68);
-}
-
-#memepop-root .memepop-default-building-5 {
-  left: 43% !important;
-  width: 11% !important;
-  height: 23% !important;
-  z-index: 3 !important;
-  --building-color: #3b7682;
-  --window-color: rgba(216, 196, 106, 0.58);
-}
-
-#memepop-root .memepop-default-building-6 {
-  left: 54% !important;
-  width: 9% !important;
-  height: 16% !important;
-  z-index: 2 !important;
-  opacity: 0.74 !important;
-  --building-color: #79a9ad;
-  --window-color: rgba(228, 210, 122, 0.5);
-}
-
-#memepop-root .memepop-default-building-7 {
-  left: 62% !important;
-  width: 8% !important;
-  height: 13% !important;
-  z-index: 1 !important;
-  opacity: 0.58 !important;
-  --building-color: #79a9ad;
-  --window-color: rgba(228, 210, 122, 0.44);
-}
-
-#memepop-root .memepop-default-building-8 {
-  left: 17% !important;
-  width: 14% !important;
-  height: 26% !important;
-  z-index: 2 !important;
-  opacity: 0.76 !important;
-  --building-color: #5b9098;
-  --window-color: rgba(228, 210, 122, 0.48);
-}
-
-#memepop-root .memepop-default-building-9 {
-  left: 30% !important;
-  width: 10% !important;
-  height: 20% !important;
-  z-index: 1 !important;
-  opacity: 0.62 !important;
-  --building-color: #79a9ad;
-  --window-color: rgba(228, 210, 122, 0.42);
-}
-
-#memepop-root .memepop-default-building-10 {
-  left: 70% !important;
-  width: 8% !important;
-  height: 12% !important;
-  z-index: 1 !important;
-  opacity: 0.54 !important;
-  --building-color: #79a9ad;
-  --window-color: rgba(228, 210, 122, 0.4);
-}
-
-#memepop-root .memepop-default-building-11 {
-  left: 78% !important;
-  width: 9% !important;
-  height: 10% !important;
-  z-index: 1 !important;
-  opacity: 0.48 !important;
-  --building-color: #79a9ad;
-  --window-color: rgba(228, 210, 122, 0.34);
-}
-
-#memepop-root .memepop-default-building-4::before,
-#memepop-root .memepop-default-building-5::before,
-#memepop-root .memepop-default-building-6::before,
-#memepop-root .memepop-default-building-7::before,
-#memepop-root .memepop-default-building-8::before,
-#memepop-root .memepop-default-building-9::before,
-#memepop-root .memepop-default-building-10::before,
-#memepop-root .memepop-default-building-11::before {
-  top: -8px !important;
-  height: 8px !important;
+#memepop-root .memepop-city-details path {
+  fill: none !important;
+  stroke: #183c45 !important;
+  stroke-width: 5 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
 }
 
 #memepop-root.memepop-accessory-none.memepop-shell-visible .memepop-default-web-stage,
@@ -489,6 +346,86 @@
 
 #memepop-root .memepop-default-web-strand-8 {
   display: none !important;
+}
+
+#memepop-root .memepop-default-spider {
+  --spider-scale: 1;
+  position: absolute !important;
+  z-index: 4 !important;
+  width: 42px !important;
+  height: 42px !important;
+  pointer-events: none !important;
+  opacity: 0.82 !important;
+  transform: rotate(var(--spider-rotate, 0deg)) scale(var(--spider-scale)) !important;
+  filter:
+    drop-shadow(0 3px 3px rgba(21, 41, 48, 0.24))
+    drop-shadow(0 0 5px rgba(255, 255, 255, 0.36)) !important;
+  animation: memepop-default-spider-dangle 2600ms ease-in-out infinite alternate !important;
+}
+
+#memepop-root .memepop-default-spider::before,
+#memepop-root .memepop-default-spider::after {
+  content: "" !important;
+  position: absolute !important;
+  pointer-events: none !important;
+}
+
+#memepop-root .memepop-default-spider::before {
+  left: 50% !important;
+  top: 50% !important;
+  width: 16px !important;
+  height: 18px !important;
+  border-radius: 50% !important;
+  background:
+    radial-gradient(circle at 34% 32%, rgba(255, 255, 255, 0.62) 0 2px, transparent 3px),
+    linear-gradient(145deg, #243943, #0f2027) !important;
+  box-shadow:
+    0 -12px 0 -5px #172a32,
+    inset -3px -4px 0 rgba(0, 0, 0, 0.22) !important;
+  transform: translate(-50%, -36%) !important;
+}
+
+#memepop-root .memepop-default-spider::after {
+  inset: 4px !important;
+  background:
+    linear-gradient(26deg, transparent 0 42%, #152b33 43% 49%, transparent 50%) 0 10px / 17px 8px no-repeat,
+    linear-gradient(-26deg, transparent 0 42%, #152b33 43% 49%, transparent 50%) 25px 10px / 17px 8px no-repeat,
+    linear-gradient(12deg, transparent 0 42%, #152b33 43% 49%, transparent 50%) 0 18px / 17px 8px no-repeat,
+    linear-gradient(-12deg, transparent 0 42%, #152b33 43% 49%, transparent 50%) 25px 18px / 17px 8px no-repeat,
+    linear-gradient(-24deg, transparent 0 42%, #152b33 43% 49%, transparent 50%) 0 25px / 17px 8px no-repeat,
+    linear-gradient(24deg, transparent 0 42%, #152b33 43% 49%, transparent 50%) 25px 25px / 17px 8px no-repeat,
+    linear-gradient(90deg, transparent 0 47%, rgba(255, 255, 255, 0.84) 48% 52%, transparent 53%) 50% -24px / 2px 30px no-repeat !important;
+}
+
+#memepop-root .memepop-default-spider-1 {
+  right: clamp(42px, 4.8vw, 82px) !important;
+  bottom: clamp(46px, 6vh, 84px) !important;
+  --spider-scale: 0.92;
+  --spider-rotate: -10deg;
+}
+
+#memepop-root .memepop-default-spider-2 {
+  right: clamp(112px, 10vw, 190px) !important;
+  bottom: clamp(112px, 13vh, 178px) !important;
+  --spider-scale: 0.72;
+  --spider-rotate: 14deg;
+  animation-delay: -900ms !important;
+}
+
+#memepop-root .memepop-default-spider-3 {
+  right: clamp(20px, 2.6vw, 50px) !important;
+  bottom: clamp(180px, 22vh, 270px) !important;
+  --spider-scale: 0.62;
+  --spider-rotate: -18deg;
+  animation-delay: -1500ms !important;
+}
+
+#memepop-root .memepop-default-spider-4 {
+  right: clamp(176px, 15vw, 290px) !important;
+  bottom: clamp(30px, 4vh, 68px) !important;
+  --spider-scale: 0.58;
+  --spider-rotate: 18deg;
+  animation-delay: -400ms !important;
 }
 
 #memepop-root .memepop-default-web-acrobat {
@@ -770,9 +707,17 @@
   pointer-events: none !important;
   opacity: 0;
   background:
-    linear-gradient(176deg, transparent 0 53%, rgba(255, 255, 255, 0.9) 54% 55%, transparent 56%),
-    linear-gradient(182deg, transparent 0 59%, rgba(255, 255, 255, 0.72) 60% 61%, transparent 62%),
-    linear-gradient(180deg, #2fc7ff 0%, #76dcff 37%, #25bfe8 38%, #11aed0 55%, #ffffff 56%, #fce2a3 63%, #ffd58a 100%) !important;
+    radial-gradient(ellipse at 14% 23%, rgba(255, 255, 255, 0.82) 0 5%, transparent 5.6%),
+    radial-gradient(ellipse at 22% 25%, rgba(255, 255, 255, 0.58) 0 4.5%, transparent 5.2%),
+    radial-gradient(ellipse at 74% 21%, rgba(255, 255, 255, 0.78) 0 6.5%, transparent 7.1%),
+    radial-gradient(ellipse at 84% 24%, rgba(255, 255, 255, 0.52) 0 4.6%, transparent 5.2%),
+    linear-gradient(180deg, transparent 0 35%, rgba(255, 255, 255, 0.6) 35.2% 35.8%, rgba(122, 216, 223, 0.28) 36% 37.4%, transparent 37.8%),
+    radial-gradient(ellipse 30% 6% at 24% 59%, rgba(255, 255, 255, 0.92) 0 24%, transparent 25%),
+    radial-gradient(ellipse 36% 7% at 58% 60%, rgba(255, 255, 255, 0.78) 0 22%, transparent 23%),
+    radial-gradient(ellipse 24% 5% at 84% 58.8%, rgba(255, 255, 255, 0.82) 0 20%, transparent 21%),
+    linear-gradient(177deg, transparent 0 57.5%, rgba(255, 255, 255, 0.88) 58% 59.5%, rgba(171, 246, 255, 0.42) 60% 61.4%, transparent 62%),
+    radial-gradient(ellipse at 50% 58%, rgba(255, 255, 255, 0.62) 0 19%, transparent 20%),
+    linear-gradient(180deg, #66d7ff 0%, #b7efff 34%, #59c9de 36%, #26b4d0 48%, #0d95b8 58%, #f5fbef 59%, #fde8b9 68%, #ffd28a 100%) !important;
 }
 
 #memepop-root .memepop-chill-stage::before,
@@ -783,14 +728,23 @@
 }
 
 #memepop-root .memepop-chill-stage::before {
-  inset: 0 !important;
+  left: -8% !important;
+  right: -8% !important;
+  top: 35% !important;
+  height: 30% !important;
   background:
-    linear-gradient(178deg, transparent 0 48%, rgba(255, 255, 255, 0.24) 49% 49.4%, transparent 50%),
-    linear-gradient(181deg, transparent 0 55%, rgba(255, 255, 255, 0.24) 56% 56.4%, transparent 57%),
-    linear-gradient(184deg, transparent 0 62%, rgba(255, 255, 255, 0.2) 63% 63.4%, transparent 64%),
-    radial-gradient(ellipse at 20% 86%, rgba(255, 122, 150, 0.36), transparent 14%),
-    radial-gradient(ellipse at 84% 86%, rgba(255, 122, 150, 0.32), transparent 13%) !important;
-  opacity: 0.72 !important;
+    radial-gradient(ellipse 32% 14% at 18% 26%, transparent 58%, rgba(255, 255, 255, 0.38) 59% 62%, transparent 63%),
+    radial-gradient(ellipse 40% 16% at 48% 38%, transparent 60%, rgba(255, 255, 255, 0.34) 61% 64%, transparent 65%),
+    radial-gradient(ellipse 34% 14% at 78% 30%, transparent 58%, rgba(255, 255, 255, 0.32) 59% 62%, transparent 63%),
+    radial-gradient(ellipse 26% 10% at 18% 78%, transparent 58%, rgba(255, 255, 255, 0.74) 59% 64%, transparent 65%),
+    radial-gradient(ellipse 34% 12% at 47% 82%, transparent 58%, rgba(255, 255, 255, 0.66) 59% 64%, transparent 65%),
+    radial-gradient(ellipse 28% 10% at 76% 76%, transparent 58%, rgba(255, 255, 255, 0.7) 59% 64%, transparent 65%),
+    linear-gradient(176deg, transparent 0 40%, rgba(255, 255, 255, 0.42) 41% 42%, transparent 43%),
+    linear-gradient(178deg, transparent 0 73%, rgba(255, 255, 255, 0.64) 74% 75%, transparent 76%),
+    linear-gradient(183deg, transparent 0 58%, rgba(255, 255, 255, 0.34) 59% 60%, transparent 61%),
+    repeating-linear-gradient(170deg, transparent 0 36px, rgba(178, 247, 255, 0.24) 37px 39px, transparent 40px 76px) !important;
+  opacity: 0.94 !important;
+  filter: blur(0.1px) !important;
   animation: memepop-chill-waves 6200ms ease-in-out infinite alternate !important;
 }
 
@@ -800,16 +754,22 @@
   bottom: 0 !important;
   height: 34% !important;
   background:
-    radial-gradient(circle at 12% 78%, #ff8fac 0 34px, transparent 35px),
-    radial-gradient(circle at 14% 74%, #ffd0da 0 10px, transparent 11px),
-    radial-gradient(circle at 84% 82%, #ff8fac 0 32px, transparent 33px),
-    radial-gradient(circle at 87% 78%, #ffd0da 0 9px, transparent 10px),
-    radial-gradient(circle at 68% 74%, #ffb36b 0 9px, transparent 10px),
-    radial-gradient(circle at 70% 77%, #fff1cf 0 11px, transparent 12px),
-    radial-gradient(circle at 30% 78%, #f8b7a7 0 12px, transparent 13px),
-    radial-gradient(circle at 33% 82%, #fff1cf 0 9px, transparent 10px),
+    radial-gradient(ellipse at 10% 82%, rgba(255, 153, 177, 0.72) 0 18px, transparent 19px),
+    radial-gradient(ellipse at 12% 78%, rgba(255, 223, 228, 0.86) 0 7px, transparent 8px),
+    radial-gradient(ellipse at 16% 86%, rgba(255, 188, 142, 0.58) 0 12px, transparent 13px),
+    radial-gradient(ellipse at 19% 82%, rgba(255, 246, 206, 0.86) 0 9px, transparent 10px),
+    radial-gradient(ellipse at 8% 93%, rgba(255, 255, 255, 0.38) 0 34px, transparent 35px),
+    radial-gradient(ellipse at 14% 92%, rgba(255, 177, 193, 0.34) 0 22px, transparent 23px),
+    radial-gradient(ellipse at 88% 83%, rgba(255, 143, 172, 0.56) 0 19px, transparent 20px),
+    radial-gradient(ellipse at 90% 79%, rgba(255, 211, 219, 0.72) 0 7px, transparent 8px),
+    radial-gradient(ellipse at 57% 78%, rgba(255, 241, 207, 0.86) 0 13px, transparent 14px),
+    radial-gradient(ellipse at 62% 82%, rgba(244, 183, 151, 0.74) 0 11px, transparent 12px),
+    radial-gradient(ellipse at 31% 82%, rgba(255, 241, 207, 0.78) 0 10px, transparent 11px),
+    radial-gradient(ellipse at 36% 78%, rgba(241, 170, 134, 0.58) 0 8px, transparent 9px),
+    radial-gradient(ellipse at 46% 90%, rgba(78, 184, 190, 0.22) 0 38px, transparent 39px),
+    linear-gradient(174deg, transparent 0 16%, rgba(255, 255, 255, 0.5) 17% 18%, transparent 19%),
     repeating-linear-gradient(8deg, transparent 0 22px, rgba(184, 119, 61, 0.08) 23px 24px) !important;
-  opacity: 0.96 !important;
+  opacity: 0.92 !important;
 }
 
 #memepop-root.memepop-accessory-sunglasses.memepop-shell-visible .memepop-chill-stage,
@@ -965,11 +925,11 @@
 
 #memepop-root .memepop-chill-surfboard {
   position: absolute !important;
-  right: max(28px, 5vw) !important;
-  bottom: max(60px, 8vh) !important;
+  right: max(6px, 2vw) !important;
+  bottom: max(44px, 5vh) !important;
   z-index: 2 !important;
-  width: clamp(72px, 8vw, 118px) !important;
-  height: clamp(210px, 24vw, 360px) !important;
+  width: clamp(56px, 6vw, 92px) !important;
+  height: clamp(168px, 19vw, 286px) !important;
   border-radius: 50% 50% 46% 46% / 42% 42% 58% 58% !important;
   background:
     linear-gradient(90deg, transparent 0 42%, rgba(255, 255, 255, 0.68) 43% 48%, transparent 49%),
@@ -977,18 +937,18 @@
     linear-gradient(145deg, #ffd38c, #ff9678 54%, #83ddff) !important;
   border: 3px solid rgba(255, 255, 255, 0.72) !important;
   box-shadow: 0 20px 28px rgba(38, 89, 107, 0.2) !important;
-  opacity: 0.96 !important;
-  transform: rotate(12deg) !important;
+  opacity: 0.84 !important;
+  transform: rotate(14deg) translateX(8px) !important;
 }
 
 #memepop-root .memepop-chill-boat {
   position: absolute !important;
-  right: 24% !important;
-  top: 43% !important;
+  right: clamp(54px, 9vw, 150px) !important;
+  top: 39% !important;
   z-index: 2 !important;
-  width: 82px !important;
-  height: 48px !important;
-  opacity: 0.72 !important;
+  width: 88px !important;
+  height: 52px !important;
+  opacity: 0.82 !important;
   animation: memepop-chill-boat 5200ms ease-in-out infinite alternate !important;
 }
 
@@ -1018,19 +978,23 @@
 #memepop-root .memepop-chill-flowers {
   position: absolute !important;
   left: max(24px, 4vw) !important;
-  bottom: max(42px, 5vh) !important;
+  bottom: max(34px, 4vh) !important;
   z-index: 2 !important;
-  width: clamp(120px, 13vw, 210px) !important;
-  height: clamp(100px, 11vw, 180px) !important;
-  opacity: 0.98 !important;
+  width: clamp(124px, 13vw, 205px) !important;
+  height: clamp(96px, 11vw, 170px) !important;
+  opacity: 0.9 !important;
   background:
-    radial-gradient(circle at 18% 58%, #ff8fac 0 16px, transparent 17px),
-    radial-gradient(circle at 32% 42%, #ffb3c7 0 15px, transparent 16px),
-    radial-gradient(circle at 41% 62%, #ff8fac 0 18px, transparent 19px),
-    radial-gradient(circle at 30% 58%, #ffd466 0 12px, transparent 13px),
-    radial-gradient(ellipse at 62% 72%, #5fcf87 0 18px, transparent 19px),
-    radial-gradient(ellipse at 72% 60%, #3eb66e 0 16px, transparent 17px) !important;
-  filter: drop-shadow(0 14px 16px rgba(96, 73, 39, 0.18)) !important;
+    radial-gradient(circle at 18% 56%, #ff8fac 0 14px, transparent 15px),
+    radial-gradient(circle at 31% 42%, #ffc0ce 0 13px, transparent 14px),
+    radial-gradient(circle at 42% 60%, #ff91b0 0 15px, transparent 16px),
+    radial-gradient(circle at 30% 57%, #ffd86d 0 10px, transparent 11px),
+    radial-gradient(ellipse at 58% 78%, #fbb18f 0 15px, transparent 16px),
+    radial-gradient(ellipse at 66% 80%, #fff2cf 0 10px, transparent 11px),
+    radial-gradient(ellipse at 78% 64%, #65cf8a 0 14px, transparent 15px),
+    radial-gradient(ellipse at 88% 56%, #42b875 0 12px, transparent 13px),
+    linear-gradient(16deg, transparent 0 47%, rgba(255, 255, 255, 0.62) 48% 51%, transparent 52%) 56% 72% / 54px 28px no-repeat,
+    radial-gradient(ellipse at 44% 92%, rgba(255, 136, 160, 0.5) 0 18px, transparent 19px) !important;
+  filter: drop-shadow(0 12px 14px rgba(96, 73, 39, 0.16)) !important;
 }
 
 #memepop-root .memepop-chill-quest {
@@ -1467,40 +1431,40 @@
 
 #memepop-root .memepop-believe-notes span:nth-child(1) {
   left: max(30px, 4vw) !important;
-  top: max(300px, 42vh) !important;
+  top: max(250px, 34vh) !important;
   transform: rotate(-3deg) !important;
 }
 
 #memepop-root .memepop-believe-notes span:nth-child(2) {
-  left: max(128px, 12vw) !important;
-  top: max(254px, 36vh) !important;
+  left: max(68px, 7vw) !important;
+  top: max(360px, 47vh) !important;
   background: linear-gradient(180deg, rgba(255, 214, 232, 0.96), rgba(218, 181, 255, 0.9)) !important;
   transform: rotate(2deg) !important;
 }
 
 #memepop-root .memepop-believe-notes span:nth-child(3) {
-  left: max(166px, 16vw) !important;
-  top: max(386px, 54vh) !important;
+  left: max(108px, 10vw) !important;
+  top: max(500px, 62vh) !important;
   background: linear-gradient(180deg, rgba(234, 205, 255, 0.96), rgba(255, 229, 179, 0.9)) !important;
   transform: rotate(-2deg) !important;
 }
 
 #memepop-root .memepop-believe-notes span:nth-child(4) {
-  left: max(250px, 23vw) !important;
-  bottom: max(26px, 4vh) !important;
+  left: max(76px, 8vw) !important;
+  bottom: max(44px, 7vh) !important;
   transform: rotate(3deg) !important;
 }
 
 #memepop-root .memepop-believe-notes span:nth-child(5) {
-  right: max(38px, 5vw) !important;
-  top: max(92px, 13vh) !important;
+  right: max(42px, 5vw) !important;
+  top: max(146px, 18vh) !important;
   background: linear-gradient(180deg, rgba(255, 214, 232, 0.96), rgba(255, 232, 172, 0.92)) !important;
   transform: rotate(5deg) !important;
 }
 
 #memepop-root .memepop-believe-notes span:nth-child(6) {
-  right: max(34px, 5vw) !important;
-  bottom: max(250px, 26vh) !important;
+  right: max(54px, 6vw) !important;
+  bottom: max(190px, 20vh) !important;
   background: linear-gradient(180deg, rgba(255, 184, 211, 0.96), rgba(255, 224, 170, 0.92)) !important;
   transform: rotate(-4deg) !important;
 }
@@ -1539,16 +1503,17 @@
 }
 
 #memepop-root .memepop-believe-neon {
-  left: clamp(42px, 5vw, 86px) !important;
-  top: max(82px, 11vh) !important;
+  left: clamp(14px, 2.2vw, 38px) !important;
+  top: max(102px, 14vh) !important;
   z-index: 4 !important;
-  width: clamp(260px, 25vw, 390px) !important;
+  width: clamp(150px, 14vw, 228px) !important;
+  font: 1000 clamp(18px, 2.1vw, 30px)/1.08 Inter, ui-sans-serif, system-ui, sans-serif !important;
   text-shadow:
     0 0 9px #ffffff,
     0 0 16px #ff8fc5,
     0 0 32px #ff6fb2,
     0 0 46px rgba(255, 115, 183, 0.72) !important;
-  transform: rotate(-5deg) !important;
+  transform: rotate(-7deg) !important;
 }
 
 #memepop-root .memepop-believe-heart-light {
@@ -1890,6 +1855,7 @@
   animation: memepop-party-sparkle-drift 5200ms ease-in-out infinite alternate !important;
 }
 
+#memepop-root.memepop-accessory-partyHat.memepop-party-gradient-visible .memepop-party-stage,
 #memepop-root.memepop-accessory-partyHat.memepop-shell-visible .memepop-party-stage,
 #memepop-root.memepop-accessory-partyHat:not(.memepop-entrance-sequenced) .memepop-party-stage {
   display: block !important;
@@ -1903,18 +1869,70 @@
   transition: opacity 220ms ease !important;
 }
 
+#memepop-root .memepop-party-title {
+  position: absolute !important;
+  top: max(22px, 3.5vh) !important;
+  left: 50% !important;
+  z-index: 4 !important;
+  color: #ffffff !important;
+  font: 1000 clamp(38px, 7vw, 88px)/1.02 Inter, ui-sans-serif, system-ui, sans-serif !important;
+  letter-spacing: 0 !important;
+  white-space: nowrap !important;
+  text-shadow:
+    0 4px 0 rgba(107, 61, 207, 0.58),
+    0 10px 24px rgba(45, 31, 61, 0.25),
+    0 0 22px rgba(255, 255, 255, 0.42) !important;
+  opacity: 0;
+  transform: translateX(-50%) translateY(-18px) scale(0.92);
+  pointer-events: none !important;
+}
+
+#memepop-root .memepop-party-title::before,
+#memepop-root .memepop-party-title::after {
+  position: absolute !important;
+  top: 50% !important;
+  color: #ffffff !important;
+  font-size: 0.62em !important;
+  text-shadow:
+    0 0 16px rgba(255, 255, 255, 0.75),
+    0 4px 0 rgba(107, 61, 207, 0.35) !important;
+  transform: translateY(-50%) !important;
+}
+
+#memepop-root .memepop-party-title::before {
+  content: "✦" !important;
+  left: -0.92em !important;
+}
+
+#memepop-root .memepop-party-title::after {
+  content: "✦" !important;
+  right: -0.92em !important;
+}
+
+#memepop-root.memepop-accessory-partyHat.memepop-party-gradient-visible .memepop-party-title,
+#memepop-root.memepop-accessory-partyHat.memepop-shell-visible .memepop-party-title,
+#memepop-root.memepop-accessory-partyHat:not(.memepop-entrance-sequenced) .memepop-party-title {
+  animation: memepop-party-title-in 620ms cubic-bezier(0.16, 1.2, 0.26, 1) 120ms both !important;
+}
+
+#memepop-root.memepop-accessory-partyHat.memepop-leaving .memepop-party-title {
+  opacity: 0 !important;
+  transition: opacity 180ms ease !important;
+}
+
 #memepop-root .memepop-disco-ball-wrap {
   position: absolute !important;
-  top: max(26px, 4vh) !important;
+  top: clamp(72px, 10vh, 112px) !important;
   left: 50% !important;
-  width: clamp(118px, 15vw, 190px) !important;
-  height: clamp(118px, 15vw, 190px) !important;
-  transform: translateX(-50%) rotate(-4deg);
+  width: clamp(88px, 10vw, 150px) !important;
+  height: clamp(88px, 10vw, 150px) !important;
+  transform: translateX(-50%) translateY(-150px) rotate(-5deg) scale(0.86);
   transform-origin: 50% -32px !important;
   opacity: 0;
   filter:
-    drop-shadow(0 18px 24px rgba(79, 29, 150, 0.28))
-    drop-shadow(0 0 34px rgba(255, 255, 255, 0.44)) !important;
+    drop-shadow(0 22px 30px rgba(50, 22, 118, 0.26))
+    drop-shadow(0 0 42px rgba(255, 255, 255, 0.68))
+    drop-shadow(0 0 34px rgba(255, 126, 179, 0.34)) !important;
   pointer-events: none !important;
 }
 
@@ -1936,6 +1954,11 @@
   width: 100% !important;
   height: 100% !important;
   object-fit: contain !important;
+  transform-origin: 50% 50% !important;
+  filter:
+    saturate(1.18)
+    contrast(1.04)
+    drop-shadow(0 0 18px rgba(255, 255, 255, 0.52)) !important;
 }
 
 #memepop-root .memepop-disco-fallback::after {
@@ -1954,11 +1977,18 @@
     inset 12px 12px 18px rgba(255, 255, 255, 0.34) !important;
 }
 
+#memepop-root.memepop-accessory-partyHat.memepop-party-disco-visible .memepop-disco-ball-wrap,
 #memepop-root.memepop-accessory-partyHat.memepop-shell-visible .memepop-disco-ball-wrap,
 #memepop-root.memepop-accessory-partyHat:not(.memepop-entrance-sequenced) .memepop-disco-ball-wrap {
   animation:
-    memepop-disco-fade-in 520ms ease-out 120ms both,
-    memepop-disco-swing 2600ms ease-in-out 650ms infinite alternate !important;
+    memepop-disco-drop-in 760ms cubic-bezier(0.16, 1.16, 0.28, 1) both,
+    memepop-disco-swing 4200ms ease-in-out 760ms infinite alternate !important;
+}
+
+#memepop-root.memepop-accessory-partyHat.memepop-party-disco-visible .memepop-disco-ball,
+#memepop-root.memepop-accessory-partyHat.memepop-shell-visible .memepop-disco-ball,
+#memepop-root.memepop-accessory-partyHat:not(.memepop-entrance-sequenced) .memepop-disco-ball {
+  animation: memepop-disco-slow-rotate 9200ms linear infinite !important;
 }
 
 #memepop-root .memepop-party-sky-confetti {
@@ -2007,10 +2037,89 @@
   background: #fff06a !important;
 }
 
+#memepop-root.memepop-accessory-partyHat.memepop-party-confetti-visible .memepop-party-sky-confetti-piece,
 #memepop-root.memepop-accessory-partyHat.memepop-shell-visible .memepop-party-sky-confetti-piece,
 #memepop-root.memepop-accessory-partyHat:not(.memepop-entrance-sequenced) .memepop-party-sky-confetti-piece {
   animation: memepop-party-sky-confetti-open 3600ms cubic-bezier(0.12, 0.84, 0.22, 1) var(--sky-delay) both !important;
 }
+
+#memepop-root .memepop-party-card-sparkles {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 2 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+#memepop-root .memepop-party-card-sparkle {
+  --spark-x: 50%;
+  --spark-y: 50%;
+  --spark-delay: 0ms;
+  --spark-scale: 1;
+  position: absolute !important;
+  left: var(--spark-x) !important;
+  top: var(--spark-y) !important;
+  width: 12px !important;
+  height: 12px !important;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.4) rotate(0deg);
+  pointer-events: none !important;
+}
+
+#memepop-root .memepop-party-card-sparkle::before,
+#memepop-root .memepop-party-card-sparkle::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: 999px !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.82) !important;
+}
+
+#memepop-root .memepop-party-card-sparkle::before {
+  width: 100% !important;
+  height: 3px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
+
+#memepop-root .memepop-party-card-sparkle::after {
+  width: 3px !important;
+  height: 100% !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+#memepop-root.memepop-accessory-partyHat.memepop-party-confetti-visible .memepop-party-card-sparkle,
+#memepop-root.memepop-accessory-partyHat.memepop-shell-visible .memepop-party-card-sparkle,
+#memepop-root.memepop-accessory-partyHat:not(.memepop-entrance-sequenced) .memepop-party-card-sparkle {
+  animation: memepop-party-card-sparkle 2200ms ease-in-out var(--spark-delay) infinite both !important;
+}
+
+#memepop-root .memepop-party-card-sparkle-1 { --spark-x: 22%; --spark-y: 40%; --spark-delay: 0ms; --spark-scale: 1.1; }
+#memepop-root .memepop-party-card-sparkle-2 { --spark-x: 31%; --spark-y: 34%; --spark-delay: 120ms; --spark-scale: 0.86; }
+#memepop-root .memepop-party-card-sparkle-3 { --spark-x: 42%; --spark-y: 36%; --spark-delay: 260ms; --spark-scale: 1; }
+#memepop-root .memepop-party-card-sparkle-4 { --spark-x: 58%; --spark-y: 35%; --spark-delay: 80ms; --spark-scale: 0.9; }
+#memepop-root .memepop-party-card-sparkle-5 { --spark-x: 70%; --spark-y: 39%; --spark-delay: 360ms; --spark-scale: 1.18; }
+#memepop-root .memepop-party-card-sparkle-6 { --spark-x: 78%; --spark-y: 48%; --spark-delay: 540ms; --spark-scale: 0.8; }
+#memepop-root .memepop-party-card-sparkle-7 { --spark-x: 20%; --spark-y: 55%; --spark-delay: 410ms; --spark-scale: 0.94; }
+#memepop-root .memepop-party-card-sparkle-8 { --spark-x: 30%; --spark-y: 65%; --spark-delay: 620ms; --spark-scale: 1.08; }
+#memepop-root .memepop-party-card-sparkle-9 { --spark-x: 43%; --spark-y: 70%; --spark-delay: 730ms; --spark-scale: 0.78; }
+#memepop-root .memepop-party-card-sparkle-10 { --spark-x: 57%; --spark-y: 70%; --spark-delay: 520ms; --spark-scale: 0.92; }
+#memepop-root .memepop-party-card-sparkle-11 { --spark-x: 69%; --spark-y: 64%; --spark-delay: 230ms; --spark-scale: 1.12; }
+#memepop-root .memepop-party-card-sparkle-12 { --spark-x: 80%; --spark-y: 56%; --spark-delay: 660ms; --spark-scale: 0.84; }
+#memepop-root .memepop-party-card-sparkle-13 { --spark-x: 15%; --spark-y: 74%; --spark-delay: 920ms; --spark-scale: 0.72; }
+#memepop-root .memepop-party-card-sparkle-14 { --spark-x: 25%; --spark-y: 82%; --spark-delay: 1060ms; --spark-scale: 1.04; }
+#memepop-root .memepop-party-card-sparkle-15 { --spark-x: 37%; --spark-y: 83%; --spark-delay: 880ms; --spark-scale: 0.76; }
+#memepop-root .memepop-party-card-sparkle-16 { --spark-x: 50%; --spark-y: 86%; --spark-delay: 1000ms; --spark-scale: 1.2; }
+#memepop-root .memepop-party-card-sparkle-17 { --spark-x: 63%; --spark-y: 83%; --spark-delay: 780ms; --spark-scale: 0.8; }
+#memepop-root .memepop-party-card-sparkle-18 { --spark-x: 76%; --spark-y: 80%; --spark-delay: 980ms; --spark-scale: 1.02; }
+#memepop-root .memepop-party-card-sparkle-19 { --spark-x: 86%; --spark-y: 72%; --spark-delay: 1140ms; --spark-scale: 0.74; }
+#memepop-root .memepop-party-card-sparkle-20 { --spark-x: 12%; --spark-y: 46%; --spark-delay: 1300ms; --spark-scale: 0.86; }
+#memepop-root .memepop-party-card-sparkle-21 { --spark-x: 88%; --spark-y: 45%; --spark-delay: 1240ms; --spark-scale: 0.98; }
+#memepop-root .memepop-party-card-sparkle-22 { --spark-x: 36%; --spark-y: 49%; --spark-delay: 1460ms; --spark-scale: 0.72; }
+#memepop-root .memepop-party-card-sparkle-23 { --spark-x: 64%; --spark-y: 50%; --spark-delay: 1520ms; --spark-scale: 0.88; }
+#memepop-root .memepop-party-card-sparkle-24 { --spark-x: 50%; --spark-y: 28%; --spark-delay: 1600ms; --spark-scale: 1; }
 
 #memepop-root .memepop-party-sky-confetti-1 { --sky-x: 11%; --sky-y: 18%; --sky-drift-x: -34px; --sky-drift-y: 420px; --sky-delay: 120ms; --sky-rotate: 620deg; }
 #memepop-root .memepop-party-sky-confetti-2 { --sky-x: 19%; --sky-y: 23%; --sky-drift-x: 44px; --sky-drift-y: 500px; --sky-delay: 180ms; --sky-rotate: -560deg; }
@@ -2092,6 +2201,7 @@
   opacity: 0 !important;
 }
 
+#memepop-root.memepop-accessory-partyHat.memepop-party-confetti-visible .memepop-party-effects,
 #memepop-root.memepop-accessory-partyHat.memepop-shell-visible .memepop-party-effects,
 #memepop-root.memepop-accessory-partyHat:not(.memepop-entrance-sequenced) .memepop-party-effects {
   opacity: 1 !important;
@@ -2115,12 +2225,12 @@
   transition: opacity 180ms ease !important;
 }
 
-#memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-card-confetti,
-#memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-confetti,
-#memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-balloon,
-#memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-party-popper,
-#memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-party-popper::before,
-#memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-party-popper::after {
+#memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible):not(.memepop-party-confetti-visible) .memepop-card-confetti,
+#memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible):not(.memepop-party-confetti-visible) .memepop-confetti,
+#memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible):not(.memepop-party-confetti-visible) .memepop-balloon,
+#memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible):not(.memepop-party-confetti-visible) .memepop-party-popper,
+#memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible):not(.memepop-party-confetti-visible) .memepop-party-popper::before,
+#memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible):not(.memepop-party-confetti-visible) .memepop-party-popper::after {
   animation: none !important;
   opacity: 0 !important;
 }
@@ -2292,12 +2402,12 @@
 
 #memepop-root .memepop-balloon-1 { --balloon-left: 3%; --balloon-top: 13%; --balloon-delay: 0ms; --balloon-drift: 26px; }
 #memepop-root .memepop-balloon-2 { --balloon-left: 13%; --balloon-top: 32%; --balloon-delay: 300ms; --balloon-drift: -24px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #7c5cff, #4f6bed) !important; }
-#memepop-root .memepop-balloon-3 { --balloon-left: 82%; --balloon-top: 13%; --balloon-delay: 560ms; --balloon-drift: 22px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #34c6a9, #0ea5a3) !important; }
-#memepop-root .memepop-balloon-4 { --balloon-left: 92%; --balloon-top: 34%; --balloon-delay: 860ms; --balloon-drift: -24px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #ffcc4d, #f59e0b) !important; }
+#memepop-root .memepop-balloon-3 { --balloon-left: 79%; --balloon-top: 14%; --balloon-delay: 560ms; --balloon-drift: 22px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #34c6a9, #0ea5a3) !important; }
+#memepop-root .memepop-balloon-4 { --balloon-left: 88%; --balloon-top: 37%; --balloon-delay: 860ms; --balloon-drift: -24px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #ffcc4d, #f59e0b) !important; }
 #memepop-root .memepop-balloon-5 { --balloon-left: 5%; --balloon-top: 57%; --balloon-delay: 1140ms; --balloon-drift: 34px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #60a5fa, #2563eb) !important; }
-#memepop-root .memepop-balloon-6 { --balloon-left: 88%; --balloon-top: 58%; --balloon-delay: 1450ms; --balloon-drift: -38px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #fb7185, #e11d48) !important; }
-#memepop-root .memepop-balloon-7 { --balloon-left: 16%; --balloon-top: 74%; --balloon-delay: 1720ms; --balloon-drift: 34px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #facc15, #f97316) !important; }
-#memepop-root .memepop-balloon-8 { --balloon-left: 80%; --balloon-top: 76%; --balloon-delay: 1980ms; --balloon-drift: -30px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #c084fc, #7c3aed) !important; }
+#memepop-root .memepop-balloon-6 { --balloon-left: 82%; --balloon-top: 61%; --balloon-delay: 1450ms; --balloon-drift: -38px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #fb7185, #e11d48) !important; }
+#memepop-root .memepop-balloon-7 { --balloon-left: 20%; --balloon-top: 75%; --balloon-delay: 1720ms; --balloon-drift: 34px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #facc15, #f97316) !important; }
+#memepop-root .memepop-balloon-8 { --balloon-left: 67%; --balloon-top: 78%; --balloon-delay: 1980ms; --balloon-drift: -30px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #c084fc, #7c3aed) !important; }
 #memepop-root .memepop-balloon-9 { --balloon-left: 2%; --balloon-top: 40%; --balloon-delay: 2260ms; --balloon-drift: 22px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #2dd4bf, #0891b2) !important; }
 #memepop-root .memepop-balloon-10 { --balloon-left: 94%; --balloon-top: 18%; --balloon-delay: 2500ms; --balloon-drift: -28px; background: radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.86) 0 12%, transparent 13%), linear-gradient(145deg, #fda4af, #f43f5e) !important; }
 
@@ -2359,13 +2469,15 @@
 }
 
 #memepop-root .memepop-party-popper-left {
-  left: 7% !important;
+  left: 8% !important;
+  bottom: 9% !important;
   --popper-rotate: -30deg;
   --popper-recoil-x: -16px;
 }
 
 #memepop-root .memepop-party-popper-right {
-  right: 7% !important;
+  right: 12% !important;
+  bottom: 8% !important;
   --popper-rotate: 30deg;
   --popper-flip: -1;
   --popper-recoil-x: 16px;
@@ -2618,6 +2730,22 @@
   pointer-events: none !important;
 }
 
+#memepop-root.memepop-accessory-sunglasses .memepop-card,
+#memepop-root.memepop-accessory-sunglasses .memepop-card-shell {
+  border-color: #2f6470 !important;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(195, 244, 255, 0.68), transparent 28%),
+    radial-gradient(circle at 86% 20%, rgba(255, 255, 255, 0.9), transparent 23%),
+    radial-gradient(circle at 45% 84%, rgba(255, 226, 170, 0.54), transparent 34%),
+    linear-gradient(145deg, rgba(236, 254, 255, 0.98), rgba(255, 248, 224, 0.98)),
+    #eafcff !important;
+  box-shadow:
+    0 0 0 6px rgba(255, 255, 255, 0.78),
+    0 0 0 14px rgba(89, 201, 221, 0.18),
+    0 34px 80px rgba(12, 63, 89, 0.3),
+    0 14px 0 rgba(47, 100, 112, 0.12) !important;
+}
+
 #memepop-root.memepop-theme-hydration .memepop-card {
   background:
     radial-gradient(circle at 28% 18%, rgba(117, 219, 255, 0.42), transparent 28%),
@@ -2846,6 +2974,19 @@
 }
 
 #memepop-root.memepop-walk-supported:not(.memepop-shell-visible) .memepop-character {
+  z-index: 6 !important;
+  opacity: 0;
+  animation: memeWalkIn 1850ms cubic-bezier(0.22, 0.86, 0.22, 1) both !important;
+}
+
+#memepop-root.memepop-party-sequence.memepop-walk-supported:not(.memepop-party-character-start):not(.memepop-shell-visible) .memepop-character {
+  z-index: 6 !important;
+  opacity: 0 !important;
+  transform: translateX(calc(-100vw - 250px)) translateY(0) rotate(-4deg) !important;
+  animation: none !important;
+}
+
+#memepop-root.memepop-party-sequence.memepop-walk-supported.memepop-party-character-start:not(.memepop-shell-visible) .memepop-character {
   z-index: 6 !important;
   opacity: 0;
   animation: memeWalkIn 1850ms cubic-bezier(0.22, 0.86, 0.22, 1) both !important;
@@ -3627,6 +3768,15 @@
   }
 }
 
+@keyframes memepop-default-spider-dangle {
+  0% {
+    translate: 0 0;
+  }
+  100% {
+    translate: 0 7px;
+  }
+}
+
 @keyframes memepop-chill-stage-in {
   0% {
     opacity: 0;
@@ -3833,6 +3983,17 @@
   }
 }
 
+@keyframes memepop-party-title-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-18px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
 @keyframes memepop-party-rays {
   0% {
     transform: rotate(0deg) scale(1);
@@ -3851,10 +4012,18 @@
   }
 }
 
-@keyframes memepop-disco-fade-in {
+@keyframes memepop-disco-drop-in {
   0% {
     opacity: 0;
-    transform: translateX(-50%) translateY(-22px) rotate(-7deg) scale(0.86);
+    transform: translateX(-50%) translateY(-150px) rotate(-10deg) scale(0.78);
+  }
+  68% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(8px) rotate(4deg) scale(1.04);
+  }
+  86% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-5px) rotate(-3deg) scale(0.99);
   }
   100% {
     opacity: 1;
@@ -3868,6 +4037,15 @@
   }
   100% {
     transform: translateX(-50%) translateY(4px) rotate(5deg) scale(1.015);
+  }
+}
+
+@keyframes memepop-disco-slow-rotate {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
   }
 }
 
@@ -3887,6 +4065,26 @@
   100% {
     opacity: 0;
     transform: translate3d(var(--sky-drift-x), var(--sky-drift-y), 0) scale(0.82) rotate(var(--sky-rotate));
+  }
+}
+
+@keyframes memepop-party-card-sparkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.35) rotate(0deg);
+  }
+  18% {
+    opacity: 0.92;
+    transform: translate(-50%, -50%) scale(calc(var(--spark-scale) * 1.18)) rotate(45deg);
+  }
+  42% {
+    opacity: 0.58;
+    transform: translate(-50%, -50%) scale(calc(var(--spark-scale) * 0.82)) rotate(90deg);
+  }
+  64% {
+    opacity: 0.86;
+    transform: translate(-50%, -50%) scale(var(--spark-scale)) rotate(135deg);
   }
 }
 
@@ -4140,7 +4338,8 @@
   }
 
   #memepop-root.memepop-accessory-none .memepop-default-web-acrobat,
-  #memepop-root.memepop-accessory-none .memepop-default-phew {
+  #memepop-root.memepop-accessory-none .memepop-default-phew,
+  #memepop-root.memepop-accessory-none .memepop-default-spider {
     animation: none !important;
   }
 
@@ -4203,6 +4402,7 @@
     transform: translateX(-50%) translateY(0) scale(1) !important;
   }
 
+  #memepop-root.memepop-accessory-partyHat.memepop-party-gradient-visible .memepop-party-stage,
   #memepop-root.memepop-accessory-partyHat.memepop-shell-visible .memepop-party-stage,
   #memepop-root.memepop-accessory-partyHat:not(.memepop-entrance-sequenced) .memepop-party-stage {
     display: block !important;
@@ -4214,6 +4414,8 @@
   #memepop-root.memepop-accessory-partyHat .memepop-party-stage::before,
   #memepop-root.memepop-accessory-partyHat .memepop-party-stage::after,
   #memepop-root.memepop-accessory-partyHat .memepop-disco-ball-wrap,
+  #memepop-root.memepop-accessory-partyHat .memepop-disco-ball,
+  #memepop-root.memepop-accessory-partyHat .memepop-party-card-sparkle,
   #memepop-root.memepop-accessory-partyHat .memepop-party-sky-confetti-piece {
     animation: none !important;
   }
@@ -4249,19 +4451,29 @@
     transform: translate3d(var(--balloon-drift), 0, 0) !important;
   }
 
-  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-party-effects,
-  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-party-effects::before,
-  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-party-effects::after,
-  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-confetti,
-  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-balloon,
-  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-party-popper,
-  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-party-popper::before,
-  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-party-popper::after {
+  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible):not(.memepop-party-confetti-visible) .memepop-party-effects,
+  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible):not(.memepop-party-confetti-visible) .memepop-party-effects::before,
+  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible):not(.memepop-party-confetti-visible) .memepop-party-effects::after,
+  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible):not(.memepop-party-confetti-visible) .memepop-confetti,
+  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible):not(.memepop-party-confetti-visible) .memepop-balloon,
+  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible):not(.memepop-party-confetti-visible) .memepop-party-popper,
+  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible):not(.memepop-party-confetti-visible) .memepop-party-popper::before,
+  #memepop-root.memepop-accessory-partyHat.memepop-entrance-sequenced:not(.memepop-shell-visible):not(.memepop-party-confetti-visible) .memepop-party-popper::after {
     animation: none !important;
     opacity: 0 !important;
   }
 
   #memepop-root.memepop-entrance-sequenced:not(.memepop-shell-visible) .memepop-character {
+    animation: memeReducedFadeIn 220ms ease both !important;
+  }
+
+  #memepop-root.memepop-party-sequence.memepop-walk-supported:not(.memepop-party-character-start):not(.memepop-shell-visible) .memepop-character {
+    animation: none !important;
+    opacity: 0 !important;
+    transform: translateX(calc(-100vw - 250px)) !important;
+  }
+
+  #memepop-root.memepop-party-sequence.memepop-walk-supported.memepop-party-character-start:not(.memepop-shell-visible) .memepop-character {
     animation: memeReducedFadeIn 220ms ease both !important;
   }
 

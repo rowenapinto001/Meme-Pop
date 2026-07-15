@@ -84,7 +84,7 @@ var MemePop;
         { id: "none", name: "No accessory", price: 0, description: "Classic MemePop energy." },
         { id: "sunglasses", name: "Chill mode", price: 20, description: "Beach background, sunshine, and relaxed vibes." },
         { id: "crown", name: "Believe mode", price: 40, description: "Warm motivation, stars, and self-belief." },
-        { id: "partyHat", name: "Party mode", price: 60, description: "Confetti, poppers, and balloons." }
+        { id: "partyHat", name: "Party mode", price: 0, description: "Confetti, poppers, and balloons." }
     ];
     MemePop.DEFAULT_STATE = {
         settings: {

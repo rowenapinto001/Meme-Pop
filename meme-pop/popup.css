@@ -14,6 +14,14 @@
   --line: rgba(55, 42, 38, 0.11);
   --paper: rgba(255, 255, 255, 0.88);
   --shadow: 0 18px 48px rgba(38, 49, 63, 0.11);
+  --field-bg: #f5f0ff;
+  --field-bg-selected: #eee7ff;
+  --field-border: #c9b8ff;
+  --field-border-strong: #a98bff;
+  --field-glow: rgba(139, 107, 255, 0.18);
+  --field-text: #14213d;
+  --field-placeholder: #727a92;
+  --field-white: #ffffff;
 }
 
 html {
@@ -1254,6 +1262,112 @@ textarea:focus {
   outline-offset: 2px;
 }
 
+.settings-panel :is(select, input[type="number"], input[type="text"], input[type="datetime-local"], textarea),
+.focus-panel select,
+.deadline-panel :is(select, input[type="number"], input[type="text"], input[type="datetime-local"], textarea),
+.mode-duration-chip {
+  border: 1.5px solid var(--field-border);
+  color: var(--field-text);
+  background:
+    linear-gradient(135deg, var(--field-bg) 0%, var(--field-bg-selected) 100%);
+  box-shadow: 0 6px 16px rgba(140, 100, 255, 0.08);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease,
+    transform 160ms ease;
+}
+
+.settings-panel :is(input[type="number"], input[type="text"], input[type="datetime-local"], textarea)::placeholder,
+.deadline-panel :is(input[type="number"], input[type="text"], input[type="datetime-local"], textarea)::placeholder {
+  color: var(--field-placeholder);
+}
+
+.settings-panel :is(select, input[type="number"], input[type="text"], input[type="datetime-local"], textarea):focus,
+.focus-panel select:focus,
+.deadline-panel :is(select, input[type="number"], input[type="text"], input[type="datetime-local"], textarea):focus {
+  outline: none;
+  border-color: var(--field-border-strong);
+  background: var(--field-bg-selected);
+  box-shadow:
+    0 0 0 4px var(--field-glow),
+    0 8px 20px rgba(140, 100, 255, 0.12);
+}
+
+.settings-panel :is(select, input[type="number"], input[type="text"], input[type="datetime-local"], textarea):disabled,
+.focus-panel select:disabled,
+.deadline-panel :is(select, input[type="number"], input[type="text"], input[type="datetime-local"], textarea):disabled {
+  color: rgba(20, 33, 61, 0.54);
+  border-color: rgba(201, 184, 255, 0.56);
+  background: #faf7ff;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.target-sites-field textarea,
+.deadline-form input,
+.deadline-form select,
+.deadline-form textarea {
+  border-color: var(--field-border);
+  background:
+    linear-gradient(135deg, var(--field-bg) 0%, var(--field-bg-selected) 100%);
+  box-shadow: 0 6px 16px rgba(140, 100, 255, 0.08);
+}
+
+.focus-row select {
+  border-color: var(--field-border);
+  color: var(--field-text);
+  background:
+    linear-gradient(90deg, transparent 0 56px, rgba(169, 139, 255, 0.26) 57px 58px, transparent 59px),
+    radial-gradient(circle at 33px 50%, transparent 0 11px, #8b6bff 12px 14px, transparent 15px),
+    linear-gradient(135deg, var(--field-bg) 0%, var(--field-bg-selected) 100%);
+  box-shadow: 0 6px 16px rgba(140, 100, 255, 0.08);
+}
+
+.mode-duration-chip {
+  background:
+    linear-gradient(135deg, var(--field-bg) 0%, var(--field-bg-selected) 100%);
+}
+
+.mode-duration-chip.is-active {
+  border-color: var(--field-border-strong);
+  background: var(--field-bg-selected);
+  box-shadow:
+    0 0 0 4px var(--field-glow),
+    0 8px 20px rgba(140, 100, 255, 0.12);
+}
+
+.mode-duration-control {
+  border-color: #d9ccff;
+  background: var(--field-white);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+}
+
+.mode-duration-chip select.mode-duration-select {
+  color: var(--field-text);
+  background: transparent;
+}
+
+.mode-duration-chip:focus-within {
+  border-color: var(--field-border-strong);
+  background: var(--field-bg-selected);
+  box-shadow:
+    0 0 0 4px var(--field-glow),
+    0 8px 20px rgba(140, 100, 255, 0.12);
+}
+
+.mode-duration-chip input[type="checkbox"].mode-duration-toggle {
+  border-color: var(--field-border);
+  background: var(--field-white);
+}
+
+input[type="checkbox"]:checked,
+.mode-duration-chip input[type="checkbox"].mode-duration-toggle:checked {
+  border-color: #8b6bff;
+  background: linear-gradient(135deg, #8b6bff, #6f7bff);
+  box-shadow: 0 0 0 5px var(--field-glow);
+}
+
 .meta-panel {
   display: flex;
   justify-content: space-between;
@@ -1570,6 +1684,49 @@ textarea:focus {
 .deadline-form textarea {
   min-height: 122px;
   padding-top: 22px;
+}
+
+.settings-panel :is(select, input[type="number"], input[type="text"], input[type="datetime-local"], textarea),
+.focus-row select,
+.deadline-form :is(select, input[type="number"], input[type="text"], input[type="datetime-local"], textarea),
+.mode-duration-chip {
+  border-color: var(--field-border);
+  color: var(--field-text);
+  background:
+    linear-gradient(135deg, var(--field-bg) 0%, var(--field-bg-selected) 100%);
+  box-shadow: 0 6px 16px rgba(140, 100, 255, 0.08);
+}
+
+.focus-row select {
+  background:
+    linear-gradient(90deg, transparent 0 56px, rgba(169, 139, 255, 0.26) 57px 58px, transparent 59px),
+    radial-gradient(circle at 33px 50%, transparent 0 11px, #8b6bff 12px 14px, transparent 15px),
+    linear-gradient(135deg, var(--field-bg) 0%, var(--field-bg-selected) 100%);
+}
+
+.settings-panel :is(select, input[type="number"], input[type="text"], input[type="datetime-local"], textarea):focus,
+.focus-row select:focus,
+.deadline-form :is(select, input[type="number"], input[type="text"], input[type="datetime-local"], textarea):focus,
+.mode-duration-chip:focus-within {
+  outline: none;
+  border-color: var(--field-border-strong);
+  background: var(--field-bg-selected);
+  box-shadow:
+    0 0 0 4px var(--field-glow),
+    0 8px 20px rgba(140, 100, 255, 0.12);
+}
+
+.mode-duration-chip.is-active {
+  border-color: var(--field-border-strong);
+  background: var(--field-bg-selected);
+  box-shadow:
+    0 0 0 4px var(--field-glow),
+    0 8px 20px rgba(140, 100, 255, 0.12);
+}
+
+.mode-duration-control {
+  border-color: #d9ccff;
+  background: var(--field-white);
 }
 
 #addDeadlineButton {
