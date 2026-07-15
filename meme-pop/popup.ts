@@ -28,6 +28,9 @@ const overdueDeadlineList = document.querySelector<HTMLElement>("#overdueDeadlin
 const showNowButton = document.querySelector<HTMLButtonElement>("#showNowButton");
 const momentButton = document.querySelector<HTMLButtonElement>("#momentButton");
 const settingsButton = document.querySelector<HTMLButtonElement>("#settingsButton");
+const helpButton = document.querySelector<HTMLButtonElement>("#helpButton");
+const closeHelpButton = document.querySelector<HTMLButtonElement>("#closeHelpButton");
+const coinHelpPanel = document.querySelector<HTMLElement>("#coinHelpPanel");
 const startScreen = document.querySelector<HTMLElement>("#startScreen");
 const readyButton = document.querySelector<HTMLButtonElement>("#readyButton");
 const planDayButton = document.querySelector<HTMLButtonElement>("#planDayButton");
@@ -37,6 +40,7 @@ let state: MemePop.AppState = MemePop.normalizeState(undefined);
 let statusTimer: number | undefined;
 let focusTickTimer: number | undefined;
 let modeRotationExpanded = false;
+let helpPanelOpen = false;
 const MODE_DURATION_OPTIONS = [1, 2, 3, 5, 10, 15, 20, 30, 45, 60, 90, 120, 180, 240, 300];
 
 function formatDurationOption(minutes: number): string {
@@ -124,6 +128,26 @@ function renderFocus(): void {
 
   if (active) {
     focusTickTimer = window.setTimeout(renderFocus, 1000);
+  }
+}
+
+function renderHelpPanel(): void {
+  if (coinHelpPanel) {
+    coinHelpPanel.classList.toggle("is-hidden", !helpPanelOpen);
+  }
+
+  if (helpButton) {
+    helpButton.classList.toggle("is-active", helpPanelOpen);
+    helpButton.setAttribute("aria-expanded", String(helpPanelOpen));
+  }
+}
+
+function toggleHelpPanel(open = !helpPanelOpen): void {
+  helpPanelOpen = open;
+  renderHelpPanel();
+
+  if (helpPanelOpen) {
+    coinHelpPanel?.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }
 }
 
@@ -491,6 +515,7 @@ function render(): void {
   }
 
   renderFocus();
+  renderHelpPanel();
   renderDeadlines();
   renderAccessories();
   renderModeRotation();
@@ -766,6 +791,8 @@ dndInput?.addEventListener("change", () => void saveSettings());
 showNowButton?.addEventListener("click", showMemePopNow);
 momentButton?.addEventListener("click", openMomentCreator);
 settingsButton?.addEventListener("click", openSettings);
+helpButton?.addEventListener("click", () => toggleHelpPanel());
+closeHelpButton?.addEventListener("click", () => toggleHelpPanel(false));
 readyButton?.addEventListener("click", () => void completeStartScreen());
 planDayButton?.addEventListener("click", () => void completeStartScreen(true));
 focusButton?.addEventListener("click", toggleFocus);

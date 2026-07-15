@@ -139,7 +139,7 @@ namespace MemePop {
   export const AUTO_HIDE_MAX_MS = 10000;
   export const MIN_SETTING_MINUTES = 1;
   export const MAX_SETTING_MINUTES = 300;
-  export const ACCESSORY_PRICING_VERSION = 2;
+  export const ACCESSORY_PRICING_VERSION = 3;
   export const MAX_TARGET_SITES = 10;
   export const COMPLETION_COIN_REWARD = 15;
   export const THEMES: Theme[] = [

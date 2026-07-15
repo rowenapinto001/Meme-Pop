@@ -29,6 +29,9 @@ const overdueDeadlineList = document.querySelector("#overdueDeadlineList");
 const showNowButton = document.querySelector("#showNowButton");
 const momentButton = document.querySelector("#momentButton");
 const settingsButton = document.querySelector("#settingsButton");
+const helpButton = document.querySelector("#helpButton");
+const closeHelpButton = document.querySelector("#closeHelpButton");
+const coinHelpPanel = document.querySelector("#coinHelpPanel");
 const startScreen = document.querySelector("#startScreen");
 const readyButton = document.querySelector("#readyButton");
 const planDayButton = document.querySelector("#planDayButton");
@@ -37,6 +40,7 @@ let state = MemePop.normalizeState(undefined);
 let statusTimer;
 let focusTickTimer;
 let modeRotationExpanded = false;
+let helpPanelOpen = false;
 const MODE_DURATION_OPTIONS = [1, 2, 3, 5, 10, 15, 20, 30, 45, 60, 90, 120, 180, 240, 300];
 function formatDurationOption(minutes) {
     if (minutes < 60) {
@@ -109,6 +113,22 @@ function renderFocus() {
     window.clearTimeout(focusTickTimer);
     if (active) {
         focusTickTimer = window.setTimeout(renderFocus, 1000);
+    }
+}
+function renderHelpPanel() {
+    if (coinHelpPanel) {
+        coinHelpPanel.classList.toggle("is-hidden", !helpPanelOpen);
+    }
+    if (helpButton) {
+        helpButton.classList.toggle("is-active", helpPanelOpen);
+        helpButton.setAttribute("aria-expanded", String(helpPanelOpen));
+    }
+}
+function toggleHelpPanel(open = !helpPanelOpen) {
+    helpPanelOpen = open;
+    renderHelpPanel();
+    if (helpPanelOpen) {
+        coinHelpPanel?.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }
 }
 function formatDueTime(timestamp) {
@@ -412,6 +432,7 @@ function render() {
         lastActive.textContent = `Last active: ${state.streak.lastActiveDate || "never"}`;
     }
     renderFocus();
+    renderHelpPanel();
     renderDeadlines();
     renderAccessories();
     renderModeRotation();
@@ -645,6 +666,8 @@ dndInput?.addEventListener("change", () => void saveSettings());
 showNowButton?.addEventListener("click", showMemePopNow);
 momentButton?.addEventListener("click", openMomentCreator);
 settingsButton?.addEventListener("click", openSettings);
+helpButton?.addEventListener("click", () => toggleHelpPanel());
+closeHelpButton?.addEventListener("click", () => toggleHelpPanel(false));
 readyButton?.addEventListener("click", () => void completeStartScreen());
 planDayButton?.addEventListener("click", () => void completeStartScreen(true));
 focusButton?.addEventListener("click", toggleFocus);
