@@ -604,7 +604,7 @@ function createDefaultWebStage() {
     acrobat.append(rope, leftArm, rightArm, leftLeg, rightLeg, body, head);
     const phew = document.createElement("span");
     phew.className = "memepop-default-phew";
-    phew.textContent = "PHEW!";
+    phew.textContent = "THWIP!";
     stage.append(city, webLayer, acrobat, phew);
     return stage;
 }

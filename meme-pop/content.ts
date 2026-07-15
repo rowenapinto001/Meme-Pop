@@ -746,7 +746,7 @@ function createDefaultWebStage(): HTMLElement {
 
   const phew = document.createElement("span");
   phew.className = "memepop-default-phew";
-  phew.textContent = "PHEW!";
+  phew.textContent = "THWIP!";
 
   stage.append(city, webLayer, acrobat, phew);
   return stage;
