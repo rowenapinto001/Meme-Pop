@@ -37,6 +37,13 @@ const THEME_CATEGORIES = {
     coding: "coding",
     hydration: "hydration"
 };
+const BELIEVE_MODE_MESSAGES = [
+    "Believe in yourself. Start with one small step.",
+    "You are stronger than you think.",
+    "Keep believing in yourself.",
+    "Small steps still move you forward.",
+    "Progress starts with one brave click."
+];
 const DROP_SEQUENCE_MODES = new Set([
     "focus",
     "study",
@@ -131,6 +138,32 @@ function sendRuntimeMessage(message, callback) {
         stopContentScript();
     }
 }
+function safeReadState(callback) {
+    if (!hasExtensionContext()) {
+        return;
+    }
+    void MemePop.readState()
+        .then((state) => {
+        if (!extensionContextAvailable || !hasExtensionContext()) {
+            return;
+        }
+        callback(state);
+    })
+        .catch(() => stopContentScript());
+}
+function safeUpdateState(mutator, callback) {
+    if (!hasExtensionContext()) {
+        return;
+    }
+    void MemePop.updateState(mutator)
+        .then((state) => {
+        if (!extensionContextAvailable || !hasExtensionContext()) {
+            return;
+        }
+        callback?.(state);
+    })
+        .catch(() => stopContentScript());
+}
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
 }
@@ -183,7 +216,7 @@ function canShow(force) {
 }
 function scheduleNextAppearance() {
     clearTimer(nextAppearTimer);
-    if (!extensionContextAvailable) {
+    if (!hasExtensionContext()) {
         return;
     }
     if (MemePop.isQuiet(appState)) {
@@ -226,7 +259,7 @@ function centerAndRememberPosition() {
         return;
     }
     appState.position = { x: null, y: null };
-    void MemePop.updateState((state) => {
+    safeUpdateState((state) => {
         state.position = { x: null, y: null };
     });
 }
@@ -262,10 +295,27 @@ function getCategoryForText(text) {
     }
     return null;
 }
+function isBelieveMode() {
+    return appState.settings.accessory === "crown";
+}
+function pickBelieveMessage(previous = "") {
+    let choice = BELIEVE_MODE_MESSAGES[Math.floor(Math.random() * BELIEVE_MODE_MESSAGES.length)];
+    if (BELIEVE_MODE_MESSAGES.length > 1 && choice === previous) {
+        const alternatives = BELIEVE_MODE_MESSAGES.filter((message) => message !== previous);
+        choice = alternatives[Math.floor(Math.random() * alternatives.length)];
+    }
+    return choice;
+}
 function getCharacterTheme() {
+    if (isBelieveMode()) {
+        return "motivation";
+    }
     return MemePop.characterThemeForSettings(getConfiguredTheme(), activeMessageCategory ?? getActiveMessageCategory());
 }
 function getCurrentModeLabel() {
+    if (isBelieveMode()) {
+        return "Believe Mode";
+    }
     return MemePop.THEME_LABELS[getCharacterTheme()];
 }
 function getCharacterAssetPath() {
@@ -439,8 +489,8 @@ function hideMemePop(animated) {
     }, 420);
 }
 function setMessage(text) {
-    const category = getCategoryForText(text) ?? getActiveMessageCategory();
-    const nextMessage = text ?? MemePop.pickMessage(category, lastMessageText).text;
+    const category = getCategoryForText(text) ?? (isBelieveMode() ? "motivationMode" : getActiveMessageCategory());
+    const nextMessage = isBelieveMode() ? pickBelieveMessage(lastMessageText) : text ?? MemePop.pickMessage(category, lastMessageText).text;
     activeMessageCategory = category;
     lastMessageText = nextMessage;
     updateThemeClass();
@@ -481,132 +531,6 @@ function createHydrationSplash() {
     puddle.className = "memepop-water-puddle";
     splash.append(puddle);
     return splash;
-}
-function createDefaultWebStage() {
-    const stage = document.createElement("div");
-    stage.className = "memepop-default-web-stage";
-    stage.setAttribute("aria-hidden", "true");
-    const city = document.createElement("div");
-    city.className = "memepop-default-city";
-    city.innerHTML = `
-    <svg class="memepop-default-city-art" viewBox="0 0 1200 330" aria-hidden="true" focusable="false">
-      <g class="memepop-city-clouds">
-        <path d="M0 258 C28 222 58 230 78 244 C102 205 154 211 176 246 C200 232 232 238 250 260 L250 330 L0 330 Z" />
-        <path d="M950 266 C980 226 1016 232 1034 250 C1058 210 1113 218 1130 255 C1152 240 1184 244 1200 266 L1200 330 L950 330 Z" />
-      </g>
-
-      <g class="memepop-city-far">
-        <path d="M54 176 L102 176 L102 330 L54 330 Z" />
-        <path d="M118 212 L156 212 L156 330 L118 330 Z" />
-        <path d="M184 196 L236 196 L236 330 L184 330 Z" />
-        <path d="M274 238 L315 238 L315 330 L274 330 Z" />
-        <path d="M792 240 L836 240 L836 330 L792 330 Z" />
-        <path d="M870 204 L922 204 L922 330 L870 330 Z" />
-        <path d="M954 220 L995 220 L995 330 L954 330 Z" />
-        <path d="M1084 178 L1134 178 L1134 330 L1084 330 Z" />
-      </g>
-
-      <g class="memepop-city-mid">
-        <path d="M0 202 L36 202 L36 330 L0 330 Z" />
-        <path d="M42 164 L96 144 L150 164 L150 330 L42 330 Z" />
-        <path d="M164 210 L224 210 L224 330 L164 330 Z" />
-        <path d="M248 224 L294 224 L294 330 L248 330 Z" />
-        <path d="M906 226 L952 226 L952 330 L906 330 Z" />
-        <path d="M976 204 L1038 184 L1102 204 L1102 330 L976 330 Z" />
-        <path d="M1116 168 L1174 148 L1200 156 L1200 330 L1116 330 Z" />
-      </g>
-
-      <g class="memepop-city-front">
-        <path d="M0 168 L44 168 L44 330 L0 330 Z" />
-        <path d="M52 124 L156 154 L156 330 L52 330 Z" />
-        <path d="M166 220 L238 220 L238 330 L166 330 Z" />
-        <path d="M244 256 L300 256 L300 330 L244 330 Z" />
-        <path d="M900 252 L956 252 L956 330 L900 330 Z" />
-        <path d="M964 224 L1038 224 L1038 330 L964 330 Z" />
-        <path d="M1048 154 L1152 124 L1152 330 L1048 330 Z" />
-        <path d="M1160 170 L1200 170 L1200 330 L1160 330 Z" />
-      </g>
-
-      <g class="memepop-city-roofs">
-        <path d="M62 126 L154 152 L154 164 L62 138 Z" />
-        <path d="M74 98 L144 118 L144 146 L74 126 Z" />
-        <path d="M178 186 L214 186 L214 220 L178 220 Z" />
-        <path d="M187 166 L205 166 L205 186 L187 186 Z" />
-        <path d="M1070 126 L1142 104 L1142 126 L1070 148 Z" />
-        <path d="M1078 78 L1136 60 L1136 104 L1078 122 Z" />
-        <path d="M998 194 L1030 194 L1030 224 L998 224 Z" />
-      </g>
-
-      <g class="memepop-city-lines">
-        <path d="M52 154 L156 184 M52 188 L156 218 M52 222 L156 252 M52 256 L156 286" />
-        <path d="M1048 184 L1152 154 M1048 218 L1152 188 M1048 252 L1152 222 M1048 286 L1152 256" />
-        <path d="M42 164 L150 164 M976 204 L1102 204" />
-      </g>
-
-      <g class="memepop-city-windows">
-        <path d="M16 198 L30 198 L30 216 L16 216 Z M16 236 L30 236 L30 254 L16 254 Z M68 184 L82 188 L82 208 L68 204 Z M102 194 L116 198 L116 218 L102 214 Z M68 230 L82 234 L82 254 L68 250 Z M102 240 L116 244 L116 264 L102 260 Z M178 240 L190 240 L190 258 L178 258 Z M206 240 L218 240 L218 258 L206 258 Z M178 278 L190 278 L190 296 L178 296 Z M206 278 L218 278 L218 296 L206 296 Z" />
-        <path d="M1084 184 L1098 180 L1098 200 L1084 204 Z M1118 174 L1132 170 L1132 190 L1118 194 Z M1084 230 L1098 226 L1098 246 L1084 250 Z M1118 220 L1132 216 L1132 236 L1118 240 Z M1172 200 L1186 200 L1186 218 L1172 218 Z M1172 242 L1186 242 L1186 260 L1172 260 Z M982 246 L994 246 L994 264 L982 264 Z M1012 246 L1024 246 L1024 264 L1012 264 Z M982 284 L994 284 L994 302 L982 302 Z M1012 284 L1024 284 L1024 302 L1012 302 Z" />
-      </g>
-
-      <g class="memepop-city-details">
-        <path d="M92 96 L92 74 M124 110 L124 88 M86 74 L132 88" />
-        <path d="M196 166 L196 142 M188 142 L204 142" />
-        <path d="M1112 70 L1112 46 M1088 78 L1134 62" />
-        <path d="M1014 194 L1014 172 M1006 172 L1022 172" />
-      </g>
-    </svg>
-  `;
-    const webLayer = document.createElement("div");
-    webLayer.className = "memepop-default-web-layer";
-    for (let index = 1; index <= 8; index += 1) {
-        const strand = document.createElement("span");
-        strand.className = `memepop-default-web-strand memepop-default-web-strand-${index}`;
-        webLayer.append(strand);
-    }
-    for (let index = 1; index <= 4; index += 1) {
-        const spider = document.createElement("span");
-        spider.className = `memepop-default-spider memepop-default-spider-${index}`;
-        webLayer.append(spider);
-    }
-    const acrobat = document.createElement("span");
-    acrobat.className = "memepop-default-web-acrobat";
-    const acrobatArtUrl = getExtensionUrl("assets/decor/web-acrobat.svg");
-    if (acrobatArtUrl) {
-        const acrobatArt = document.createElement("img");
-        acrobatArt.className = "memepop-default-web-acrobat-art";
-        acrobatArt.src = acrobatArtUrl;
-        acrobatArt.alt = "";
-        acrobatArt.decoding = "async";
-        acrobat.classList.add("memepop-default-web-acrobat-has-art");
-        acrobatArt.addEventListener("error", () => {
-            acrobat.classList.remove("memepop-default-web-acrobat-has-art");
-            acrobatArt.remove();
-        });
-        acrobat.append(acrobatArt);
-    }
-    const rope = document.createElement("span");
-    rope.className = "memepop-default-web-rope";
-    const body = document.createElement("span");
-    body.className = "memepop-default-web-body";
-    const head = document.createElement("span");
-    head.className = "memepop-default-web-head";
-    const mask = document.createElement("span");
-    mask.className = "memepop-default-web-mask";
-    const leftArm = document.createElement("span");
-    leftArm.className = "memepop-default-web-limb memepop-default-web-arm-left";
-    const rightArm = document.createElement("span");
-    rightArm.className = "memepop-default-web-limb memepop-default-web-arm-right";
-    const leftLeg = document.createElement("span");
-    leftLeg.className = "memepop-default-web-limb memepop-default-web-leg-left";
-    const rightLeg = document.createElement("span");
-    rightLeg.className = "memepop-default-web-limb memepop-default-web-leg-right";
-    head.append(mask);
-    acrobat.append(rope, leftArm, rightArm, leftLeg, rightLeg, body, head);
-    const phew = document.createElement("span");
-    phew.className = "memepop-default-phew";
-    phew.textContent = "THWIP!";
-    stage.append(city, webLayer, acrobat, phew);
-    return stage;
 }
 function createPartyStage() {
     const stage = document.createElement("div");
@@ -836,7 +760,6 @@ function createMemePop(message) {
     root.id = "memepop-root";
     root.setAttribute("aria-live", "polite");
     root.className = "memepop-accessory-none";
-    const defaultWebStage = createDefaultWebStage();
     const chillStage = createChillStage();
     const believeStage = createBelieveStage();
     const partyStage = createPartyStage();
@@ -894,7 +817,7 @@ function createMemePop(message) {
     modeLabel.className = "memepop-mode-label";
     modeLabel.textContent = getCurrentModeLabel();
     card.append(shell, cardConfetti, controls, countdown, characterButton, bubble, modeLabel, reward);
-    root.append(defaultWebStage, chillStage, believeStage, partyStage, splash, partyEffects, card);
+    root.append(chillStage, believeStage, partyStage, splash, partyEffects, card);
     rootElement = root;
     cardElement = card;
     messageElement = messageText;
@@ -905,9 +828,9 @@ function createMemePop(message) {
     setMessage(message);
     closeButton.addEventListener("click", () => hideMemePop(true));
     muteButton.addEventListener("click", () => {
-        void MemePop.updateState((state) => {
+        safeUpdateState((state) => {
             state.settings.mutedUntil = Date.now() + 30 * 60000;
-        }).then((state) => {
+        }, (state) => {
             appState = state;
             hideMemePop(true);
             scheduleNextAppearance();
@@ -1007,58 +930,70 @@ function showMemePop(force, message) {
 }
 try {
     chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-        if (!extensionContextAvailable) {
+        try {
+            if (!hasExtensionContext()) {
+                sendResponse({ ok: false });
+                return;
+            }
+            if (message?.type === "MEMEPOP_SHOW_NOW") {
+                showMemePop(true, message.message);
+                scheduleNextAppearance();
+                sendResponse({ ok: Boolean(rootElement) });
+                return;
+            }
+            if (message?.type === "MEMEPOP_FOCUS_START") {
+                showMemePop(true, message.message ?? MemePop.FOCUS_START_MESSAGES[0]);
+                sendResponse({ ok: true });
+                return;
+            }
+            if (message?.type === "MEMEPOP_FOCUS_DONE") {
+                showMemePop(true, message.message ?? MemePop.FOCUS_DONE_MESSAGES[0]);
+                sendResponse({ ok: true });
+            }
+        }
+        catch {
+            stopContentScript();
             sendResponse({ ok: false });
-            return;
-        }
-        if (message?.type === "MEMEPOP_SHOW_NOW") {
-            showMemePop(true, message.message);
-            scheduleNextAppearance();
-            sendResponse({ ok: Boolean(rootElement) });
-            return;
-        }
-        if (message?.type === "MEMEPOP_FOCUS_START") {
-            showMemePop(true, message.message ?? MemePop.FOCUS_START_MESSAGES[0]);
-            sendResponse({ ok: true });
-            return;
-        }
-        if (message?.type === "MEMEPOP_FOCUS_DONE") {
-            showMemePop(true, message.message ?? MemePop.FOCUS_DONE_MESSAGES[0]);
-            sendResponse({ ok: true });
         }
     });
     chrome.storage.onChanged.addListener((changes, areaName) => {
-        if (!extensionContextAvailable || areaName !== "local" || !changes[MemePop.STATE_KEY]) {
-            return;
+        try {
+            if (!hasExtensionContext() || areaName !== "local" || !changes[MemePop.STATE_KEY]) {
+                return;
+            }
+            const previousModeKey = getModeSettingsKey(appState.settings);
+            appState = MemePop.normalizeState(changes[MemePop.STATE_KEY].newValue);
+            updateAccessoryClass();
+            updateThemeClass();
+            if (rootElement && previousModeKey !== getModeSettingsKey(appState.settings)) {
+                setMessage();
+                restartHydrationOffer();
+            }
+            if (MemePop.isQuiet(appState)) {
+                hideMemePop(true);
+            }
+            scheduleNextAppearance();
         }
-        const previousModeKey = getModeSettingsKey(appState.settings);
-        appState = MemePop.normalizeState(changes[MemePop.STATE_KEY].newValue);
-        updateAccessoryClass();
-        updateThemeClass();
-        if (rootElement && previousModeKey !== getModeSettingsKey(appState.settings)) {
-            setMessage();
-            restartHydrationOffer();
+        catch {
+            stopContentScript();
         }
-        if (MemePop.isQuiet(appState)) {
-            hideMemePop(true);
-        }
-        scheduleNextAppearance();
     });
 }
 catch {
     stopContentScript();
 }
-window.addEventListener("resize", () => centerAndRememberPosition());
+window.addEventListener("resize", () => {
+    if (extensionContextAvailable) {
+        centerAndRememberPosition();
+    }
+});
 document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") {
+    if (document.visibilityState === "visible" && hasExtensionContext()) {
         scheduleNextAppearance();
     }
 });
 if (hasExtensionContext()) {
-    void MemePop.readState().then((state) => {
-        if (!extensionContextAvailable) {
-            return;
-        }
+    safeReadState((state) => {
         appState = state;
         scheduleNextAppearance();
     });
