@@ -4,9 +4,9 @@ MemePop is a cute, privacy-friendly Chrome extension that brings animated meme r
 
 ## Demo
 
-[![Watch the MemePop demo video](meme-pop/assets/demo/memepop-thumbnail.png)](meme-pop/assets/demo/memepop-demo.mp4)
+[![Watch the MemePop demo video](assets/demo/memepop-thumbnail.png)](assets/demo/memepop-demo.mp4)
 
-[Watch the demo video](meme-pop/assets/demo/memepop-demo.mp4)
+[Watch the demo video](assets/demo/memepop-demo.mp4)
 
 ## What It Does
 
@@ -28,7 +28,6 @@ MemePop adds a playful browser companion that can pop up on webpages with jokes,
 ## Install And Run
 
 ```bash
-cd meme-pop
 npm install
 npm run build
 ```
@@ -38,9 +37,5 @@ Then load it in Chrome:
 1. Open `chrome://extensions`.
 2. Enable Developer mode.
 3. Click Load unpacked.
-4. Select `/home/rowena001/Meme-Pop/meme-pop`.
+4. Select `/home/rowena001/Meme-Pop`.
 5. Open a normal webpage and click Show MemePop Now.
-
-## Project Folder
-
-The extension source code lives in [`meme-pop/`](meme-pop/).
