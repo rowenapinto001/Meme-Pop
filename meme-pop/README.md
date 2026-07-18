@@ -1,6 +1,21 @@
 # MemePop
 
-MemePop is a Manifest V3 Chrome extension with a cute local-only browser companion.
+MemePop is a cute, privacy-friendly Manifest V3 Chrome extension that brings animated meme reactions, focus nudges, break reminders, streaks, and Meme Coins directly into your browser. It runs locally with no backend, no login, and no data collection.
+
+## Demo
+
+[![Watch the MemePop demo video](assets/demo/memepop-thumbnail.png)](assets/demo/memepop-demo.mp4)
+
+[Watch the demo video](assets/demo/memepop-demo.mp4)
+
+## Features
+
+- Centered MemePop popup with character art, speech bubble, timer, and controls.
+- Side panel dashboard with settings, coins, streaks, help, and mode controls.
+- Multi-mode timing with custom durations per mode.
+- Focus Mode, Deadline Mode, Break Time, Hydration, Studying, Gaming, Office, Coding, Chill, Believe, and Party styles.
+- Meme Coins, streaks, unlockable visual styles, and Meme Moment PNG creation.
+- Local-only privacy model: no backend, no login, no data collection.
 
 ## Setup
 
